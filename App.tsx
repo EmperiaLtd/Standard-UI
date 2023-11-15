@@ -1,3 +1,7 @@
+// Assets
+import theme from './App.style';
+// Components
+import ViewManager from './components/viewManager';
 // Library
 import * as Font from 'expo-font';
 import { useState, useEffect, useRef } from 'react';
@@ -9,20 +13,14 @@ import {
   Platform,
 } from 'react-native';
 
-/* Interfaces for Window & Screen Dimensions */
+// Interfaces for Window & Screen Dimensions
 const windowDimensions = Dimensions.get('window');
 const screenDimensions = Dimensions.get('screen');
 
 const App = () => {
   const [dimensions, setDimensions] = useState<any>({
     window: windowDimensions,
-    view: {
-      width: windowDimensions.width,
-      height:
-        Platform.OS === 'ios' ? windowDimensions.height - 72 :
-        Platform.OS === 'android' ? windowDimensions.height - 32:
-        windowDimensions.height - 52
-    },
+    view: { width: windowDimensions.width, height: Platform.OS === 'ios' ? window.height - 20 : window.height },
     screen: screenDimensions,
   });
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
@@ -39,10 +37,7 @@ const App = () => {
     const subscription = Dimensions.addEventListener('change', ({window, screen}) => {
       setDimensions({
         window,
-        view: {
-          width: window.width,
-          height: Platform.OS === 'ios' ? window.height - 72 : window.height - 52
-        },
+        view: { width: window.width, height: Platform.OS === 'ios' ? window.height - 20 : window.height },
         screen
       });
     });
@@ -53,13 +48,14 @@ const App = () => {
   if (!fontsLoaded) return <></>
   return <>
     <StatusBar barStyle="light-content" backgroundColor="#202029"/>
+    <ViewManager view={dimensions.view}/>
   </>;
 };
 
 /* Dev Mode Web Compatibility */
 if (!isNative) {
   const docHead = document.querySelector('head') as HTMLElement;
-  if (docHead !== undefined && docHead !== null) docHead.style.display = 'hidden';
+  if (docHead) docHead.style.display = 'hidden';
   if (isTemplateTag.test(document.title) && process.env.REACT_APP_NAME !== undefined)
     document.title = `[DEV] ${process.env.REACT_APP_NAME}`;
 };
