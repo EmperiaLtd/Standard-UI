@@ -1,0 +1,10 @@
+{
+  "path": "clients/standard/shared",
+  "file": [
+  ],
+  "module": [
+    "assets/",
+    "components/",
+    "library/"
+  ]
+}

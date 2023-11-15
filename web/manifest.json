@@ -1,0 +1,20 @@
+{
+  "display": "standalone",
+  "lang": "en",
+  "name": "Experience",
+  "short_name": "Experience",
+  "start_url": "/",
+  "orientation": "portrait",
+  "background_color": "#202029",
+  "theme_color": "#202029",
+  "edge_side_panel": {
+    "preferred_width": 376
+  },
+  "related_applications": [
+    {
+      "platform": "play",
+      "id": "com.my.app"
+    }
+  ],
+  "prefer_related_applications": false
+}
