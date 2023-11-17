@@ -1,9 +1,10 @@
+import Main from '../views/main';
 
 const ViewManager = ({view}) => {
   switch (view) {
-    case "ExperienceWebView":
-      return <></>
-    default:
-      return <></>
-  }
+    case 'Experience': return <Main/>
+    default: return <Main/>
+  };
 };
+
+export default ViewManager;

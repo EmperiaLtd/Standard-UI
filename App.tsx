@@ -5,7 +5,7 @@ import * as Font from 'expo-font';
 import * as serviceWorkerRegistration from "./src/serviceWorkerRegistration";
 import { useState, useEffect, useRef } from 'react';
 import { isTemplateTag } from './library/devTools';
-import { Dimensions, Platform } from 'react-native';
+import { StatusBar, Dimensions, Platform } from 'react-native';
 
 // Dev Mode Web Compatibility
 if (Platform.OS === 'web') {
@@ -44,7 +44,7 @@ const App = () => {
   if (!fontsLoaded) return <></>
   return <>
     <StatusBar barStyle="light-content" backgroundColor="#202029"/>
-    <ViewManager dimensions={dimensions}/>
+    <ViewManager view="Experience"/>
   </>;
 };
 

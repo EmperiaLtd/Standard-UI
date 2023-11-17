@@ -11,7 +11,7 @@ const experienceURI = REACT_APP_ENV === 'Prd' ?
   `https://emperia.digital/preview/${experienceOrg}/${experienceName}/index.html`;
 
 
-const ExperienceWebView = ({width, height, style, blur}:any) => {
+const ExperienceWebView = ({width, height, style, nativeBlur}:any) => {
   const webView = useRef(null);
 
   const onMessage = (event:any) => {
@@ -22,7 +22,7 @@ const ExperienceWebView = ({width, height, style, blur}:any) => {
   }
 
   useEffect(() => {
-    if (blur && Platform.OS !== 'web') {
+    if (nativeBlur && Platform.OS !== 'web') {
       webView.current.injectJavaScript(`
         var webViewBody = document.querySelector('body');
         webViewBody.style.backgroundColor = '#202029';
@@ -35,7 +35,7 @@ const ExperienceWebView = ({width, height, style, blur}:any) => {
         webViewBody.style.filter = 'blur(0px)';
       `);
     }
-  }, [blur]);
+  }, [nativeBlur]);
 
   if (Platform.OS === 'web') return <WebView
     ref={webView}

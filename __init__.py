@@ -8,8 +8,8 @@ class Client(client.NativeClient):
   PWA:bool = False
   API_DOMAIN:str = "https://emperiavr.com"
   VARS = {
-    'experienceOrg': 'emperia',
-    'experienceName': 'example'
+    'experienceOrg': 'bicester',
+    'experienceName': 'lavalee'
   }
 
   def __init__(self) -> None:
