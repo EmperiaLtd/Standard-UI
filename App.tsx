@@ -1,11 +1,13 @@
 // Components
+import GenericModal from './components/genericModal';
 import ViewManager from './components/viewManager';
+import ExperienceWebView from './components/experienceWebView';
 // Library
 import * as Font from 'expo-font';
 import * as serviceWorkerRegistration from "./src/serviceWorkerRegistration";
 import { useState, useEffect, useRef } from 'react';
 import { isTemplateTag } from './library/devTools';
-import { StatusBar, Dimensions, Platform } from 'react-native';
+import { View, StatusBar, Dimensions, Platform } from 'react-native';
 
 // Dev Mode Web Compatibility
 if (Platform.OS === 'web') {
@@ -19,10 +21,8 @@ if (Platform.OS === 'web') {
 const windowDimensions = Dimensions.get('window');
 const screenDimensions = Dimensions.get('screen');
 
-
 const App = () => {
   const [dimensions, setDimensions] = useState<any>({ window: windowDimensions, screen: screenDimensions });
-  const [PDPOpen, setPDPOpen] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
@@ -42,11 +42,11 @@ const App = () => {
   }, [ dimensions.window, dimensions.screen ]);
 
   if (!fontsLoaded) return <></>
-  return <>
+  return <View>
     <StatusBar barStyle="light-content" backgroundColor="#202029"/>
-    <ViewManager view="Experience"/>
-  </>;
+    <ExperienceWebView width={dimensions.window.width} height={dimensions.window.height}/>
+    <GenericModal width={dimensions.window.width} height={dimensions.window.height}/>
+  </View>;
 };
-
 
 export default App;
