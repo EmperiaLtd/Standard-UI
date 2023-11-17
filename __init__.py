@@ -6,7 +6,11 @@ class Client(client.NativeClient):
   DIR:str = Path(dirname(realpath(__file__))).parts[-1]
   NAME:str = "VR Experience"
   PWA:bool = False
-  API_DOMAIN:str = "https://example.com"
+  API_DOMAIN:str = "https://emperiavr.com"
+  VARS = {
+    'experienceOrg': 'emperia',
+    'experienceName': 'example'
+  }
 
   def __init__(self) -> None:
     super().__init__()

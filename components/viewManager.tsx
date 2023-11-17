@@ -1,7 +1,9 @@
-import {} from 'React-Native';
 
 const ViewManager = ({view}) => {
-  return <></>
+  switch (view) {
+    case "ExperienceWebView":
+      return <></>
+    default:
+      return <></>
+  }
 };
-
-export default ViewManager;

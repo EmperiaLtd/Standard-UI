@@ -1,10 +1,7 @@
 {
-  "path": "clients/standard/shared",
+  "path": "clients/experience/shared",
   "file": [
   ],
   "module": [
-    "assets/",
-    "components/",
-    "library/"
   ]
 }

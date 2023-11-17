@@ -1,45 +1,41 @@
-// Assets
-import theme from './App.style';
 // Components
 import ViewManager from './components/viewManager';
 // Library
 import * as Font from 'expo-font';
-import { useState, useEffect, useRef } from 'react';
-import { isTemplateTag } from './shared/library/devTools';
 import * as serviceWorkerRegistration from "./src/serviceWorkerRegistration";
-import {
-  StatusBar,
-  Dimensions,
-  Platform,
-} from 'react-native';
+import { useState, useEffect, useRef } from 'react';
+import { isTemplateTag } from './library/devTools';
+import { Dimensions, Platform } from 'react-native';
+
+// Dev Mode Web Compatibility
+if (Platform.OS === 'web') {
+  const docHead = document.querySelector('head') as HTMLElement;
+  if (docHead !== undefined && docHead !== null) docHead.style.display = 'hidden';
+  if (isTemplateTag.test(document.title) && process.env.REACT_APP_NAME !== undefined)
+    document.title = `[DEV] ${process.env.REACT_APP_NAME}`;
+};
 
 // Interfaces for Window & Screen Dimensions
 const windowDimensions = Dimensions.get('window');
 const screenDimensions = Dimensions.get('screen');
 
+
 const App = () => {
-  const [dimensions, setDimensions] = useState<any>({
-    window: windowDimensions,
-    view: { width: windowDimensions.width, height: Platform.OS === 'ios' ? window.height - 20 : window.height },
-    screen: screenDimensions,
-  });
+  const [dimensions, setDimensions] = useState<any>({ window: windowDimensions, screen: screenDimensions });
+  const [PDPOpen, setPDPOpen] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     Font.loadAsync({
-      'Metro': require('./shared/assets/fonts/Metropolis-Regular.otf'),
-      'Metro-Thin': require('./shared/assets/fonts/Metropolis-Thin.otf'),
-      'Metro-Bold': require('./shared/assets/fonts/Metropolis-Bold.otf'),
-      'Metro-Light': require('./shared/assets/fonts/Metropolis-Light.otf'),
-      'Metro-Italic': require('./shared/assets/fonts/Metropolis-RegularItalic.otf'),
+      'Metro': require('./assets/fonts/Metropolis-Regular.otf'),
+      'Metro-Thin': require('./assets/fonts/Metropolis-Thin.otf'),
+      'Metro-Bold': require('./assets/fonts/Metropolis-Bold.otf'),
+      'Metro-Light': require('./assets/fonts/Metropolis-Light.otf'),
+      'Metro-Italic': require('./assets/fonts/Metropolis-RegularItalic.otf'),
     }).then(() => setFontsLoaded(true))
 
     const subscription = Dimensions.addEventListener('change', ({window, screen}) => {
-      setDimensions({
-        window,
-        view: { width: window.width, height: Platform.OS === 'ios' ? window.height - 20 : window.height },
-        screen
-      });
+      setDimensions({window, screen});
     });
 
     return () => subscription?.remove();
@@ -48,16 +44,9 @@ const App = () => {
   if (!fontsLoaded) return <></>
   return <>
     <StatusBar barStyle="light-content" backgroundColor="#202029"/>
-    <ViewManager view={dimensions.view}/>
+    <ViewManager dimensions={dimensions}/>
   </>;
 };
 
-/* Dev Mode Web Compatibility */
-if (!isNative) {
-  const docHead = document.querySelector('head') as HTMLElement;
-  if (docHead) docHead.style.display = 'hidden';
-  if (isTemplateTag.test(document.title) && process.env.REACT_APP_NAME !== undefined)
-    document.title = `[DEV] ${process.env.REACT_APP_NAME}`;
-};
 
 export default App;
