@@ -1,8 +1,8 @@
 {
   "display": "standalone",
   "lang": "en",
-  "name": "Experience",
-  "short_name": "Experience",
+  "name": "Standard",
+  "short_name": "Standard",
   "start_url": "/",
   "orientation": "portrait",
   "background_color": "#202029",
