@@ -4,14 +4,17 @@ import Overlay from "./components/Overlay";
 import WelcomeScreen from "./components/WelcomeScreen";
 import InfoModal from "./components/InfoModal";
 import Instructions from "./components/Instructions";
-import ExperienceWebView from "./components/experienceWebView";
+import PDP from "./components/PDP";
 import { CustomTheme } from "./theme/theme";
+
+// Styles
+import "./styles/App.css";
 
 // Library
 import * as Font from "expo-font";
 import { useState, useEffect } from "react";
 import { isTemplateTag } from "./library/devTools";
-import { View, Dimensions, Platform } from "react-native";
+import { View, Platform } from "react-native";
 
 // Dev Mode Web Compatibility
 if (Platform.OS === "web") {
@@ -26,14 +29,14 @@ if (Platform.OS === "web") {
 }
 
 // Interfaces for Window & Screen Dimensions
-const windowDimensions = Dimensions.get("window");
-const screenDimensions = Dimensions.get("screen");
+// const windowDimensions = Dimensions.get("window");
+// const screenDimensions = Dimensions.get("screen");
 
 const App = () => {
-  const [dimensions, setDimensions] = useState<any>({
-    window: windowDimensions,
-    screen: screenDimensions,
-  });
+  // const [dimensions, setDimensions] = useState<any>({
+  //   window: windowDimensions,
+  //   screen: screenDimensions,
+  // });
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
@@ -43,16 +46,17 @@ const App = () => {
       "Montserrat-Bold": require("./assets/fonts/Montserrat/Montserrat-Bold.ttf"),
     }).then(() => setFontsLoaded(true));
 
-    const subscription = Dimensions.addEventListener(
-      "change",
-      ({ window, screen }) => {
-        setDimensions({ window, screen });
-      }
-    );
+    // const subscription = Dimensions.addEventListener(
+    //   "change",
+    //   ({ window, screen }) => {
+    //     setDimensions({ window, screen });
+    //   }
+    // );
 
-    return () => subscription?.remove();
-  }, [dimensions.window, dimensions.screen]);
+    // return () => subscription?.remove();
+  }, []);
 
+  const [pdpActive, setPDPActive] = useState(false);
   const [instructionsActive, setInstructionsActive] = useState(false);
   const [infoModalActive, setInfoModalActive] = useState(false);
   const [welcomeActive, setWelcomeActive] = useState(false);
@@ -76,6 +80,12 @@ const App = () => {
               setInstructionsActive(false);
             }}
           />
+          <PDP
+            active={pdpActive}
+            close={() => {
+              setPDPActive(false);
+            }}
+          />
           <InfoModal
             active={infoModalActive}
             close={() => {
@@ -83,10 +93,10 @@ const App = () => {
             }}
           />
         </Box>
-        <ExperienceWebView
+        {/* <ExperienceWebView
           width={dimensions.window.width}
           height={dimensions.window.height}
-        />
+        /> */}
       </ChakraProvider>
     </View>
   );
