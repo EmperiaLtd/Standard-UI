@@ -1,16 +1,11 @@
-import { Box, IconButton, Text } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import MenuOption from "./common/MenuOption";
 import RoomOption from "./common/RoomOption";
 import LanguageOption from "./common/LanguageOption";
 import { BurgerDots } from "../assets/icons/BurgerDots";
-import ReactPlayer from "react-player";
-import Slider from "react-slick";
-import { LeftStemArrow } from "../assets/icons/LeftStemArrow";
-import { RightStemArrow } from "../assets/icons/RightStemArrow";
-import HoldAndDrag from "../assets/videos/HoldAndDrag.mp4";
-import TapToMove from "../assets/videos/TapToMove.mp4";
-import ClickToOpen from "../assets/videos/ClickToOpen.mp4";
+import OverlayInstruction from "./common/OverlayInstruction";
+
 interface Room {
   name: string;
   description: string;
@@ -20,63 +15,18 @@ interface Language {
   name: string;
 }
 
-export interface InstructionItem {
-  text: string;
-  video: string;
-}
-
-export const InstructionItems: InstructionItem[] = [
-  {
-    text: "Click on floor to move",
-    video: HoldAndDrag,
-  },
-  {
-    text: "Hold and Drag to look around",
-    video: TapToMove,
-  },
-  {
-    text: "Hover or Click on objects to learn more",
-    video: ClickToOpen,
-  },
-];
-
 function Overlay() {
   const transition = "all 0.2s ease-in-out";
 
-  const [menuHovered, setMenuHovered] = useState(true);
+  const [menuHovered, setMenuHovered] = useState(false);
   const [menuOptionHoveredOrActive, setMenuOptionHoveredOrActive] =
     useState("");
 
-  const [activeMenuOption, setActiveMenuOption] = useState("instructions");
+  const [activeMenuOption, setActiveMenuOption] = useState("");
 
   const [rooms, setRooms] = useState<Room[]>();
 
   const [languages, setLanguages] = useState<Language[]>();
-
-  const [slider, setSlider] = useState<any>();
-  const [activeImageIndex, setActiveImageIndex] = useState({
-    oldIndex: 0,
-    newIndex: 0,
-  });
-
-  const nextSlide = () => {
-    slider.slickNext();
-  };
-
-  const prevSlide = () => {
-    slider.slickPrev();
-  };
-
-  const settings = {
-    speed: 500,
-    arrows: false,
-    infinite: false,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    beforeChange: (oldIndex: number, newIndex: number) => {
-      setActiveImageIndex({ oldIndex: oldIndex, newIndex: newIndex });
-    },
-  };
 
   useEffect(() => {
     setRooms([
@@ -138,111 +88,7 @@ function Overlay() {
     instructions: {
       height: ["250px"],
       width: ["250px"],
-      content: (
-        <Box
-          display="flex"
-          justifyContent={["space-between"]}
-          alignItems={["center"]}
-          flexDirection={["column"]}
-          h="100%"
-          w="100%"
-        >
-          <Box
-            padding={["10px", "15px", "15px"]}
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="space-between"
-            borderRadius={["24px", "24px", "24px", "24px"]}
-            background={"rgba(0, 0, 0, 0.05)"}
-            boxShadow="0px 2px 4px 0px rgba(0, 0, 0, 0.25)"
-            backdropFilter="blur(12px)"
-            w={["150px", "200px", "100%"]}
-            height={["200px", "260px", "230px"]}
-          >
-            <Box w={["100%", "180px", "160px"]} h={["170px", "180px", "160px"]}>
-              <Slider ref={(slider) => setSlider(slider)} {...settings}>
-                {InstructionItems?.map(
-                  (InstructionItem: InstructionItem, index: number) => (
-                    <ReactPlayer
-                      key={index}
-                      id="instructions-screen-video"
-                      height="inherit"
-                      width="100%"
-                      loop={true}
-                      muted
-                      controls={false}
-                      playing={true}
-                      url={InstructionItem.video}
-                      playsinline
-                    />
-                  )
-                )}
-              </Slider>
-            </Box>
-            <Text
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              color="white"
-              fontSize={["12px", "14px", "15px"]}
-              fontFamily="Montserrat-Medium"
-              fontWeight="900"
-              height={["50px", "40px", "auto"]}
-              textAlign="center"
-            >
-              {InstructionItems[activeImageIndex.newIndex].text}
-            </Text>
-          </Box>
-
-          {/* For Desktop Only */}
-          <Box
-            position="relative"
-            w="100%"
-            height={["70px"]}
-            display={["none", "none", "flex"]}
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Box
-              w={["130px"]}
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <IconButton
-                variant="outline"
-                aria-label="Move Left"
-                onClick={prevSlide}
-                w={["60px"]}
-                height={["50px"]}
-                border="1px solid rgba(255, 255, 255, 0.80)"
-                backdropFilter="blur(12px)"
-                background={"rgba(0, 0, 0, 0.05)"}
-                _hover={{ background: "rgba(0, 0, 0, 0.15)" }}
-                boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                borderRadius="8px"
-                icon={<LeftStemArrow fill="white" boxSize={[6]} />}
-              />
-
-              <IconButton
-                variant="outline"
-                aria-label="Move Left"
-                onClick={nextSlide}
-                w={["60px"]}
-                height={["50px"]}
-                border="1px solid rgba(255, 255, 255, 0.80)"
-                backdropFilter="blur(12px)"
-                background={"rgba(0, 0, 0, 0.05)"}
-                _hover={{ background: "rgba(0, 0, 0, 0.15)" }}
-                boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                borderRadius="8px"
-                icon={<RightStemArrow fill="white" boxSize={[6]} />}
-              />
-            </Box>
-          </Box>
-        </Box>
-      ),
+      content: <OverlayInstruction />,
     },
     language: {
       height: ["170px"],
@@ -271,16 +117,16 @@ function Overlay() {
       onMouseEnter={() => {
         setMenuHovered(true);
       }}
-      // onMouseLeave={() => {
-      //   if (activeMenuOption !== "") {
-      //     setActiveMenuOption("");
-      //     setTimeout(() => {
-      //       setMenuHovered(false);
-      //     }, 200);
-      //   } else {
-      //     setMenuHovered(false);
-      //   }
-      // }}
+      onMouseLeave={() => {
+        if (activeMenuOption !== "") {
+          setActiveMenuOption("");
+          setTimeout(() => {
+            setMenuHovered(false);
+          }, 200);
+        } else {
+          setMenuHovered(false);
+        }
+      }}
       onClick={() => setMenuHovered(true)}
       transition={transition}
       cursor="pointer"
