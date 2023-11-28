@@ -94,35 +94,49 @@ function Instructions({ active, close }: InstructionsProps) {
         borderRadius={["24px", "24px", "24px", "24px"]}
         boxShadow={["none", "none", "0px 4px 4px 0px rgba(0, 0, 0, 0.25)"]}
         backdropFilter="blur(12px)"
-        width={["100%", "360px", "450px"]}
-        height={["400px", "270px", "400px"]}
-        padding={["40px", "0px", "30px"]}
+        width={["260px", "360px", "450px"]}
+        height={["210px", "270px", "400px"]}
+        padding={["5px", "0px", "30px"]}
         overflowY={["auto", "auto", "unset", "unset"]}
         overflowX="hidden"
         display="flex"
         justifyContent={["space-between"]}
         alignItems={["center"]}
-        flexDirection={["column", "row", "column"]}
+        flexDirection={["row", "row", "column"]}
         transition={transition}
       >
+        <Text
+          textTransform="uppercase"
+          position="absolute"
+          left={["5px", "5px", "40px"]}
+          bottom={["10px", "10px", "40px"]}
+          color="white"
+          fontSize={["15px"]}
+          fontFamily="Montserrat-Medium"
+          fontWeight="900"
+          cursor="pointer"
+        >
+          Skip
+        </Text>
+
         <IconButton
           display={["unset", "unset", "none"]}
           variant="outline"
           aria-label="Move Left"
           onClick={prevSlide}
-          w={["60px"]}
-          height={["50px"]}
+          w={["40px", "60px", "60px"]}
+          height={["30px", "50px", "50px"]}
           border="1px solid rgba(255, 255, 255, 0.80)"
           backdropFilter="blur(12px)"
           background={"rgba(0, 0, 0, 0.05)"}
           _hover={{ background: "rgba(0, 0, 0, 0.15)" }}
           boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
           borderRadius="8px"
-          icon={<LeftStemArrow fill="white" boxSize={[6]} />}
+          icon={<LeftStemArrow fill="white" boxSize={[4, 6, 6]} />}
         />
 
         <Box
-          padding={["10px", "10px", "15px"]}
+          padding={["10px", "15px", "15px"]}
           display="flex"
           flexDirection="column"
           alignItems="center"
@@ -131,17 +145,17 @@ function Instructions({ active, close }: InstructionsProps) {
           background={"rgba(0, 0, 0, 0.05)"}
           boxShadow="0px 2px 4px 0px rgba(0, 0, 0, 0.25)"
           backdropFilter="blur(12px)"
-          w={["100%", "200px", "100%"]}
-          height={["260px"]}
+          w={["150px", "200px", "100%"]}
+          height={["200px", "260px", "260px"]}
         >
-          <Box w="100%" h={["190px"]}>
+          <Box w={["100%", "180px", "190px"]} h={["170px", "180px", "190px"]}>
             <Slider ref={(slider) => setSlider(slider)} {...settings}>
               {InstructionItems?.map(
                 (InstructionItem: InstructionItem, index: number) => (
                   <ReactPlayer
                     key={index}
                     id="instructions-screen-video"
-                    height="190px"
+                    height="inherit"
                     width="100%"
                     loop={true}
                     muted
@@ -159,10 +173,9 @@ function Instructions({ active, close }: InstructionsProps) {
             alignItems="center"
             justifyContent="center"
             color="white"
-            fontSize={["15px"]}
+            fontSize={["12px", "14px", "15px"]}
             fontFamily="Montserrat-Medium"
             fontWeight="900"
-            bg="red"
             height={["50px", "40px", "auto"]}
             textAlign="center"
           >
@@ -175,8 +188,8 @@ function Instructions({ active, close }: InstructionsProps) {
           variant="outline"
           aria-label="Move Left"
           onClick={nextSlide}
-          w={["60px"]}
-          height={["50px"]}
+          w={["40px", "60px", "60px"]}
+          height={["30px", "50px", "50px"]}
           border="1px solid rgba(255, 255, 255, 0.80)"
           backdropFilter="blur(12px)"
           background={"rgba(0, 0, 0, 0.05)"}
@@ -195,18 +208,6 @@ function Instructions({ active, close }: InstructionsProps) {
           justifyContent="center"
           alignItems="center"
         >
-          <Text
-            textTransform="uppercase"
-            position="absolute"
-            left="30px"
-            color="white"
-            fontSize={["15px"]}
-            fontFamily="Montserrat-Medium"
-            fontWeight="900"
-            cursor="pointer"
-          >
-            Skip
-          </Text>
           <Box
             w={["130px"]}
             display="flex"
