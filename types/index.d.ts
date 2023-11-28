@@ -1,10 +1,3 @@
-declare module '*.svg';
-declare module '*.png';
-declare module '*.jpg';
-declare module '*.jpeg';
-
-export { };
-
 declare global {
   interface Window {
     embedpano: () => void;
@@ -15,3 +8,5 @@ declare global {
     GotoScene: (scene: string) => void;
   }
 }
+
+export { };

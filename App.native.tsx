@@ -32,13 +32,7 @@ const App = () => {
   const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    Font.loadAsync({
-      Metro: require("./assets/fonts/Metropolis-Regular.otf"),
-      "Metro-Thin": require("./assets/fonts/Metropolis-Thin.otf"),
-      "Metro-Bold": require("./assets/fonts/Metropolis-Bold.otf"),
-      "Metro-Light": require("./assets/fonts/Metropolis-Light.otf"),
-      "Metro-Italic": require("./assets/fonts/Metropolis-RegularItalic.otf"),
-    }).then(() => setFontsLoaded(true));
+    Font.loadAsync({}).then(() => setFontsLoaded(true));
 
     const subscription = Dimensions.addEventListener(
       "change",

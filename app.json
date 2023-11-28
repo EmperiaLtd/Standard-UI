@@ -33,8 +33,7 @@
       "visible": "immersive"
     },
     "web": {
-      "favicon": "./assets/images/react.png",
-      "publicPath": "/static/documentation"
+      "favicon": "./assets/images/react.png"
     },
     "plugins": [
       [
