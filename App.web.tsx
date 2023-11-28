@@ -12,7 +12,7 @@ import "./styles/App.css";
 
 // Library
 import * as Font from "expo-font";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { isTemplateTag } from "./library/devTools";
 import { View, Platform } from "react-native";
 
@@ -28,40 +28,17 @@ if (Platform.OS === "web") {
     document.title = `[DEV] ${process.env.REACT_APP_NAME}`;
 }
 
-// Interfaces for Window & Screen Dimensions
-// const windowDimensions = Dimensions.get("window");
-// const screenDimensions = Dimensions.get("screen");
+Font.loadAsync({
+  Montserrat: require("./assets/fonts/Montserrat/Montserrat-Regular.ttf"),
+  "Montserrat-Medium": require("./assets/fonts/Montserrat/Montserrat-Medium.ttf"),
+  "Montserrat-Bold": require("./assets/fonts/Montserrat/Montserrat-Bold.ttf"),
+});
 
 const App = () => {
-  // const [dimensions, setDimensions] = useState<any>({
-  //   window: windowDimensions,
-  //   screen: screenDimensions,
-  // });
-  const [fontsLoaded, setFontsLoaded] = useState<boolean>(false);
-
-  useEffect(() => {
-    Font.loadAsync({
-      Montserrat: require("./assets/fonts/Montserrat/Montserrat-Regular.ttf"),
-      "Montserrat-Medium": require("./assets/fonts/Montserrat/Montserrat-Medium.ttf"),
-      "Montserrat-Bold": require("./assets/fonts/Montserrat/Montserrat-Bold.ttf"),
-    }).then(() => setFontsLoaded(true));
-
-    // const subscription = Dimensions.addEventListener(
-    //   "change",
-    //   ({ window, screen }) => {
-    //     setDimensions({ window, screen });
-    //   }
-    // );
-
-    // return () => subscription?.remove();
-  }, []);
-
   const [pdpActive, setPDPActive] = useState(false);
   const [instructionsActive, setInstructionsActive] = useState(false);
   const [infoModalActive, setInfoModalActive] = useState(false);
   const [welcomeActive, setWelcomeActive] = useState(false);
-
-  if (!fontsLoaded) return <></>;
 
   return (
     <View>
