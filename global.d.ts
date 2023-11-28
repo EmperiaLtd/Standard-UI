@@ -1,9 +1,24 @@
+/// <reference types="react-scripts" />
+
 declare module '*.svg';
 declare module '*.png';
 declare module '*.jpg';
 declare module '*.jpeg';
 
-export { };
+declare module '*.mp4' {
+  const src: string;
+  export default src;
+};
+
+declare module '*.mp3' {
+  const src: string;
+  export default src;
+};
+
+declare module '*.webm' {
+  const src: string;
+  export default src;
+};
 
 declare global {
   interface Window {
@@ -15,3 +30,5 @@ declare global {
     GotoScene: (scene: string) => void;
   }
 }
+
+export { };

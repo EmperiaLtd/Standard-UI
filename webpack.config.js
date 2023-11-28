@@ -14,7 +14,6 @@ module.exports = async function (env, argv) {
       }
     }
   );
-
   if (isEnvProduction) {
     config.plugins.push(
       new WorkboxWebpackPlugin.InjectManifest({
@@ -27,9 +26,10 @@ module.exports = async function (env, argv) {
           /\.js\.gz$/,
           /(apple-touch-startup-image|chrome-icon|apple-touch-icon).*\.png$/,
         ],
-        maximumFileSizeToCacheInBytes: 12 * 1024 * 1024
+        maximumFileSizeToCacheInBytes: 25 * 1024 * 1024
       })
     );
+
   }
   return config;
 };
