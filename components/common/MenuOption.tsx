@@ -141,7 +141,11 @@ function MenuOption({
           </Text>
           {additionalOptions &&
             (activeMenuOption ? (
-              <UpArrow boxSize={[2]} stroke="black" />
+              <UpArrow
+                boxSize={[2]}
+                stroke="black"
+                transform={["unset", "unset", "rotate(-90deg)"]}
+              />
             ) : (
               <AddIcon
                 color={
@@ -154,7 +158,6 @@ function MenuOption({
       </Box>
       <Box
         mt="10px"
-        // h={activeMenuOption ? "auto" : "100px"}
         maxH={activeMenuOption ? contentHeight : "100px"}
         display={["flex", "flex", "none"]}
         flexDirection="column"

@@ -4,6 +4,7 @@ import MenuOption from "./common/MenuOption";
 import RoomOption from "./common/RoomOption";
 import LanguageOption from "./common/LanguageOption";
 import { BurgerDots } from "../assets/icons/BurgerDots";
+import OverlayInstruction from "./common/OverlayInstruction";
 
 interface Room {
   name: string;
@@ -87,7 +88,7 @@ function Overlay() {
     instructions: {
       height: ["250px"],
       width: ["250px"],
-      content: <Box>Instructions Go Here</Box>,
+      content: <OverlayInstruction />,
     },
     language: {
       height: ["170px"],
