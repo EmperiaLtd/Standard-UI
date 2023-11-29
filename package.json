@@ -2,7 +2,7 @@
   "name": "standard",
   "version": "0.0.0",
   "homepage": "/Testing/UI/0.0.0",
-  "main": "src/expo/AppEntry.js",
+  "main": "node_modules/expo/AppEntry.js",
   "main-web": "src/expo/AppEntry.js",
   "scripts": {
     "start": "env-cmd -f .env npx expo start --web --clear",
