@@ -1,12 +1,11 @@
 import { Box, Image, Button, Text } from "@chakra-ui/react";
 import { CrossIcon } from "../assets/icons/CrossIcon";
 
-interface InfoModalProps {
-  active: boolean;
-  close: () => void;
-}
 
-function InfoModal({ active, close }: InfoModalProps) {
+
+function InfoModal({ infoData, active, close }: InfoModalProps) {
+  const transition = "all 0.2s ease-in-out";
+
   return (
     <>
       <Box
@@ -17,8 +16,8 @@ function InfoModal({ active, close }: InfoModalProps) {
         left="0"
         opacity={active ? 1 : 0}
         visibility={active ? "visible" : "hidden"}
-        backgroundColor="rgba(0,0,0,0.2)"
-        transition="all 1s"
+        background="rgba(0, 0, 0, 0)"
+        transition={transition}
         zIndex="6"
         onClick={close}
       />
@@ -27,15 +26,14 @@ function InfoModal({ active, close }: InfoModalProps) {
         zIndex="12"
         opacity={active ? 1 : 0}
         visibility={active ? "visible" : "hidden"}
-        transition="all 0.5s"
+        transition={transition}
         position="fixed"
         top={0}
         right={0}
         left={0}
         bottom={0}
         margin="auto"
-        background="rgba(255, 255, 255, 0.2)"
-        border="0.731px solid rgba(255, 255, 255, 0.80)"
+        background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
         borderRadius={["0px", "12px", "12px", "12px"]}
         boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
         backdropFilter="blur(12px)"
@@ -67,7 +65,7 @@ function InfoModal({ active, close }: InfoModalProps) {
         >
           <Image
             objectFit="cover"
-            src="https://picsum.photos/1000/1000"
+            src={infoData?.image}
             height="100%"
             width="100%"
             borderRadius="inherit"
@@ -94,7 +92,7 @@ function InfoModal({ active, close }: InfoModalProps) {
               textTransform="uppercase"
               color="white"
             >
-              Title
+              {infoData?.title}
             </Text>
             <Text
               m="10px 0px"
@@ -102,19 +100,10 @@ function InfoModal({ active, close }: InfoModalProps) {
               fontSize={["14px"]}
               color="white"
             >
-              Subtitle
+              {infoData?.subtitle}
             </Text>
             <Text fontFamily="Montserrat" fontSize={["12px"]} color="white">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
+              {infoData?.description}
             </Text>
           </Box>
           <Button
@@ -129,7 +118,7 @@ function InfoModal({ active, close }: InfoModalProps) {
             backdropFilter="blur(12px)"
             color="white"
           >
-            Learn More
+            {infoData?.moreCTA}
           </Button>
         </Box>
       </Box>

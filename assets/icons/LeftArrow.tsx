@@ -12,7 +12,7 @@ export const LeftArrow = (props: IconProps) => (
     <path
       d="M7.30005 1.39014L1.30005 7.39014L7.30005 13.3901"
       strokeWidth="2px"
-      stroke-linecap="round"
+      strokeLinecap="round"
     />
   </Icon>
 );

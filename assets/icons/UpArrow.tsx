@@ -9,6 +9,6 @@ export const UpArrow = (props: IconProps) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <path d="M1 4L4 1L7 4" stroke="black" stroke-linecap="round" />
+    <path d="M1 4L4 1L7 4" stroke="black" strokeLinecap="round" />
   </Icon>
 );

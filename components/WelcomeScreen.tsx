@@ -1,17 +1,16 @@
 import { Box, Button, Image, Text } from "@chakra-ui/react";
 import { OutlineRightArrow } from "../assets/icons/OutlineRightArrow";
 
-interface WelcomeProps  {
-  active:boolean;
-  close:()=>void;
-}
 
-function WelcomeScreen({active,close}:WelcomeProps) {
+
+function WelcomeScreen({ welcomeData, active, close }: WelcomeProps) {
+  const transition = "all 0.2s ease-in-out";
+
   return (
     <Box
-    opacity={active ? 1 : 0}
-    visibility={active ? 'visible' : 'hidden'}
-    transition="all 1s"
+      opacity={active ? 1 : 0}
+      visibility={active ? "visible" : "hidden"}
+      transition={transition}
       display="flex"
       flexDirection={["column", "column", "row", "row", "row"]}
       justifyContent={[
@@ -27,7 +26,8 @@ function WelcomeScreen({active,close}:WelcomeProps) {
       left="0"
       h="100%"
       w="100%"
-      backdropFilter="blur(20px)"
+      background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
+      backdropFilter="blur(12px)"
       padding={["40px", "40px", "60px", "80px", "100px"]}
     >
       <Box
@@ -45,7 +45,7 @@ function WelcomeScreen({active,close}:WelcomeProps) {
           alignItems="center"
         >
           <Image
-            src="https://picsum.photos/200/200"
+            src={welcomeData?.collectionImage}
             height={["50px", "50px", "55px", "60px", "70px"]}
             width={["50px", "50px", "55px", "60px", "70px"]}
             borderRadius="100"
@@ -58,7 +58,7 @@ function WelcomeScreen({active,close}:WelcomeProps) {
             lineHeight={["20px", "20px", "22px", "24px", "27px"]}
             color="white"
           >
-            The Bicester Collection
+            {welcomeData?.collectionTitle}
           </Text>
         </Box>
         <Text
@@ -69,7 +69,7 @@ function WelcomeScreen({active,close}:WelcomeProps) {
           lineHeight={["30px", "30px", "40px", "60px", "100px"]}
           color="white"
         >
-          VIRTUAL VOYAGE
+          {welcomeData?.jumboTitle}
         </Text>
         <Text
           fontFamily="Montserrat-Bold"
@@ -77,8 +77,7 @@ function WelcomeScreen({active,close}:WelcomeProps) {
           fontSize={["13px", "13px", "14px", "15px", "15px"]}
           color="white"
         >
-          Explore The Bicester Collection universe and immerse yourself in a 360
-          journey of delight.
+          {welcomeData?.tagline}
         </Text>
       </Box>
       <Box
@@ -95,7 +94,7 @@ function WelcomeScreen({active,close}:WelcomeProps) {
           rightIcon={<OutlineRightArrow boxSize={[5]} />}
           onClick={close}
         >
-          Enter
+          {welcomeData?.enterCTA}
         </Button>
       </Box>
     </Box>

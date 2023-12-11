@@ -10,6 +10,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "declaration": true, 
     "allowJs": true,
     "noImplicitAny": false,
     "removeComments": true,
@@ -28,7 +29,9 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "./*"
+    "./*",
+    "src", 
+    "types"
   ],
   "extends": "expo/tsconfig.base"
 }

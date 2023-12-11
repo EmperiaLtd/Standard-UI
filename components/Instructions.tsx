@@ -1,46 +1,23 @@
 import { Box, IconButton, Text } from "@chakra-ui/react";
-import HoldAndDrag from "../assets/videos/HoldAndDrag.mp4";
-import TapToMove from "../assets/videos/TapToMove.mp4";
-import ClickToOpen from "../assets/videos/ClickToOpen.mp4";
+import HoldAndDrag from "../assets/videos/HoldAndDrag.webm";
+import TapToMove from "../assets/videos/TapToMove.webm";
+import ClickToOpen from "../assets/videos/ClickToOpen.webm";
 import Slider from "react-slick";
 import ReactPlayer from "react-player";
 import { RightStemArrow } from "../assets/icons/RightStemArrow";
 import { LeftStemArrow } from "../assets/icons/LeftStemArrow";
 import { useState } from "react";
 
-interface InstructionsProps {
-  active: boolean;
-  close: () => void;
-}
 
-interface InstructionItem {
-  text: string;
-  video: string;
-}
 
-function Instructions({ active, close }: InstructionsProps) {
+function Instructions({ instructionsData, active, close }: InstructionsProps) {
   const transition = "all 0.2s ease-in-out";
-
+  const videos = [HoldAndDrag, TapToMove, ClickToOpen];
   const [slider, setSlider] = useState<any>();
   const [activeImageIndex, setActiveImageIndex] = useState({
     oldIndex: 0,
     newIndex: 0,
   });
-
-  const InstructionItems: InstructionItem[] = [
-    {
-      text: "Click on floor to move",
-      video: HoldAndDrag,
-    },
-    {
-      text: "Hold and Drag to look around",
-      video: TapToMove,
-    },
-    {
-      text: "Hover or Click on objects to learn more",
-      video: ClickToOpen,
-    },
-  ];
 
   const nextSlide = () => {
     slider.slickNext();
@@ -72,7 +49,7 @@ function Instructions({ active, close }: InstructionsProps) {
         opacity={active ? 1 : 0}
         visibility={active ? "visible" : "hidden"}
         backgroundColor="rgba(0,0,0,0.2)"
-        transition="all 1s"
+        transition={transition}
         zIndex="6"
         onClick={close}
       />
@@ -86,54 +63,36 @@ function Instructions({ active, close }: InstructionsProps) {
         left={0}
         bottom={["20px", "20px", "60px"]}
         margin="auto"
-        background={[
-          "transparent",
-          "transparent",
-          "linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)",
-        ]}
+        background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
         borderRadius={["24px", "24px", "24px", "24px"]}
         boxShadow={["none", "none", "0px 4px 4px 0px rgba(0, 0, 0, 0.25)"]}
         backdropFilter="blur(12px)"
-        width={["260px", "360px", "450px"]}
-        height={["210px", "270px", "400px"]}
-        padding={["5px", "0px", "30px"]}
+        width={["220px", "300px", "450px"]}
+        height={["270px", "340px", "400px"]}
+        padding={["10px", "20px", "30px"]}
         overflowY={["auto", "auto", "unset", "unset"]}
         overflowX="hidden"
         display="flex"
         justifyContent={["space-between"]}
         alignItems={["center"]}
-        flexDirection={["row", "row", "column"]}
+        flexDirection="column"
         transition={transition}
       >
         <Text
           textTransform="uppercase"
           position="absolute"
-          left={["5px", "5px", "40px"]}
-          bottom={["10px", "10px", "40px"]}
+          left={["20px", "20px", "40px"]}
+          bottom={["20px", "20px", "40px"]}
           color="white"
-          fontSize={["15px"]}
+          fontSize={["13px", "14px", "15px"]}
           fontFamily="Montserrat-Medium"
           fontWeight="900"
           cursor="pointer"
+          onClick={close}
+          zIndex="10"
         >
-          Skip
+          {instructionsData?.skip}
         </Text>
-
-        <IconButton
-          display={["unset", "unset", "none"]}
-          variant="outline"
-          aria-label="Move Left"
-          onClick={prevSlide}
-          w={["40px", "60px", "60px"]}
-          height={["30px", "50px", "50px"]}
-          border="1px solid rgba(255, 255, 255, 0.80)"
-          backdropFilter="blur(12px)"
-          background={"rgba(0, 0, 0, 0.05)"}
-          _hover={{ background: "rgba(0, 0, 0, 0.15)" }}
-          boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-          borderRadius="8px"
-          icon={<LeftStemArrow fill="white" boxSize={[4, 6, 6]} />}
-        />
 
         <Box
           padding={["10px", "15px", "15px"]}
@@ -146,26 +105,24 @@ function Instructions({ active, close }: InstructionsProps) {
           boxShadow="0px 2px 4px 0px rgba(0, 0, 0, 0.25)"
           backdropFilter="blur(12px)"
           w={["150px", "200px", "100%"]}
-          height={["200px", "260px", "260px"]}
+          height={["195px", "240px", "260px"]}
         >
-          <Box w={["100%", "180px", "190px"]} h={["170px", "180px", "190px"]}>
+          <Box w={["130px", "160px", "190px"]} h={["130px", "160px", "190px"]}>
             <Slider ref={(slider) => setSlider(slider)} {...settings}>
-              {InstructionItems?.map(
-                (InstructionItem: InstructionItem, index: number) => (
-                  <ReactPlayer
-                    key={index}
-                    id="instructions-screen-video"
-                    height="inherit"
-                    width="100%"
-                    loop={true}
-                    muted
-                    controls={false}
-                    playing={true}
-                    url={InstructionItem.video}
-                    playsinline
-                  />
-                )
-              )}
+              {videos.map((video: string, index: number) => (
+                <ReactPlayer
+                  key={index}
+                  id="instructions-screen-video"
+                  height="inherit"
+                  width="100%"
+                  loop={true}
+                  muted
+                  controls={false}
+                  playing={true}
+                  url={video}
+                  playsinline
+                />
+              ))}
             </Slider>
           </Box>
           <Text
@@ -176,72 +133,51 @@ function Instructions({ active, close }: InstructionsProps) {
             fontSize={["12px", "14px", "15px"]}
             fontFamily="Montserrat-Medium"
             fontWeight="900"
-            height={["50px", "40px", "auto"]}
+            height={["40px", "40px", "auto"]}
             textAlign="center"
           >
-            {InstructionItems[activeImageIndex.newIndex].text}
+            {instructionsData?.content[activeImageIndex.newIndex]}
           </Text>
         </Box>
 
-        <IconButton
-          display={["unset", "unset", "none"]}
-          variant="outline"
-          aria-label="Move Left"
-          onClick={nextSlide}
-          w={["40px", "60px", "60px"]}
-          height={["30px", "50px", "50px"]}
-          border="1px solid rgba(255, 255, 255, 0.80)"
-          backdropFilter="blur(12px)"
-          background={"rgba(0, 0, 0, 0.05)"}
-          _hover={{ background: "rgba(0, 0, 0, 0.15)" }}
-          boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-          borderRadius="8px"
-          icon={<RightStemArrow fill="white" boxSize={[6]} />}
-        />
-
-        {/* For Desktop Only */}
         <Box
           position="relative"
           w="100%"
           height={["50px"]}
-          display={["none", "none", "flex"]}
+          display="flex"
           justifyContent="center"
           alignItems="center"
         >
           <Box
-            w={["130px"]}
+            w={["90px", "130px", "130px"]}
             display="flex"
             justifyContent="space-between"
             alignItems="center"
           >
             <IconButton
-              variant="outline"
               aria-label="Move Left"
               onClick={prevSlide}
-              w={["60px"]}
-              height={["50px"]}
-              border="1px solid rgba(255, 255, 255, 0.80)"
+              w={["40px", "60px", "60px"]}
+              height={["30px", "50px", "50px"]}
               backdropFilter="blur(12px)"
               background={"rgba(0, 0, 0, 0.05)"}
               _hover={{ background: "rgba(0, 0, 0, 0.15)" }}
               boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
               borderRadius="8px"
-              icon={<LeftStemArrow fill="white" boxSize={[6]} />}
+              icon={<LeftStemArrow fill="white" boxSize={[4, 5, 6]} />}
             />
 
             <IconButton
-              variant="outline"
               aria-label="Move Left"
               onClick={nextSlide}
-              w={["60px"]}
-              height={["50px"]}
-              border="1px solid rgba(255, 255, 255, 0.80)"
+              w={["40px", "60px", "60px"]}
+              height={["30px", "50px", "50px"]}
               backdropFilter="blur(12px)"
               background={"rgba(0, 0, 0, 0.05)"}
               _hover={{ background: "rgba(0, 0, 0, 0.15)" }}
               boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
               borderRadius="8px"
-              icon={<RightStemArrow fill="white" boxSize={[6]} />}
+              icon={<RightStemArrow fill="white" boxSize={[4, 5, 6]} />}
             />
           </Box>
         </Box>

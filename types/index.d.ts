@@ -1,5 +1,8 @@
+export { };
 declare global {
   interface Window {
+    emperia: any;
+    currency: string;
     embedpano: () => void;
     openProductPopUp: (id: string) => void;
     InitiateExperience: () => void;
@@ -7,6 +10,5 @@ declare global {
     updateScene: (scene: string) => void;
     GotoScene: (scene: string) => void;
   }
-}
 
-export { };
+}

@@ -12,14 +12,14 @@ export const CrossIcon = (props: IconProps) => (
     <path
       d="M0.829346 12.9454L12.8295 0.945435"
       strokeWidth="1.5px"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M12.8295 12.9454L0.829346 0.945435"
       strokeWidth="1.5px"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </Icon>
 );

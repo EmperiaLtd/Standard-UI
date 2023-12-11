@@ -1,39 +1,26 @@
 import { useState } from "react";
 import { Box, IconButton, Text } from "@chakra-ui/react";
-import HoldAndDrag from "../../assets/videos/HoldAndDrag.mp4";
-import TapToMove from "../../assets/videos/TapToMove.mp4";
-import ClickToOpen from "../../assets/videos/ClickToOpen.mp4";
+import HoldAndDrag from "../../assets/videos/HoldAndDrag.webm";
+import TapToMove from "../../assets/videos/TapToMove.webm";
+import ClickToOpen from "../../assets/videos/ClickToOpen.webm";
 import ReactPlayer from "react-player";
 import Slider from "react-slick";
 import { LeftStemArrow } from "../../assets/icons/LeftStemArrow";
 import { RightStemArrow } from "../../assets/icons/RightStemArrow";
 
-function OverlayInstruction() {
+interface OverlayInstructionsProps{
+  instructionsData: string[];
+}
+
+function OverlayInstruction({instructionsData}:OverlayInstructionsProps) {
+
+  const videos = [HoldAndDrag, TapToMove, ClickToOpen];
+
   const [slider, setSlider] = useState<any>();
   const [activeImageIndex, setActiveImageIndex] = useState({
     oldIndex: 0,
     newIndex: 0,
   });
-
-  interface InstructionItem {
-    text: string;
-    video: string;
-  }
-
-  const InstructionItems: InstructionItem[] = [
-    {
-      text: "Click on floor to move",
-      video: HoldAndDrag,
-    },
-    {
-      text: "Hold and Drag to look around",
-      video: TapToMove,
-    },
-    {
-      text: "Hover or Click on objects to learn more",
-      video: ClickToOpen,
-    },
-  ];
 
   const nextSlide = () => {
     slider.slickNext();
@@ -70,16 +57,15 @@ function OverlayInstruction() {
         alignItems="center"
         justifyContent="space-between"
         borderRadius={["24px", "24px", "24px", "24px"]}
-        background={"rgba(0, 0, 0, 0.05)"}
+        background={"rgba(0, 0, 0, 0.15)"}
         boxShadow="0px 2px 4px 0px rgba(0, 0, 0, 0.25)"
-        backdropFilter="blur(12px)"
         w={["160px", "180px", "100%"]}
         height={["200px", "200px", "230px"]}
       >
         <Box w={["100%", "120px", "150px"]} h={["170px", "120px", "150px"]}>
           <Slider ref={(slider) => setSlider(slider)} {...settings}>
-            {InstructionItems?.map(
-              (InstructionItem: InstructionItem, index: number) => (
+            {videos?.map(
+              (video: string, index: number) => (
                 <ReactPlayer
                   key={index}
                   id="instructions-screen-video"
@@ -89,7 +75,7 @@ function OverlayInstruction() {
                   muted
                   controls={false}
                   playing={true}
-                  url={InstructionItem.video}
+                  url={video}
                   playsinline
                 />
               )
@@ -107,7 +93,7 @@ function OverlayInstruction() {
           height={["40px", "40px", "40px"]}
           textAlign="center"
         >
-          {InstructionItems[activeImageIndex.newIndex].text}
+          {instructionsData[activeImageIndex.newIndex]}
         </Text>
       </Box>
 
@@ -126,30 +112,24 @@ function OverlayInstruction() {
           alignItems="center"
         >
           <IconButton
-            variant="outline"
             aria-label="Move Left"
             onClick={prevSlide}
             w={["40px", "40px", "60px"]}
             height={["30px", "30px", "50px"]}
-            border="1px solid rgba(255, 255, 255, 0.80)"
-            backdropFilter="blur(12px)"
-            background={"rgba(0, 0, 0, 0.05)"}
-            _hover={{ background: "rgba(0, 0, 0, 0.15)" }}
+            background={"rgba(0, 0, 0, 0.15)"}
+            _hover={{ background: "rgba(0, 0, 0, 0.25)" }}
             boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
             borderRadius="8px"
             icon={<LeftStemArrow fill="white" boxSize={[4, 4, 6]} />}
           />
 
           <IconButton
-            variant="outline"
             aria-label="Move Left"
             onClick={nextSlide}
             w={["40px", "40px", "60px"]}
             height={["30px", "30px", "50px"]}
-            border="1px solid rgba(255, 255, 255, 0.80)"
-            backdropFilter="blur(12px)"
-            background={"rgba(0, 0, 0, 0.05)"}
-            _hover={{ background: "rgba(0, 0, 0, 0.15)" }}
+            background={"rgba(0, 0, 0, 0.15)"}
+            _hover={{ background: "rgba(0, 0, 0, 0.25)" }}
             boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
             borderRadius="8px"
             icon={<RightStemArrow fill="white" boxSize={[4, 4, 6]} />}

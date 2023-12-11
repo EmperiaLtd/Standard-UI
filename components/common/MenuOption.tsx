@@ -54,7 +54,7 @@ function MenuOption({
         stroke={menuOptionHovered || activeMenuOption ? "black" : "white"}
       />
     ),
-    language: (
+    languages: (
       <LanguageShifter
         boxSize={[6]}
         stroke={menuOptionHovered || activeMenuOption ? "black" : "white"}

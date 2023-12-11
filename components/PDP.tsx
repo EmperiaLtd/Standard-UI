@@ -14,22 +14,7 @@ import { Hanger } from "../assets/icons/Hanger";
 import Swatch from "./PDP/Swatch";
 import Size from "./PDP/Size";
 
-interface PDPProps {
-  active: boolean;
-  close: () => void;
-}
 
-interface ColorItem {
-  id: number | string;
-  name: string;
-  available: boolean;
-}
-
-interface SizeItem {
-  id: number | string;
-  name: string;
-  available: boolean;
-}
 
 const PDP = ({ active, close }: PDPProps) => {
   const transition = "all 0.2s ease-in-out";
@@ -94,7 +79,7 @@ const PDP = ({ active, close }: PDPProps) => {
 
   return (
     <Modal onClose={() => close()} isOpen={active}>
-      <ModalOverlay />
+      <ModalOverlay background="rgba(0, 0, 0, 0)" />
       <ModalContent
         m={["0px", "0px", "auto", "auto", "auto"]}
         h={[
@@ -117,11 +102,9 @@ const PDP = ({ active, close }: PDPProps) => {
         borderRadius={["0px", "0px", "12px", "12px"]}
         boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
         backdropFilter="blur(12px)"
-        border="0.731px solid rgba(255, 255, 255, 0.80)"
       >
         <CrossIcon
           position="absolute"
-          filter="drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.5))"
           top={["10px", "10px", "10px", "10px", "10px"]}
           right={["10px", "10px", "10px", "10px", "10px"]}
           boxSize={[5, 5, 5, 6]}
@@ -314,6 +297,7 @@ const PDP = ({ active, close }: PDPProps) => {
                 >
                   {sizes?.map((size: SizeItem) => (
                     <Size
+                      key={size.id}
                       active={selectedSize.id === size.id}
                       transition={transition}
                       sizeName={size.name}
