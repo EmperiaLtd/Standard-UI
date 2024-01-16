@@ -1,6 +1,8 @@
+/* eslint-disable prettier/prettier */
 export { };
 declare global {
   interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     emperia: any;
     currency: string;
     embedpano: () => void;
@@ -10,5 +12,4 @@ declare global {
     updateScene: (scene: string) => void;
     GotoScene: (scene: string) => void;
   }
-
 }

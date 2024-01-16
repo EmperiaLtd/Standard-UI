@@ -1,21 +1,21 @@
-import { useState } from "react";
-import { Box, IconButton, Text } from "@chakra-ui/react";
-import HoldAndDrag from "../../assets/videos/HoldAndDrag.webm";
-import TapToMove from "../../assets/videos/TapToMove.webm";
-import ClickToOpen from "../../assets/videos/ClickToOpen.webm";
-import ReactPlayer from "react-player";
-import Slider from "react-slick";
-import { LeftStemArrow } from "../../assets/icons/LeftStemArrow";
-import { RightStemArrow } from "../../assets/icons/RightStemArrow";
+import { useState } from 'react';
+import { Box, IconButton, Text } from '@chakra-ui/react';
+import HoldAndDrag from '../../assets/videos/HoldAndDrag.webm';
+import TapToMove from '../../assets/videos/TapToMove.webm';
+import ClickToOpen from '../../assets/videos/ClickToOpen.webm';
+import ReactPlayer from 'react-player';
+import Slider from 'react-slick';
+import { LeftStemArrow } from '../../assets/icons/LeftStemArrow';
+import { RightStemArrow } from '../../assets/icons/RightStemArrow';
 
-interface OverlayInstructionsProps{
+interface OverlayInstructionsProps {
   instructionsData: string[];
 }
 
-function OverlayInstruction({instructionsData}:OverlayInstructionsProps) {
-
+function OverlayInstruction({ instructionsData }: OverlayInstructionsProps) {
   const videos = [HoldAndDrag, TapToMove, ClickToOpen];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [slider, setSlider] = useState<any>();
   const [activeImageIndex, setActiveImageIndex] = useState({
     oldIndex: 0,
@@ -44,42 +44,40 @@ function OverlayInstruction({instructionsData}:OverlayInstructionsProps) {
   return (
     <Box
       display="flex"
-      justifyContent={["space-between"]}
-      alignItems={["center"]}
-      flexDirection={["column"]}
-      h={["300px", "300px", "100%"]}
+      justifyContent={['space-between']}
+      alignItems={['center']}
+      flexDirection={['column']}
+      h={['240px', '300px', '100%']}
       w="100%"
     >
       <Box
-        padding={["10px", "15px", "15px"]}
+        padding={['10px', '10px', '15px']}
         display="flex"
         flexDirection="column"
         alignItems="center"
         justifyContent="space-between"
-        borderRadius={["24px", "24px", "24px", "24px"]}
-        background={"rgba(0, 0, 0, 0.15)"}
+        borderRadius={['24px', '24px', '24px', '24px']}
+        background={'rgba(0, 0, 0, 0.15)'}
         boxShadow="0px 2px 4px 0px rgba(0, 0, 0, 0.25)"
-        w={["160px", "180px", "100%"]}
-        height={["200px", "200px", "230px"]}
+        w={['150px', '160px', '100%']}
+        height={['190px', '200px', '230px']}
       >
-        <Box w={["100%", "120px", "150px"]} h={["170px", "120px", "150px"]}>
+        <Box w={['100%', '130px', '150px']} h={['150px', '130px', '150px']}>
           <Slider ref={(slider) => setSlider(slider)} {...settings}>
-            {videos?.map(
-              (video: string, index: number) => (
-                <ReactPlayer
-                  key={index}
-                  id="instructions-screen-video"
-                  height="inherit"
-                  width="100%"
-                  loop={true}
-                  muted
-                  controls={false}
-                  playing={true}
-                  url={video}
-                  playsinline
-                />
-              )
-            )}
+            {videos?.map((video: string, index: number) => (
+              <ReactPlayer
+                key={index}
+                id="instructions-screen-video"
+                height="inherit"
+                width="100%"
+                loop={true}
+                muted
+                controls={false}
+                playing={true}
+                url={video}
+                playsinline
+              />
+            ))}
           </Slider>
         </Box>
         <Text
@@ -87,10 +85,10 @@ function OverlayInstruction({instructionsData}:OverlayInstructionsProps) {
           alignItems="center"
           justifyContent="center"
           color="white"
-          fontSize={["12px", "13px", "15px"]}
+          fontSize={['12px', '12px', '14px']}
           fontFamily="Montserrat-Medium"
           fontWeight="900"
-          height={["40px", "40px", "40px"]}
+          height={['40px', '40px', '40px']}
           textAlign="center"
         >
           {instructionsData[activeImageIndex.newIndex]}
@@ -100,24 +98,19 @@ function OverlayInstruction({instructionsData}:OverlayInstructionsProps) {
       <Box
         position="relative"
         w="100%"
-        height={["50px", "50px", "70px"]}
+        height={['50px', '50px', '70px']}
         display="flex"
         justifyContent="center"
         alignItems="center"
       >
-        <Box
-          w={["90px", "90px", "130px"]}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
+        <Box w={['90px', '90px', '130px']} display="flex" justifyContent="space-between" alignItems="center">
           <IconButton
             aria-label="Move Left"
             onClick={prevSlide}
-            w={["40px", "40px", "60px"]}
-            height={["30px", "30px", "50px"]}
-            background={"rgba(0, 0, 0, 0.15)"}
-            _hover={{ background: "rgba(0, 0, 0, 0.25)" }}
+            w={['40px', '40px', '60px']}
+            height={['30px', '30px', '50px']}
+            background={'rgba(0, 0, 0, 0.15)'}
+            _hover={{ background: 'rgba(0, 0, 0, 0.25)' }}
             boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
             borderRadius="8px"
             icon={<LeftStemArrow fill="white" boxSize={[4, 4, 6]} />}
@@ -126,10 +119,10 @@ function OverlayInstruction({instructionsData}:OverlayInstructionsProps) {
           <IconButton
             aria-label="Move Left"
             onClick={nextSlide}
-            w={["40px", "40px", "60px"]}
-            height={["30px", "30px", "50px"]}
-            background={"rgba(0, 0, 0, 0.15)"}
-            _hover={{ background: "rgba(0, 0, 0, 0.25)" }}
+            w={['40px', '40px', '60px']}
+            height={['30px', '30px', '50px']}
+            background={'rgba(0, 0, 0, 0.15)'}
+            _hover={{ background: 'rgba(0, 0, 0, 0.25)' }}
             boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
             borderRadius="8px"
             icon={<RightStemArrow fill="white" boxSize={[4, 4, 6]} />}

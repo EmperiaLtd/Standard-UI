@@ -1,26 +1,9 @@
-import { Icon, IconProps } from "@chakra-ui/icons";
+import { Icon, IconProps } from '@chakra-ui/icons';
 
 export const LanguageShifter = (props: IconProps) => (
-  <Icon
-    width="22"
-    height="22"
-    viewBox="0 0 22 22"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
-    <path
-      d="M10.8135 13.1885H20.7285"
-      strokeWidth="1.3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M15.7705 10.5129V13.1885"
-      strokeWidth="1.3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
+  <Icon width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <path d="M10.8135 13.1885H20.7285" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M15.7705 10.5129V13.1885" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
     <path
       d="M12.8945 13.1885C13.6709 16.8461 17.0193 19.2017 19.4028 20.7213"
       strokeWidth="1.3"
@@ -39,12 +22,7 @@ export const LanguageShifter = (props: IconProps) => (
       strokeLinecap="round"
       strokeLinejoin="round"
     />
-    <path
-      d="M3.30371 7.1805H6.11327"
-      strokeWidth="1.3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
+    <path d="M3.30371 7.1805H6.11327" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
     <path
       d="M13.208 2.18513C16.5272 2.5063 19.4296 5.57597 19.8464 8.36828"
       strokeWidth="1.3"

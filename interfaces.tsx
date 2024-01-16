@@ -1,44 +1,42 @@
 //Overlay
-interface OverlayProps {
+export interface OverlayProps {
   overlayData: OverlayElement[];
   active: boolean;
 }
-
-interface TransformedOverlayData {
+export interface TransformedOverlayData {
   height: string[];
   width: string[];
   key: string;
   text: string;
   textAlternate: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: any;
 }
-
-interface OverlayState {
+export interface OverlayState {
   data: OverlayElement[];
   active: boolean;
 }
-
-interface OverlayElement {
+export interface OverlayElement {
   key: string;
   text: string;
   textAlternate?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
 //Welcome
-interface WelcomeProps {
+export interface WelcomeProps {
   welcomeData: WelcomeData;
   active: boolean;
   close: () => void;
 }
-
-interface WelcomeState {
+export interface WelcomeState {
   data: WelcomeData;
   active: boolean;
 }
-
-interface WelcomeData {
+export interface WelcomeData {
   collectionImage: string;
   collectionTitle: string;
   jumboTitle: string;
@@ -47,35 +45,41 @@ interface WelcomeData {
 }
 
 // Instructions
-interface InstructionsProps {
+export interface InstructionsProps {
   instructionsData: InstructionsData;
   active: boolean;
   close: () => void;
 }
 
-interface InstructionsState {
+export interface InstructionsState {
   data: InstructionsData;
   active: boolean;
 }
 
-interface InstructionsData {
+export interface InstructionsData {
   skip: string;
   content: string[];
 }
 
 //Info Modal
-interface InfoModalProps {
+export interface InfoModalProps {
   infoData: InfoData;
   active: boolean;
   close: () => void;
 }
 
-interface InfoState {
+export interface InfoDrawerProps {
+  infoData: InfoData;
+  active: boolean;
+  close: () => void;
+}
+
+export interface InfoState {
   data: InfoData;
   active: boolean;
 }
 
-interface InfoData {
+export interface InfoData {
   image: string;
   title: string;
   subtitle: string;
@@ -84,36 +88,36 @@ interface InfoData {
 }
 
 // PDP
-interface PDPProps {
+export interface ProductDrawerProps {
   active: boolean;
   close: () => void;
 }
 
-interface ColorItem {
+export interface ColorItem {
   id: number | string;
   name: string;
   available: boolean;
 }
 
-interface SizeItem {
+export interface SizeItem {
   id: number | string;
   name: string;
   available: boolean;
 }
 
 //UI Ready
-interface UIReadyData {
+export interface UIReadyData {
   welcome: WelcomeData;
   instructions: InstructionsData;
   overlay: OverlayElement[];
 }
 
-interface SoundItem {
+export interface SoundItem {
   name: string;
   fileURL: string;
 }
 
-interface RoomItem {
+export interface RoomItem {
   roomName: string;
   description: string;
   sceneToGo: string;

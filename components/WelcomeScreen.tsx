@@ -1,102 +1,103 @@
-import { Box, Button, Image, Text } from "@chakra-ui/react";
-import { OutlineRightArrow } from "../assets/icons/OutlineRightArrow";
-
-
+import { Box, Button, Image, Text } from '@chakra-ui/react';
+import { WelcomeProps } from '../interfaces';
 
 function WelcomeScreen({ welcomeData, active, close }: WelcomeProps) {
-  const transition = "all 0.2s ease-in-out";
+  const transition = 'all 0.2s ease-in-out';
 
   return (
     <Box
+      zIndex="12"
       opacity={active ? 1 : 0}
-      visibility={active ? "visible" : "hidden"}
+      visibility={active ? 'visible' : 'hidden'}
       transition={transition}
-      display="flex"
-      flexDirection={["column", "column", "row", "row", "row"]}
-      justifyContent={[
-        "flex-end",
-        "flex-end",
-        "space-between",
-        "space-between",
-        "space-between",
-      ]}
-      alignItems={["flex-end", "center", "flex-end", "flex-end", "flex-end"]}
       position="fixed"
-      top="0"
-      left="0"
-      h="100%"
-      w="100%"
+      top={0}
+      right={0}
+      left={0}
+      bottom={0}
+      margin="auto"
       background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
+      borderRadius="12px"
+      boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
       backdropFilter="blur(12px)"
-      padding={["40px", "40px", "60px", "80px", "100px"]}
+      width={['90vw', '390px', '650px', '650px']}
+      height={['370px', '420px', '450px', '450px']}
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      flexDirection="column"
     >
       <Box
+        width={['180px', '210px', '235px', '300px']}
+        height={['45px', '50px', '60px', '70px']}
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Image
+          src={welcomeData?.collectionImage}
+          height={['45px', '50px', '55px', '70px']}
+          width={['45px', '50px', '55px', '70px']}
+          borderRadius="100"
+        />
+        <Text
+          textTransform="uppercase"
+          fontFamily="Montserrat-Medium"
+          w={['125px', '150px', '170px', '220px']}
+          fontSize={['16px', '18px', '22px', '25px']}
+          lineHeight={['18px', '20px', '24px', '27px']}
+          color="white"
+          noOfLines={2}
+        >
+          {welcomeData?.collectionTitle}
+        </Text>
+      </Box>
+
+      <Box
+        m={['30px 0px', '35px 0px', '40px 0px', '45px 0px']}
+        height={['120px', '120px', '100px', '110px']}
         display="flex"
         flexDirection="column"
         justifyContent="space-between"
-        width={["100%", "310px", "450px", "600px", "1000px"]}
-        height={["auto", "160px", "180px", "200px", "300px"]}
+        alignItems="center"
       >
-        <Box
-          width={["260px", "260px", "285px", "290px", "300px"]}
-          height={["50px", "50px", "55px", "60px", "70px"]}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Image
-            src={welcomeData?.collectionImage}
-            height={["50px", "50px", "55px", "60px", "70px"]}
-            width={["50px", "50px", "55px", "60px", "70px"]}
-            borderRadius="100"
-          />
-          <Text
-            textTransform="uppercase"
-            fontFamily="Montserrat-Medium"
-            width={["200px", "200px", "220px", "220px", "220px"]}
-            fontSize={["18px", "18px", "20px", "22px", "25px"]}
-            lineHeight={["20px", "20px", "22px", "24px", "27px"]}
-            color="white"
-          >
-            {welcomeData?.collectionTitle}
-          </Text>
-        </Box>
         <Text
           fontFamily="Montserrat-Bold"
           width="100%"
-          m={["20px 0px", "unset", "unset", "unset"]}
-          fontSize={["30px", "30px", "40px", "60px", "100px"]}
-          lineHeight={["30px", "30px", "40px", "60px", "100px"]}
+          fontSize={['23px', '26px', '45px', '50px']}
+          lineHeight={['23px', '26px', '45px', '50px']}
           color="white"
+          textAlign="center"
+          noOfLines={1}
         >
           {welcomeData?.jumboTitle}
         </Text>
         <Text
           fontFamily="Montserrat-Bold"
-          width={["100%", "100%", "450px", "450px", "450px"]}
-          fontSize={["13px", "13px", "14px", "15px", "15px"]}
+          width={['200px', '200px', '400px', '450px']}
+          fontSize={['13px', '13px', '13px', '14px']}
           color="white"
+          textAlign="center"
+          noOfLines={[4, 4, 2, 2]}
         >
           {welcomeData?.tagline}
         </Text>
       </Box>
-      <Box
-        display="flex"
-        alignItems="flex-end"
-        width={["100%", "310px", "180px", "180px", "250px"]}
-        mt="30px"
-        h="auto"
+
+      <Button
+        width={['150px']}
+        textTransform="uppercase"
+        fontFamily="Montserrat"
+        bg="rgba(0, 0, 0, 0.1)"
+        _hover={{ bg: 'rgba(0, 0, 0, 0.3)' }}
+        border="1px solid rgba(255, 255, 255, 0.80)"
+        boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25);"
+        backdropFilter="blur(12px)"
+        color="white"
+        onClick={close}
       >
-        <Button
-          w="100%"
-          boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px"
-          textTransform="uppercase"
-          rightIcon={<OutlineRightArrow boxSize={[5]} />}
-          onClick={close}
-        >
-          {welcomeData?.enterCTA}
-        </Button>
-      </Box>
+        {welcomeData?.enterCTA}
+      </Button>
     </Box>
   );
 }

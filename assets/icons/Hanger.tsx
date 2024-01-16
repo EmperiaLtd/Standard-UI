@@ -1,14 +1,8 @@
-import { Icon, IconProps } from "@chakra-ui/icons";
+import { Icon, IconProps } from '@chakra-ui/icons';
+import React from 'react';
 
 export const Hanger = (props: IconProps) => (
-  <Icon
-    width="20"
-    height="14"
-    viewBox="0 0 20 14"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <Icon width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"

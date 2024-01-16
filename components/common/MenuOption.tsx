@@ -1,15 +1,17 @@
-import { AddIcon } from "@chakra-ui/icons";
-import { Text, Box } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { RoomShifter } from "../../assets/icons/RoomShifter";
-import { InstructionsQuestion } from "../../assets/icons/InstructionsQuestion";
-import { LanguageShifter } from "../../assets/icons/LanguageShifter";
-import { Sound } from "../../assets/icons/Sound";
-import { UpArrow } from "../../assets/icons/UpArrow";
-import { Share } from "../../assets/icons/Share";
+import { AddIcon } from '@chakra-ui/icons';
+import { Text, Box } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { RoomShifter } from '../../assets/icons/RoomShifter';
+import { InstructionsQuestion } from '../../assets/icons/InstructionsQuestion';
+import { LanguageShifter } from '../../assets/icons/LanguageShifter';
+import { Sound } from '../../assets/icons/Sound';
+import { UpArrow } from '../../assets/icons/UpArrow';
+import { Share } from '../../assets/icons/Share';
 
 interface MenuOptionProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   contentHeight?: any;
   activeMenuOption?: boolean;
   leftIcon: string;
@@ -36,36 +38,15 @@ function MenuOption({
   setMenuOptionHovered,
 }: MenuOptionProps) {
   const icons = {
-    changeRooms: (
-      <RoomShifter
-        boxSize={[6]}
-        stroke={menuOptionHovered || activeMenuOption ? "black" : "white"}
-      />
-    ),
+    changeRooms: <RoomShifter boxSize={[4, 5, 6]} stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'} />,
     instructions: (
-      <InstructionsQuestion
-        boxSize={[6]}
-        stroke={menuOptionHovered || activeMenuOption ? "black" : "white"}
-      />
+      <InstructionsQuestion boxSize={[4, 5, 6]} stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'} />
     ),
-    sound: (
-      <Sound
-        boxSize={[6]}
-        stroke={menuOptionHovered || activeMenuOption ? "black" : "white"}
-      />
-    ),
+    sound: <Sound boxSize={[4, 5, 6]} stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'} />,
     languages: (
-      <LanguageShifter
-        boxSize={[6]}
-        stroke={menuOptionHovered || activeMenuOption ? "black" : "white"}
-      />
+      <LanguageShifter boxSize={[4, 5, 6]} stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'} />
     ),
-    share: (
-      <Share
-        boxSize={[6]}
-        stroke={menuOptionHovered || activeMenuOption ? "black" : "white"}
-      />
-    ),
+    share: <Share boxSize={[4, 5, 6]} stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'} />,
   };
 
   const [display, setDisplay] = useState(false);
@@ -84,34 +65,32 @@ function MenuOption({
 
   return (
     <Box
-      _notFirst={{ marginTop: "10px" }}
+      _notFirst={{ marginTop: ['5px', '5px', '10px'] }}
       borderTopRadius="24px"
       borderBottomRadius="24px"
-      h={activeMenuOption ? ["auto"] : ["50px"]}
+      h={activeMenuOption ? ['auto'] : ['40px', '40px', '50px']}
       w="100%"
       display="flex"
       flexDirection="column"
       justifyContent="flex-start"
       alignItems="center"
-      background={activeMenuOption ? "rgba(0, 0, 0, 0.10)" : "transparent"}
+      background={activeMenuOption ? 'rgba(0, 0, 0, 0.10)' : 'transparent'}
       transition={transition}
       overflow="hidden"
     >
       <Box
         zIndex="20"
         borderRadius="24px"
-        minH="50px"
+        minH={['40px', '40px', '50px']}
         w="100%"
         display="flex"
         justifyContent="space-evenly"
         alignItems="center"
-        background={activeMenuOption ? "#FFF" : "unset"}
-        boxShadow={
-          activeMenuOption ? "#0px 2px 4px 0px rgba(0, 0, 0, 0.25)" : "unset"
-        }
+        background={activeMenuOption ? '#FFF' : 'unset'}
+        boxShadow={activeMenuOption ? '#0px 2px 4px 0px rgba(0, 0, 0, 0.25)' : 'unset'}
         _hover={{
-          background: "#FFF",
-          boxShadow: "0px 2px 4px 0px rgba(0, 0, 0, 0.25)",
+          background: '#FFF',
+          boxShadow: '0px 2px 4px 0px rgba(0, 0, 0, 0.25)',
         }}
         transition={transition}
         onClick={onMenuOptionClick}
@@ -124,60 +103,51 @@ function MenuOption({
       >
         {icons[leftIcon as keyof typeof icons]}
         <Box
-          width={["140px"]}
+          width={['120px', '130px', '140px']}
           opacity={display ? 1 : 0}
-          display={activateMenuOptions ? "flex" : "none"}
+          display={activateMenuOptions ? 'flex' : 'none'}
           justifyContent="space-between"
           alignItems="center"
           transition={transition}
         >
           <Text
-            lineHeight={["15px"]}
-            fontSize={["15px"]}
+            lineHeight={['13px', '14px', '15px']}
+            fontSize={['13px', '14px', '15px']}
             fontFamily="Montserrat-Medium"
-            color={menuOptionHovered || activeMenuOption ? "black" : "white"}
+            color={menuOptionHovered || activeMenuOption ? 'black' : 'white'}
           >
             {text}
           </Text>
           {additionalOptions &&
             (activeMenuOption ? (
-              <UpArrow
-                boxSize={[2]}
-                stroke="black"
-                transform={["unset", "unset", "rotate(-90deg)"]}
-              />
+              <UpArrow boxSize={[2]} stroke="black" transform={['unset', 'unset', 'rotate(90deg)']} />
             ) : (
-              <AddIcon
-                color={
-                  menuOptionHovered || activeMenuOption ? "black" : "white"
-                }
-                boxSize={[2]}
-              />
+              <AddIcon color={menuOptionHovered || activeMenuOption ? 'black' : 'white'} boxSize={[2]} />
             ))}
         </Box>
       </Box>
       <Box
         mt="10px"
-        maxH={activeMenuOption ? contentHeight : "100px"}
-        display={["flex", "flex", "none"]}
+        maxH={activeMenuOption ? contentHeight : '100px'}
+        display={['flex', 'flex', 'none']}
         flexDirection="column"
         alignItems="center"
         w="100%"
         overflowY="auto"
         overflowX="hidden"
         css={{
-          "&::-webkit-scrollbar": {
-            width: "6px",
+          '&::-webkit-scrollbar': {
+            width: '6px',
           },
-          "&::-webkit-scrollbar-track": {
-            width: "6px",
-            background: "rgba(0, 0, 0, 0.25)",
-            borderRadius: "24px",
+          '&::-webkit-scrollbar-track': {
+            width: '6px',
+            background: 'rgba(0, 0, 0, 0.25)',
+            borderRadius: '24px',
           },
-          "&::-webkit-scrollbar-thumb": {
-            background: "white",
-            borderRadius: "24px",
-            outline: "1px white solid",
+          '&::-webkit-scrollbar-thumb': {
+            background: 'white',
+            borderRadius: '24px',
+            outline: '1px white solid',
           },
         }}
         transition={transition}

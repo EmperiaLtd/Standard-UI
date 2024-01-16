@@ -1,14 +1,7 @@
-import { Icon, IconProps } from "@chakra-ui/icons";
+import { Icon, IconProps } from '@chakra-ui/icons';
 
 export const Sound = (props: IconProps) => (
-  <Icon
-    width="23"
-    height="19"
-    viewBox="0 0 23 19"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <Icon width="23" height="19" viewBox="0 0 23 19" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path
       d="M4.97486 6.09008H1.2386C1.10604 6.09008 1 6.19613 1 6.32868V12.4792C1 12.6117 1.10604 12.7178 1.2386 12.7178H4.97486C5.01904 12.7178 5.06323 12.7266 5.09857 12.7531L11.8659 17.7283C12.025 17.8256 12.2282 17.7107 12.2282 17.5251V1.2386C12.2282 1.05302 12.025 0.938141 11.8659 1.03535L5.18726 5.98895C5.12832 6.03267 5.06619 6.07715 4.99368 6.08844C4.98697 6.08948 4.98062 6.09008 4.97486 6.09008Z"
       strokeWidth="1.3"

@@ -1,22 +1,15 @@
-import { useState } from "react";
-import { Box, Image } from "@chakra-ui/react";
-import Slider, { CustomArrowProps } from "react-slick";
-import { RightArrow } from "../../assets/icons/RightArrow";
-import { LeftArrow } from "../../assets/icons/LeftArrow";
+import { Box, Image } from '@chakra-ui/react';
+import Slider, { CustomArrowProps } from 'react-slick';
+import { RightArrow } from '../../assets/icons/RightArrow';
+import { LeftArrow } from '../../assets/icons/LeftArrow';
+import { Eclipse } from '../../assets/icons/Eclipse';
+import { useEffect, useState } from 'react';
 
 const BackArrow = (props: CustomArrowProps) => {
   const { className, style, onClick } = props;
   return (
-    <div
-      className={className}
-      style={{ ...style, display: "block" }}
-      onClick={onClick}
-    >
-      <LeftArrow
-        boxSize={[6]}
-        stroke="white"
-        filter="drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.5))"
-      />
+    <div className={className} style={{ ...style, display: 'block' }} onClick={onClick}>
+      <LeftArrow boxSize={[6]} stroke="white" filter="drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.5))" />
     </div>
   );
 };
@@ -24,16 +17,8 @@ const BackArrow = (props: CustomArrowProps) => {
 const NextArrow = (props: CustomArrowProps) => {
   const { className, style, onClick } = props;
   return (
-    <div
-      className={className}
-      style={{ ...style, display: "block" }}
-      onClick={onClick}
-    >
-      <RightArrow
-        boxSize={[6]}
-        stroke="white"
-        filter="drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.5))"
-      />
+    <div className={className} style={{ ...style, display: 'block' }} onClick={onClick}>
+      <RightArrow boxSize={[6]} stroke="white" filter="drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.5))" />
     </div>
   );
 };
@@ -44,12 +29,10 @@ interface ImageSliderProps {
   setHighLightImage: (image: string) => void;
 }
 
-const ImageSlider = ({
-  highlightImage,
-  images,
-  setHighLightImage,
-}: ImageSliderProps) => {
-  const [slider, setSlider] = useState<any>();
+const ImageSlider = ({ highlightImage, images, setHighLightImage }: ImageSliderProps) => {
+  const transition = 'all 0.2s ease-in-out';
+
+  const [activeImageIndex, setActiveImageIndex] = useState({ oldIndex: 0, newIndex: 0 });
 
   const settings = {
     infinite: true,
@@ -59,90 +42,71 @@ const ImageSlider = ({
     nextArrow: <NextArrow />,
     prevArrow: <BackArrow />,
     beforeChange: (oldIndex: number, newIndex: number) => {
+      setActiveImageIndex({ oldIndex: oldIndex, newIndex: newIndex });
       if (highlightImage === images[oldIndex]) {
         setHighLightImage(images[newIndex]);
       }
     },
   };
 
+  useEffect(() => {
+    console.log(highlightImage);
+  }, [highlightImage]);
+
   return (
     <Box
-      width={["100%", "100%", "370px", "390px", "460px"]}
-      maxH={["unset", "unset", "410px", "440px", "470px"]}
+      width={['100%', '100%', '100%', '100%', '100%']}
+      maxH={['450px', '500px', '430px', '470px', '570px']}
       display="flex"
-      flexDirection={[
-        "column",
-        "column",
-        "row-reverse",
-        "row-reverse",
-        "row-reverse",
-      ]}
+      flexDirection={['column', 'column', 'row-reverse', 'row-reverse', 'row-reverse']}
       justifyContent="space-between"
       position="relative"
     >
       <Box
-        width={["100%", "100%", "310px", "320px", "380px"]}
-        h={["450px", "500px", "410px", "440px", "470px"]}
+        width={['100%', '100%', '100%', '100%', '100%']}
+        h={['450px', '500px', '410px', '470px', '570px']}
         textAlign="center"
       >
-        <Slider ref={(slider) => setSlider(slider)} {...settings}>
+        <Slider {...settings}>
           {images?.map((image: string, index: number) => (
             <Image
-              borderRadius={["0px", "0px", "12px", "12px"]}
               loading="lazy"
               key={index}
-              width={["100%", "380px", "310px", "320px", "380px"]}
-              h={["450px", "500px", "410px", "440px", "470px"]}
+              width={['100%', '100%', '100%', '100%', '100%']}
+              h={['450px', '500px', '430px', '470px', '570px']}
               objectFit="cover"
               src={image}
             />
           ))}
         </Slider>
       </Box>
+
       <Box
-        width={["30px", "30px", "40px", "50px", "60px"]}
-        overflowX={["hidden", "hidden", "hidden", "hidden", "hidden"]}
-        overflowY={["auto", "auto", "auto", "auto", "auto"]}
-        height={["100%", "100%", "100%", "100%", "100%"]}
-        display={["none", "none", "flex", "flex", "flex"]}
-        flexDirection="column"
-        alignItems="center"
+        position="absolute"
+        margin="0 auto"
+        left="0"
+        right="0px"
+        bottom="10px"
+        display="flex"
+        flexDirection="row"
         justifyContent="center"
+        alignItems="center"
+        h="30px"
       >
-        {images?.map((image: string, index: number) => (
-          <Box
-            flex={["unset", "unset", "0 0 auto", "0 0 auto"]}
-            key={index}
-            width={["30px", "30px", "30px", "40px"]}
-            height={["30px", "30px", "50px", "60px"]}
-            margin={["5px", "5px", "5px", "5px"]}
-          >
-            <Image
-              borderRadius="4px"
-              loading="lazy"
-              cursor="pointer"
-              width="100%"
-              height="100%"
-              objectFit="cover"
-              src={image}
-              alt="Product Image"
-              onClick={() => {
-                setHighLightImage(image);
-                slider.slickGoTo(index);
-              }}
-              border={
-                image === highlightImage
-                  ? "1px solid rgba(255, 255, 255, 0.80)"
-                  : "transparent"
-              }
-              boxShadow={
-                image === highlightImage
-                  ? "0px 2px 4px 0px rgba(0, 0, 0, 0.25)"
-                  : "unset"
-              }
-              opacity={image === highlightImage ? "1" : "0.7"}
-            />
-          </Box>
+        {images.map((image: string, index: number) => (
+          <Eclipse
+            key={image}
+            m="0px 5px"
+            boxSize={activeImageIndex.newIndex === index ? [4] : [3]}
+            border={activeImageIndex.newIndex === index ? 'unset' : '1px solid white'}
+            borderRadius="100px"
+            filter={activeImageIndex.newIndex === index ? 'drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.25))' : 'unset'}
+            fill={activeImageIndex.newIndex === index ? 'white' : 'black'}
+            onClick={() => {
+              setHighLightImage(image);
+            }}
+            transition={transition}
+          />
         ))}
       </Box>
     </Box>

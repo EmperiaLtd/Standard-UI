@@ -1,14 +1,7 @@
-import { Icon, IconProps } from "@chakra-ui/icons";
+import { Icon, IconProps } from '@chakra-ui/icons';
 
 export const Share = (props: IconProps) => (
-  <Icon
-    width="22"
-    height="22"
-    viewBox="0 0 22 22"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <Icon width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path
       d="M4.33883 8.13046C5.92798 8.12669 7.22152 9.42212 7.21211 11.0094C7.20269 12.5722 5.91103 13.8657 4.35577 13.8714C2.78357 13.877 1.4712 12.5571 1.48249 10.983C1.49191 9.40894 2.7685 8.13611 4.33883 8.13234V8.13046Z"
       strokeWidth="1.3"
@@ -24,15 +17,7 @@ export const Share = (props: IconProps) => (
       strokeWidth="1.3"
       strokeMiterlimit="10"
     />
-    <path
-      d="M6.76172 9.45416L15.3646 5.20638"
-      strokeWidth="1.3"
-      strokeMiterlimit="10"
-    />
-    <path
-      d="M15.3646 16.8256L6.76172 12.5797"
-      strokeWidth="1.3"
-      strokeMiterlimit="10"
-    />
+    <path d="M6.76172 9.45416L15.3646 5.20638" strokeWidth="1.3" strokeMiterlimit="10" />
+    <path d="M15.3646 16.8256L6.76172 12.5797" strokeWidth="1.3" strokeMiterlimit="10" />
   </Icon>
 );

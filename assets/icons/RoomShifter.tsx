@@ -1,14 +1,7 @@
-import { Icon, IconProps } from "@chakra-ui/icons";
+import { Icon, IconProps } from '@chakra-ui/icons';
 
 export const RoomShifter = (props: IconProps) => (
-  <Icon
-    width="21"
-    height="22"
-    viewBox="0 0 21 22"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <Icon width="21" height="22" viewBox="0 0 21 22" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path
       d="M14.0469 10.1994C13.7812 10.5621 13.24 10.5621 12.9757 10.1994C11.6557 8.38597 10.3877 6.6681 10.3877 4.64659C10.3877 2.5562 11.8132 1 13.486 1C15.2545 1 16.5858 2.17945 16.5858 4.66346C16.5858 6.72012 15.2447 8.56028 14.0469 10.2008V10.1994Z"
       strokeWidth="1.3"

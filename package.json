@@ -1,7 +1,7 @@
 {
   "name": "standard",
   "version": "0.0.0",
-  "homepage": "/Testing/UI/0.0.0",
+  "homepage": ".",
   "main": "node_modules/expo/AppEntry.js",
   "main-web": "src/expo/AppEntry.js",
   "scripts": {
@@ -57,5 +57,15 @@
     "workbox-streams": "^6.1.5",
     "workbox-webpack-plugin": "^6.1.5"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@types/react-slick": "^0.23.10",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.10",
+    "prettier": "^2.7.1"
+  }
 }
