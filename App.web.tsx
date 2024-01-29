@@ -1,5 +1,5 @@
 // Components
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, Image, Spinner } from '@chakra-ui/react';
 import Overlay from './components/Overlay';
 import WelcomeScreen from './components/WelcomeScreen';
 import InfoDrawer from './components/InfoDrawer';
@@ -7,7 +7,7 @@ import InfoModal from './components/InfoModal';
 import Instructions from './components/Instructions';
 import ProductDrawer from './components/ProductDrawer';
 import { CustomTheme } from './theme/theme';
-// import BG from './assets/images/alexander-slattery-LI748t0BK8w-unsplash.jpeg';
+import BG from './assets/images/alexander-slattery-LI748t0BK8w-unsplash.jpeg';
 
 // Styles
 import 'slick-carousel/slick/slick.css';
@@ -19,7 +19,13 @@ import * as Font from 'expo-font';
 import { useEffect, useState } from 'react';
 import { isTemplateTag } from './library/devTools';
 import { Platform } from 'react-native';
-import { fallbackWelcomeData, fallOverlayData, fallbackInstructionsData, fallbackInfoData } from './fallbackData';
+import {
+  fallbackWelcomeData,
+  fallOverlayData,
+  fallbackInstructionsData,
+  fallbackInfoData,
+  fallbackProductData,
+} from './fallbackData';
 import {
   InstructionsState,
   WelcomeState,
@@ -29,6 +35,8 @@ import {
   WelcomeData,
   InstructionsData,
   InfoData,
+  ProductState,
+  ProductData,
 } from './interfaces';
 
 // Dev Mode Web Compatibility
@@ -46,7 +54,12 @@ Font.loadAsync({
 });
 
 const App = () => {
-  const [productDrawerActive, setProductDrawerActive] = useState(false);
+  const [activeScene, setActiveScene] = useState('room_1');
+  const [productDrawerLoading, setProductDrawerLoading] = useState(false);
+  const [productDrawerData, setProductDrawerData] = useState<ProductState>({
+    data: fallbackProductData,
+    active: false,
+  });
   const [instructionsData, setInstructionsData] = useState<InstructionsState>({
     data: fallbackInstructionsData,
     active: false,
@@ -72,7 +85,7 @@ const App = () => {
     uiReady: (uiReadyData: UIReadyData) => onUIReady(uiReadyData),
     openWelcome: (welcomeData: WelcomeData) => openWelcomeModal(welcomeData),
     openInstructions: (instructionsData: InstructionsData) => openInstructionsModal(instructionsData),
-    openProduct: () => openProductModal(),
+    openProduct: (productData: ProductData) => openProductModal(productData),
     openInfo: (infoData: InfoData) => openInfoModal(infoData),
   };
 
@@ -91,8 +104,13 @@ const App = () => {
     });
   };
 
-  const openProductModal = () => {
-    setProductDrawerActive(true);
+  const openProductModal = (productData: ProductData) => {
+    setProductDrawerLoading(true);
+
+    setTimeout(() => {
+      setProductDrawerLoading(false);
+      setProductDrawerData({ data: productData || fallbackProductData, active: true });
+    }, 2000);
   };
 
   const openInfoModal = (infoData: InfoData) => {
@@ -133,8 +151,13 @@ const App = () => {
 
   return (
     <ChakraProvider theme={CustomTheme}>
-      {/* <Image position="absolute" height="100vh" w="100%" src={BG} objectFit="cover" /> */}
-      <Overlay overlayData={overlayData?.data} active={overlayData?.active} />
+      <Image position="absolute" height="100vh" w="100%" src={BG} objectFit="cover" />
+      <Overlay
+        activeScene={activeScene}
+        setActiveScene={(scene) => setActiveScene(scene)}
+        overlayData={overlayData?.data}
+        active={overlayData?.active}
+      />
       <WelcomeScreen
         welcomeData={welcomeData?.data}
         active={welcomeData?.active}
@@ -151,12 +174,30 @@ const App = () => {
           setInstructionsData({ ...instructionsData, active: false });
         }}
       />
-      <ProductDrawer
-        active={productDrawerActive}
-        close={() => {
-          setProductDrawerActive(false);
-        }}
-      />
+
+      {productDrawerLoading ? (
+        <Spinner
+          position="fixed"
+          top="0px"
+          left="0px"
+          bottom="0px"
+          right="0px"
+          margin="auto"
+          thickness="4px"
+          speed="0.5s"
+          color="white"
+          size="xl"
+        />
+      ) : (
+        <ProductDrawer
+          productDrawerData={productDrawerData.data}
+          active={productDrawerData.active}
+          close={() => {
+            setProductDrawerData({ ...productDrawerData, active: false });
+          }}
+        />
+      )}
+
       <InfoDrawer
         infoData={infoData?.data}
         active={infoData?.active}

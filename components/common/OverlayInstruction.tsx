@@ -47,11 +47,12 @@ function OverlayInstruction({ instructionsData }: OverlayInstructionsProps) {
       justifyContent={['space-between']}
       alignItems={['center']}
       flexDirection={['column']}
-      h={['240px', '300px', '100%']}
+      h={['240px', '240px', '240px', '240px', '290PX']}
       w="100%"
+      marginBottom={['10px', '10px', 'unset', 'unset', 'unset']}
     >
       <Box
-        padding={['10px', '10px', '15px']}
+        padding={['10px', '10px', '15px', '15px', '15px']}
         display="flex"
         flexDirection="column"
         alignItems="center"
@@ -59,10 +60,10 @@ function OverlayInstruction({ instructionsData }: OverlayInstructionsProps) {
         borderRadius={['24px', '24px', '24px', '24px']}
         background={'rgba(0, 0, 0, 0.15)'}
         boxShadow="0px 2px 4px 0px rgba(0, 0, 0, 0.25)"
-        w={['150px', '160px', '100%']}
-        height={['190px', '200px', '230px']}
+        w={['160px', '160px', '100%', '100%', '100%']}
+        height={['190px', '190px', '185px', '185px', '220px']}
       >
-        <Box w={['100%', '130px', '150px']} h={['150px', '130px', '150px']}>
+        <Box w={['100%', '100%', '130px', '130px', '150px']} h={['140px', '140px', '130px', '130px', '150px']}>
           <Slider ref={(slider) => setSlider(slider)} {...settings}>
             {videos?.map((video: string, index: number) => (
               <ReactPlayer
@@ -85,10 +86,10 @@ function OverlayInstruction({ instructionsData }: OverlayInstructionsProps) {
           alignItems="center"
           justifyContent="center"
           color="white"
-          fontSize={['12px', '12px', '14px']}
+          lineHeight={['12px', '12px', '13px', '13px', '14px']}
+          fontSize={['12px', '12px', '13px', '13px', '14px']}
           fontFamily="Montserrat-Medium"
-          fontWeight="900"
-          height={['40px', '40px', '40px']}
+          height={['30px', '30px', '40px', '40px', '50px']}
           textAlign="center"
         >
           {instructionsData[activeImageIndex.newIndex]}
@@ -98,34 +99,39 @@ function OverlayInstruction({ instructionsData }: OverlayInstructionsProps) {
       <Box
         position="relative"
         w="100%"
-        height={['50px', '50px', '70px']}
+        height={['40px', '40px', '50px', '50px', '60px']}
         display="flex"
         justifyContent="center"
         alignItems="center"
       >
-        <Box w={['90px', '90px', '130px']} display="flex" justifyContent="space-between" alignItems="center">
+        <Box
+          w={['90px', '90px', '110px', '110px', '130px']}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <IconButton
             aria-label="Move Left"
             onClick={prevSlide}
-            w={['40px', '40px', '60px']}
-            height={['30px', '30px', '50px']}
+            w={['40px', '40px', '50px', '50px', '60px']}
+            height={['30px', '30px', '40px', '40px', '50px']}
             background={'rgba(0, 0, 0, 0.15)'}
             _hover={{ background: 'rgba(0, 0, 0, 0.25)' }}
             boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
             borderRadius="8px"
-            icon={<LeftStemArrow fill="white" boxSize={[4, 4, 6]} />}
+            icon={<LeftStemArrow fill="white" boxSize={[4, 4, 5, 5, 6]} />}
           />
 
           <IconButton
             aria-label="Move Left"
             onClick={nextSlide}
-            w={['40px', '40px', '60px']}
-            height={['30px', '30px', '50px']}
+            w={['40px', '40px', '50px', '50px', '60px']}
+            height={['30px', '30px', '40px', '40px', '50px']}
             background={'rgba(0, 0, 0, 0.15)'}
             _hover={{ background: 'rgba(0, 0, 0, 0.25)' }}
             boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
             borderRadius="8px"
-            icon={<RightStemArrow fill="white" boxSize={[4, 4, 6]} />}
+            icon={<RightStemArrow fill="white" boxSize={[4, 4, 5, 5, 6]} />}
           />
         </Box>
       </Box>

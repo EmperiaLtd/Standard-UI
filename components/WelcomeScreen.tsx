@@ -20,32 +20,32 @@ function WelcomeScreen({ welcomeData, active, close }: WelcomeProps) {
       borderRadius="12px"
       boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
       backdropFilter="blur(12px)"
-      width={['90vw', '390px', '650px', '650px']}
-      height={['370px', '420px', '450px', '450px']}
+      width={['90vw', '390px', '600px', '600px', '650px']}
+      height={['370px', '370px', '400px', '400px', '450px']}
       display="flex"
       alignItems="center"
       justifyContent="center"
       flexDirection="column"
     >
       <Box
-        width={['180px', '210px', '235px', '300px']}
-        height={['45px', '50px', '60px', '70px']}
+        width={['180px', '180px', '230px', '230px', '290px']}
+        height={['45px', '45px', '50px', '50px', '60px']}
         display="flex"
         justifyContent="space-between"
         alignItems="center"
       >
         <Image
           src={welcomeData?.collectionImage}
-          height={['45px', '50px', '55px', '70px']}
-          width={['45px', '50px', '55px', '70px']}
+          height={['45px', '45px', '50px', '50px', '60px']}
+          width={['45px', '45px', '50px', '50px', '60px']}
           borderRadius="100"
         />
         <Text
           textTransform="uppercase"
           fontFamily="Montserrat-Medium"
-          w={['125px', '150px', '170px', '220px']}
-          fontSize={['16px', '18px', '22px', '25px']}
-          lineHeight={['18px', '20px', '24px', '27px']}
+          w={['125px', '125px', '170px', '170px', '220px']}
+          fontSize={['16px', '16px', '20px', '20px', '25px']}
+          lineHeight={['18px', '18px', '22px', '22px', '27px']}
           color="white"
           noOfLines={2}
         >
@@ -54,8 +54,8 @@ function WelcomeScreen({ welcomeData, active, close }: WelcomeProps) {
       </Box>
 
       <Box
-        m={['30px 0px', '35px 0px', '40px 0px', '45px 0px']}
-        height={['120px', '120px', '100px', '110px']}
+        m={['30px 0px', '30px 0px', '35px 0px', '35px 0px', '40px 0px']}
+        height={['120px', '120px', '100px', '100px', '110px']}
         display="flex"
         flexDirection="column"
         justifyContent="space-between"
@@ -64,8 +64,8 @@ function WelcomeScreen({ welcomeData, active, close }: WelcomeProps) {
         <Text
           fontFamily="Montserrat-Bold"
           width="100%"
-          fontSize={['23px', '26px', '45px', '50px']}
-          lineHeight={['23px', '26px', '45px', '50px']}
+          fontSize={['23px', '23px', '35px', '35px', '40px']}
+          lineHeight={['23px', '23px', '35px', '35px', '40px']}
           color="white"
           textAlign="center"
           noOfLines={1}
@@ -74,18 +74,19 @@ function WelcomeScreen({ welcomeData, active, close }: WelcomeProps) {
         </Text>
         <Text
           fontFamily="Montserrat-Bold"
-          width={['200px', '200px', '400px', '450px']}
-          fontSize={['13px', '13px', '13px', '14px']}
+          width={['200px', '300px', '400px', '400px', '450px']}
+          fontSize={['13px', '13px', '14px', '14px', '15px']}
           color="white"
           textAlign="center"
-          noOfLines={[4, 4, 2, 2]}
+          noOfLines={[4, 4, 2, 2, 2]}
         >
           {welcomeData?.tagline}
         </Text>
       </Box>
 
       <Button
-        width={['150px']}
+        width="150px"
+        fontSize={['13px', '13px', '14px', '14px', '15px']}
         textTransform="uppercase"
         fontFamily="Montserrat"
         bg="rgba(0, 0, 0, 0.1)"

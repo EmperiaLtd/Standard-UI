@@ -18,7 +18,7 @@ function InfoDrawer({ infoData, active, close }: InfoDrawerProps) {
       isOpen={active}
       placement="right"
       onClose={close}
-      size={['full', 'full', 'xs', 'sm', 'sm']}
+      size={['full', 'full', 'sm', 'sm', 'md']}
       closeOnOverlayClick={false}
     >
       <DrawerOverlay bg="transparent" />
@@ -39,7 +39,7 @@ function InfoDrawer({ infoData, active, close }: InfoDrawerProps) {
         />
 
         <DrawerBody padding="0px">
-          <Box width="100%" height={['450px', '500px', '430px', '470px', '570px']}>
+          <Box width="100%" height={['450px', '500px', '470px', '470px', '570px']}>
             <Image objectFit="cover" src={infoData?.image} height="100%" width="100%" borderRadius="inherit" />
           </Box>
           <Box
@@ -47,7 +47,7 @@ function InfoDrawer({ infoData, active, close }: InfoDrawerProps) {
             height="auto"
             display="flex"
             flexDirection="column"
-            padding={['20px', '20px', '25px', '25px']}
+            padding={['20px', '20px', '25px', '25px', '25px']}
           >
             <Box w="100%" height="auto" display="flex" flexDirection="column" justifyContent="space-between">
               <Text fontFamily="Montserrat-Bold" fontSize={['20px']} textTransform="uppercase" color="white">
@@ -64,7 +64,7 @@ function InfoDrawer({ infoData, active, close }: InfoDrawerProps) {
         </DrawerBody>
 
         <DrawerFooter p="0px" justifyContent="flex-start">
-          <Box p={['20px', '20px', '25px', '25px']}>
+          <Box p={['20px', '20px', '25px', '25px', '25px']}>
             <Button
               w="100%"
               maxW={['200px']}

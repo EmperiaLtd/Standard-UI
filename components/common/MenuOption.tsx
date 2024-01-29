@@ -38,15 +38,20 @@ function MenuOption({
   setMenuOptionHovered,
 }: MenuOptionProps) {
   const icons = {
-    changeRooms: <RoomShifter boxSize={[4, 5, 6]} stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'} />,
+    changeRooms: (
+      <RoomShifter boxSize={[4, 4, 5, 5, 6]} stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'} />
+    ),
     instructions: (
-      <InstructionsQuestion boxSize={[4, 5, 6]} stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'} />
+      <InstructionsQuestion
+        boxSize={[4, 4, 5, 5, 6]}
+        stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'}
+      />
     ),
-    sound: <Sound boxSize={[4, 5, 6]} stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'} />,
+    sound: <Sound boxSize={[4, 4, 5, 5, 6]} stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'} />,
     languages: (
-      <LanguageShifter boxSize={[4, 5, 6]} stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'} />
+      <LanguageShifter boxSize={[4, 4, 5, 5, 6]} stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'} />
     ),
-    share: <Share boxSize={[4, 5, 6]} stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'} />,
+    share: <Share boxSize={[4, 4, 5, 5, 6]} stroke={menuOptionHovered || activeMenuOption ? 'black' : 'white'} />,
   };
 
   const [display, setDisplay] = useState(false);
@@ -66,9 +71,9 @@ function MenuOption({
   return (
     <Box
       _notFirst={{ marginTop: ['5px', '5px', '10px'] }}
-      borderTopRadius="24px"
-      borderBottomRadius="24px"
-      h={activeMenuOption ? ['auto'] : ['40px', '40px', '50px']}
+      borderTopRadius={['16px', '16px', '24px', '24px', '24px']}
+      borderBottomRadius={['16px', '16px', '24px', '24px', '24px']}
+      h={activeMenuOption ? ['auto'] : ['35px', '35px', '40px', '40px', '50px']}
       w="100%"
       display="flex"
       flexDirection="column"
@@ -80,8 +85,8 @@ function MenuOption({
     >
       <Box
         zIndex="20"
-        borderRadius="24px"
-        minH={['40px', '40px', '50px']}
+        borderRadius={['16px', '16px', '24px', '24px', '24px']}
+        minH={['35px', '35px', '40px', '40px', '50px']}
         w="100%"
         display="flex"
         justifyContent="space-evenly"
@@ -103,7 +108,7 @@ function MenuOption({
       >
         {icons[leftIcon as keyof typeof icons]}
         <Box
-          width={['120px', '130px', '140px']}
+          width={['125px', '125px', '130px', '130px', '140px']}
           opacity={display ? 1 : 0}
           display={activateMenuOptions ? 'flex' : 'none'}
           justifyContent="space-between"
@@ -111,8 +116,8 @@ function MenuOption({
           transition={transition}
         >
           <Text
-            lineHeight={['13px', '14px', '15px']}
-            fontSize={['13px', '14px', '15px']}
+            lineHeight={['13px', '13px', '14px', '14px', '15px']}
+            fontSize={['13px', '13px', '14px', '14px', '15px']}
             fontFamily="Montserrat-Medium"
             color={menuOptionHovered || activeMenuOption ? 'black' : 'white'}
           >

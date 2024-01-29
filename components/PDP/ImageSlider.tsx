@@ -56,7 +56,7 @@ const ImageSlider = ({ highlightImage, images, setHighLightImage }: ImageSliderP
   return (
     <Box
       width={['100%', '100%', '100%', '100%', '100%']}
-      maxH={['450px', '500px', '430px', '470px', '570px']}
+      maxH={['450px', '500px', '470px', '470px', '570px']}
       display="flex"
       flexDirection={['column', 'column', 'row-reverse', 'row-reverse', 'row-reverse']}
       justifyContent="space-between"
@@ -64,16 +64,17 @@ const ImageSlider = ({ highlightImage, images, setHighLightImage }: ImageSliderP
     >
       <Box
         width={['100%', '100%', '100%', '100%', '100%']}
-        h={['450px', '500px', '410px', '470px', '570px']}
+        h={['450px', '500px', '470px', '470px', '570px']}
         textAlign="center"
       >
         <Slider {...settings}>
           {images?.map((image: string, index: number) => (
             <Image
+              cursor="pointer"
               loading="lazy"
               key={index}
               width={['100%', '100%', '100%', '100%', '100%']}
-              h={['450px', '500px', '430px', '470px', '570px']}
+              h={['450px', '500px', '470px', '470px', '570px']}
               objectFit="cover"
               src={image}
             />

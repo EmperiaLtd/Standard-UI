@@ -9,7 +9,7 @@ import Emperia from '../assets/images/Emperia.png';
 import OverlayInstruction from './common/OverlayInstruction';
 import { OverlayProps, TransformedOverlayData, RoomItem, SoundItem, OverlayElement } from '../interfaces';
 
-function Overlay({ overlayData, active }: OverlayProps) {
+function Overlay({ activeScene, setActiveScene, overlayData, active }: OverlayProps) {
   const transition = 'all 0.2s ease-in-out';
   const [audioActive, setAudioActive] = useState(false);
   const [menuHovered, setMenuHovered] = useState(false);
@@ -23,7 +23,7 @@ function Overlay({ overlayData, active }: OverlayProps) {
       {
         roomName: 'Room 1',
         description: 'Description 1',
-        sceneToGo: 'room_1',
+        scene: 'room_1',
       },
     ],
     instructions: ['First', 'Second', 'Third'],
@@ -35,34 +35,41 @@ function Overlay({ overlayData, active }: OverlayProps) {
       key: 'changeRooms',
       text: 'Change Rooms',
       textAlternate: '',
-      height: ['220px', '230px', '220px'],
-      width: ['230px', '230px', '230px'],
+      height: ['220px', '220px', '240px', '240px', '290px'],
+      width: ['230px', '230px', '230px', '230px', '230px'],
       content: defaultData.rooms?.map((room: RoomItem) => (
-        <RoomOption key={room.roomName} name={room.roomName} description={room.description} transition={transition} />
+        <RoomOption
+          key={room.roomName}
+          active={activeScene === room.scene}
+          name={room.roomName}
+          description={room.description}
+          transition={transition}
+          onClick={() => setActiveScene(room.scene)}
+        />
       )),
     },
     instructions: {
       key: 'instructions',
       text: 'Instructions',
       textAlternate: '',
-      height: ['250px', '250px', '250px'],
-      width: ['250px', '250px', '250px'],
+      height: ['250px', '250px', '240px', '240px', '290px'],
+      width: ['unset', 'unset', '240px', '240px', '270px'],
       content: <OverlayInstruction instructionsData={defaultData.instructions} />,
     },
     sound: {
       key: 'sound',
       text: 'Sound : ON',
       textAlternate: 'Sound : OFF',
-      height: ['160px', '165px', '160px'],
-      width: ['140px', '140px', '180px'],
+      height: ['160px', '160px', '240px', '240px', '290px'],
+      width: ['140px', '140px', '180px', '180px', '180px'],
       content: null,
     },
     languages: {
       key: 'languages',
       text: 'Languages',
       textAlternate: '',
-      height: ['160px', '165px', '160px'],
-      width: ['140px', '140px', '170px'],
+      height: ['160px', '160px', '240px', '240px', '290px'],
+      width: ['140px', '140px', '180px', '180px', '180px'],
       content: defaultData.languages?.map((language: string) => (
         <LanguageOption key={language} name={language} transition={transition} />
       )),
@@ -110,7 +117,7 @@ function Overlay({ overlayData, active }: OverlayProps) {
     });
 
     setTransformedOverlayData(transformedOverlayData);
-  }, [overlayData]);
+  }, [overlayData, activeScene]);
 
   const renderLanguageItems = (languages: string[]) => {
     return languages?.map((language: string) => (
@@ -130,7 +137,14 @@ function Overlay({ overlayData, active }: OverlayProps) {
 
   const renderRoomItems = (rooms: RoomItem[]) => {
     return rooms?.map((room: RoomItem) => (
-      <RoomOption key={room.roomName} name={room.roomName} description={room.description} transition={transition} />
+      <RoomOption
+        key={room.roomName}
+        active={activeScene === room.scene}
+        name={room.roomName}
+        description={room.description}
+        transition={transition}
+        onClick={() => setActiveScene(room.scene)}
+      />
     ));
   };
 
@@ -168,13 +182,13 @@ function Overlay({ overlayData, active }: OverlayProps) {
         opacity={active ? 1 : 0}
         visibility={active ? 'visible' : 'hidden'}
         position="fixed"
-        top={['10px', '15px', '20px']}
-        left={['10px', '15px', '20px']}
-        padding={['10px', '15px', '20px']}
+        top={['10px', '10px', '15px', '15px', '20px']}
+        left={['10px', '10px', '15px', '15px', '20px']}
+        padding={['10px', '10px', '15px', '15px', '20px']}
         display="flex"
         justifyContent="space-between"
-        alignItems="center"
-        h={['auto', 'auto', '350px']}
+        alignItems="flex-start"
+        h={['auto']}
         width={['auto']}
         borderRadius={['30px', '30px', '30px']}
         background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
@@ -197,14 +211,14 @@ function Overlay({ overlayData, active }: OverlayProps) {
         transition={transition}
         cursor="pointer"
       >
-        {!menuHovered && <BurgerDots boxSize={[5]} display={['unset', 'unset', 'none']} />}
+        {!menuHovered && <BurgerDots boxSize={[4, 4, 5, 5]} display={['unset', 'unset', 'none']} />}
 
         <Box
           display={[menuHovered ? 'flex' : 'none', menuHovered ? 'flex' : 'none', 'flex']}
           flexDirection="column"
           justifyContent="space-between"
           alignItems="center"
-          width={menuHovered ? ['170px', '190px', '200px'] : ['auto', 'auto', '40px']}
+          width={menuHovered ? ['180px', '180px', '180px', '180px', '220px'] : ['auto', 'auto', '30px', '30px', '40px']}
           h={['auto']}
           transition={transition}
         >
@@ -252,6 +266,7 @@ function Overlay({ overlayData, active }: OverlayProps) {
           display={['none', 'none', 'unset']}
           w={activeOverlayData?.width}
           h="100%"
+          maxHeight={menuOptionsFallbackContent[activeMenuOption as keyof typeof menuOptionsFallbackContent]?.height}
           ml={activeMenuOption !== '' ? ['20px'] : '0px'}
           overflowY="auto"
           overflowX="hidden"

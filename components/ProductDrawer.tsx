@@ -4,73 +4,94 @@ import { useEffect, useState } from 'react';
 import Size from './PDP/Size';
 import Swatch from './PDP/Swatch';
 import ImageSlider from './PDP/ImageSlider';
-import { ColorItem, ProductDrawerProps, SizeItem } from '../interfaces';
+import { ProductDrawerProps, ProductMedia, ProductVariant, ProductVariantType } from '../interfaces';
+import { sortSizes } from '../utils/helper/index.ts';
 
-function ProductDrawer({ active, close }: ProductDrawerProps) {
+function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps) {
   const transition = 'all 0.2s ease-in-out';
 
-  const [selectedImage, setSelectedImage] = useState('https://picsum.photos/800/800');
-  const [colors, setColors] = useState<ColorItem[]>();
-  const [selectedColor, setSelectedColor] = useState<ColorItem>();
-  const [sizes, setSizes] = useState<SizeItem[]>();
-  const [selectedSize, setSelectedSize] = useState<SizeItem>();
+  const [selectedImage, setSelectedImage] = useState('');
+  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>();
+  const [currency, setCurrency] = useState('');
+  const [selectedSize, setSelectedSize] = useState<ProductVariantType>();
+  const [selectedColor, setSelectedColor] = useState('');
+  const [currentSizes, setCurrentSizes] = useState<ProductVariantType[]>([]);
+  const [currentImages, setCurrentImages] = useState<ProductMedia[]>([]);
+  const [productVariants, setProductVariants] = useState<ProductVariant[]>([]);
 
   useEffect(() => {
-    setColors([
-      {
-        id: 0,
-        name: 'black',
-        available: true,
-      },
-      {
-        id: 1,
-        name: 'red',
-        available: false,
-      },
-      {
-        id: 2,
-        name: 'blue',
-        available: true,
-      },
-    ]);
+    if (active) {
+      //Set Product Variants
+      const variants = productDrawerData.variants;
+      setProductVariants(variants);
 
-    setSelectedColor({
-      id: 0,
-      name: 'black',
-      available: true,
-    });
+      //set Default Variant
+      const defaultVariant = variants.find((variant: ProductVariant) => variant.default);
+      if (defaultVariant) {
+        defaultVariant && setSelectedVariant(defaultVariant);
+      }
 
-    setSizes([
-      {
-        id: 0,
-        name: 'XS',
-        available: true,
-      },
-      {
-        id: 1,
-        name: 'S',
-        available: false,
-      },
-      {
-        id: 2,
-        name: 'M',
-        available: true,
-      },
-    ]);
+      //Get Default Color
+      const colorName = defaultVariant?.variants.find(
+        (variant: ProductVariantType) => variant.variant_type === 'color',
+      );
+      colorName && setSelectedColor(colorName?.name);
 
-    setSelectedSize({
-      id: 0,
-      name: 'XS',
-      available: true,
-    });
-  }, []);
+      // Get Sizes
+      const sizes = defaultVariant?.variants.filter((variant: ProductVariantType) => variant.variant_type === 'size');
+      const sortedSizes = sizes && sortSizes(sizes);
+      sortedSizes && setCurrentSizes(sortedSizes);
+
+      //Get First Size
+      sortedSizes && setSelectedSize(sortedSizes[0]);
+
+      //Set Currency
+      setCurrency(productDrawerData.currency);
+
+      // Get Images
+      defaultVariant?.media && setCurrentImages(defaultVariant?.media);
+
+      // Set Default Image
+      defaultVariant?.media[0].url && setSelectedImage(defaultVariant?.media[0].url);
+    }
+  }, [productDrawerData]);
+
+  const updateVariant = (variant: ProductVariant) => {
+    if (selectedVariant === variant) return;
+
+    setSelectedVariant(variant);
+
+    //Set  Color
+    const colorName = variant?.variants.find((variant: ProductVariantType) => variant.variant_type === 'color');
+    colorName && setSelectedColor(colorName.name);
+
+    // Get Sizes
+    const sizes = variant?.variants.filter((variant: ProductVariantType) => variant.variant_type === 'size');
+    const sortedSizes = sizes && sortSizes(sizes);
+    sortedSizes && setCurrentSizes(sortedSizes);
+
+    // Check if prev selected size is available in new selected color
+    const prevSelectedSizeAvailable = variant?.variants.find(
+      (variant: ProductVariantType) => variant.value === selectedSize?.value,
+    );
+
+    if (prevSelectedSizeAvailable.available_stock > 0) {
+      setSelectedSize(prevSelectedSizeAvailable);
+    }
+
+    // Get Images
+    variant?.media && setCurrentImages(variant?.media);
+
+    // Set Default Image
+    variant?.media[0].url && setSelectedImage(variant?.media[0].url);
+  };
 
   return (
     <Drawer
       isOpen={active}
       placement="right"
       onClose={close}
-      size={['full', 'full', 'xs', 'sm', 'sm']}
+      size={['full', 'full', 'sm', 'sm', 'md']}
       closeOnOverlayClick={false}
     >
       <DrawerOverlay bg="transparent" />
@@ -94,36 +115,30 @@ function ProductDrawer({ active, close }: ProductDrawerProps) {
         <DrawerBody padding="0px">
           <ImageSlider
             highlightImage={selectedImage}
-            images={[
-              'https://picsum.photos/800/800',
-              'https://picsum.photos/900/900',
-              'https://picsum.photos/1000/1000',
-              'https://picsum.photos/1001/1001',
-              'https://picsum.photos/1002/1002',
-            ]}
+            images={currentImages.map((currentImage: ProductMedia) => currentImage.url)}
             setHighLightImage={(image) => setSelectedImage(image)}
           />
           <Box
-            h={['fit-content', 'fit-content', '400px', '450px', '470px']}
+            h={['fit-content', 'fit-content', '450px', '450px', '470px']}
             w={['100%', '100%', '100%', '100%', '100%']}
             display="flex"
             flexDirection="column"
             justifyContent="space-between"
-            p={['20px', '20px', '20px', '30px', '30px']}
+            p={['20px', '20px', '30px', '30px', '30px']}
           >
             <Box>
               <Text fontFamily="Montserrat-Bold" fontSize={['20px']} color="white">
-                Product Name
+                {productDrawerData?.title}
               </Text>
               <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white" mt={['5px']}>
-                Subtitle
+                {productDrawerData?.short_description}
               </Text>
               <Box display="flex" justifyContent="space-between" alignItems="center" width={['85px']} mt={['5px']}>
                 <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white">
-                  $ 300
+                  {`${currency} ${selectedSize?.price}`}
                 </Text>
                 <Text fontFamily="Montserrat-Bold" fontSize={['14px']} color="white" textDecoration="line-through">
-                  $ 450
+                  {`${currency} ${selectedVariant?.retail_price}`}
                 </Text>
               </Box>
               <Text
@@ -135,19 +150,28 @@ function ProductDrawer({ active, close }: ProductDrawerProps) {
                 h="auto"
                 overflow="auto"
               >
-                Iconic medium shoulder bag with monogram motif and silver chain. Versatile design with detachable handle
-                and shoulder strap. Crafted metalware details. Made in Italy. Iconic medium shoulder bag with monogram
-                motif and silver chain.
+                {productDrawerData.long_description}
               </Text>
 
               {/* Variant */}
-              <Box mt={['15px', '15px', '10px', '20px']} height={['auto']} display="flex" flexDirection="column">
+              <Box
+                mt={['15px', '15px', '20px', '20px', '20px']}
+                height={['auto']}
+                display="flex"
+                flexDirection="column"
+              >
                 <Box display="flex" justifyContent="flex-start" alignItems="center">
-                  <Text fontFamily="Montserrat-Bold" fontSize={['13px', '13px', '13px', '14px']} color="white">
+                  <Text fontFamily="Montserrat-Bold" fontSize={['13px', '13px', '14px', '14px', '14px']} color="white">
                     Variant:
                   </Text>
-                  <Text ml={['5px']} fontFamily="Montserrat" fontSize={['13px', '13px', '13px', '14px']} color="white">
-                    {selectedColor?.name?.charAt(0).toUpperCase() + selectedColor?.name?.slice(1)}
+                  <Text
+                    ml={['5px']}
+                    fontFamily="Montserrat"
+                    fontSize={['13px', '13px', '14px', '14px', '14px']}
+                    color="white"
+                    textTransform="capitalize"
+                  >
+                    {selectedColor}
                   </Text>
                 </Box>
 
@@ -155,33 +179,38 @@ function ProductDrawer({ active, close }: ProductDrawerProps) {
                   display="flex"
                   overflowY={['hidden', 'hidden', 'hidden', 'hidden', 'hidden']}
                   overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
-                  height={['40px', '40px', '40px', '50px']}
+                  height={['40px', '40px', '50px', '50px', '50px']}
                   w={['100%']}
                   alignItems="center"
                   justifyContent="flex-start"
                 >
-                  {colors?.map((color: ColorItem) => (
+                  {productVariants?.map((productVariant: ProductVariant) => (
                     <Swatch
-                      key={color.id}
+                      key={productVariant.variant_id}
                       transition={transition}
-                      active={selectedColor.id === color.id}
-                      colorName={color.name}
-                      available={color.available}
-                      onSwatchClick={() => setSelectedColor(color)}
+                      active={selectedVariant.color_swatch === productVariant.color_swatch}
+                      colorName={productVariant.color_swatch}
+                      available={productVariant.available_stock > 0}
+                      onSwatchClick={() => updateVariant(productVariant)}
                     />
                   ))}
                 </Box>
               </Box>
 
               {/* Size */}
-              <Box mt={['15px', '15px', '10px', '20px']} height={['auto']} display="flex" flexDirection="column">
+              <Box
+                mt={['15px', '15px', '20px', '20px', '20px']}
+                height={['auto']}
+                display="flex"
+                flexDirection="column"
+              >
                 <Box display="flex" justifyContent="space-between" alignItems="center" width={['100%']}>
-                  <Text fontFamily="Montserrat-Bold" fontSize={['13px', '13px', '13px', '14px']} color="white">
+                  <Text fontFamily="Montserrat-Bold" fontSize={['13px', '13px', '14px', '14px', '14px']} color="white">
                     Size:
                   </Text>
                   <Text
                     fontFamily="Montserrat"
-                    fontSize={['13px', '13px', '13px', '14px']}
+                    fontSize={['13px', '13px', '14px', '14px', '14px']}
                     color="white"
                     textDecoration="underline"
                     cursor="pointer"
@@ -203,13 +232,13 @@ function ProductDrawer({ active, close }: ProductDrawerProps) {
                   alignItems="center"
                   justifyContent="flex-start"
                 >
-                  {sizes?.map((size: SizeItem) => (
+                  {currentSizes?.map((size: ProductVariantType) => (
                     <Size
-                      key={size.id}
-                      active={selectedSize.id === size.id}
+                      key={size.value}
+                      active={selectedSize?.value === size.value && size.available_stock > 0}
                       transition={transition}
-                      sizeName={size.name}
-                      available={size.available}
+                      sizeName={size.value}
+                      available={size.available_stock > 0}
                       onSizeClick={() => setSelectedSize(size)}
                     />
                   ))}
