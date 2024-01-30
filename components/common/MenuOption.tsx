@@ -7,22 +7,7 @@ import { LanguageShifter } from '../../assets/icons/LanguageShifter';
 import { Sound } from '../../assets/icons/Sound';
 import { UpArrow } from '../../assets/icons/UpArrow';
 import { Share } from '../../assets/icons/Share';
-
-interface MenuOptionProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  content?: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  contentHeight?: any;
-  activeMenuOption?: boolean;
-  leftIcon: string;
-  additionalOptions?: boolean;
-  text: string;
-  activateMenuOptions: boolean;
-  menuOptionHovered: boolean;
-  transition: string;
-  onMenuOptionClick?: () => void;
-  setMenuOptionHovered: (state: boolean) => void;
-}
+import { MenuOptionProps } from '../../interfaces';
 
 function MenuOption({
   content,

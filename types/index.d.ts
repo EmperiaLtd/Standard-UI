@@ -1,9 +1,10 @@
+import { Emperia } from '../interfaces';
+
 /* eslint-disable prettier/prettier */
-export { };
+export {};
 declare global {
   interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    emperia: any;
+    emperia: Emperia;
     currency: string;
     embedpano: () => void;
     openProductPopUp: (id: string) => void;

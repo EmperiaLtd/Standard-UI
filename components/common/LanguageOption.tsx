@@ -1,10 +1,7 @@
 import { Box, Text } from '@chakra-ui/react';
-interface LanguageOptionProps {
-  name: string;
-  transition: string;
-}
+import { LanguageOptionProps } from '../../interfaces';
 
-function LanguageOption({ name, transition }: LanguageOptionProps) {
+function LanguageOption({ active, name, transition, onClick }: LanguageOptionProps) {
   return (
     <Box
       textAlign="center"
@@ -12,13 +9,20 @@ function LanguageOption({ name, transition }: LanguageOptionProps) {
       m="0 auto"
       p={['10px 20px']}
       borderRadius="12px"
-      background={'rgba(0, 0, 0, 0.15)'}
+      background={active ? 'white' : 'rgba(0, 0, 0, 0.15)'}
       boxShadow="0px 2px 4px 0px rgba(0, 0, 0, 0.25)"
       marginBottom="15px"
-      _hover={{ background: 'rgba(0, 0, 0, 0.30)' }}
+      _hover={{
+        background: !active && 'rgba(0, 0, 0, 0.30)',
+      }}
       transition={transition}
+      onClick={onClick}
     >
-      <Text fontSize={['13px', '13px', '14px', '14px', '15px']} fontFamily="Montserrat-Bold" color="white">
+      <Text
+        fontSize={['13px', '13px', '14px', '14px', '15px']}
+        fontFamily="Montserrat-Bold"
+        color={active ? 'black' : 'white'}
+      >
         {name}
       </Text>
     </Box>

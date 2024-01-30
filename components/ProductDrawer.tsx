@@ -150,7 +150,7 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
                 h="auto"
                 overflow="auto"
               >
-                {productDrawerData.long_description}
+                {productDrawerData?.long_description}
               </Text>
 
               {/* Variant */}

@@ -1,12 +1,5 @@
 import { Box, Text } from '@chakra-ui/react';
-
-interface RoomOptionProps {
-  name: string;
-  active: boolean;
-  description: string;
-  transition: string;
-  onClick: () => void;
-}
+import { RoomOptionProps } from '../../interfaces';
 
 function RoomOption({ name, active, description, transition, onClick }: RoomOptionProps) {
   return (

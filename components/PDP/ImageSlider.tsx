@@ -4,6 +4,7 @@ import { RightArrow } from '../../assets/icons/RightArrow';
 import { LeftArrow } from '../../assets/icons/LeftArrow';
 import { Eclipse } from '../../assets/icons/Eclipse';
 import { useEffect, useState } from 'react';
+import { ImageSliderProps } from '../../interfaces';
 
 const BackArrow = (props: CustomArrowProps) => {
   const { className, style, onClick } = props;
@@ -22,12 +23,6 @@ const NextArrow = (props: CustomArrowProps) => {
     </div>
   );
 };
-
-interface ImageSliderProps {
-  highlightImage: string;
-  images: string[];
-  setHighLightImage: (image: string) => void;
-}
 
 const ImageSlider = ({ highlightImage, images, setHighLightImage }: ImageSliderProps) => {
   const transition = 'all 0.2s ease-in-out';

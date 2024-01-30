@@ -9,7 +9,16 @@ import Emperia from '../assets/images/Emperia.png';
 import OverlayInstruction from './common/OverlayInstruction';
 import { OverlayProps, TransformedOverlayData, RoomItem, SoundItem, OverlayElement } from '../interfaces';
 
-function Overlay({ activeScene, setActiveScene, overlayData, active }: OverlayProps) {
+function Overlay({
+  activeScene,
+  activeLang,
+  activeSound,
+  setActiveScene,
+  setActiveLang,
+  setActiveSound,
+  overlayData,
+  active,
+}: OverlayProps) {
   const transition = 'all 0.2s ease-in-out';
   const [audioActive, setAudioActive] = useState(false);
   const [menuHovered, setMenuHovered] = useState(false);
@@ -18,69 +27,26 @@ function Overlay({ activeScene, setActiveScene, overlayData, active }: OverlayPr
 
   const [transformedOverlayData, setTransformedOverlayData] = useState<TransformedOverlayData[]>();
 
-  const defaultData = {
-    rooms: [
-      {
-        roomName: 'Room 1',
-        description: 'Description 1',
-        scene: 'room_1',
-      },
-    ],
-    instructions: ['First', 'Second', 'Third'],
-    languages: ['Lang1', 'Lang2'],
-  };
-
-  const menuOptionsFallbackContent = {
+  const menuOptionsDimensions = {
     changeRooms: {
-      key: 'changeRooms',
-      text: 'Change Rooms',
-      textAlternate: '',
       height: ['220px', '220px', '240px', '240px', '290px'],
       width: ['230px', '230px', '230px', '230px', '230px'],
-      content: defaultData.rooms?.map((room: RoomItem) => (
-        <RoomOption
-          key={room.roomName}
-          active={activeScene === room.scene}
-          name={room.roomName}
-          description={room.description}
-          transition={transition}
-          onClick={() => setActiveScene(room.scene)}
-        />
-      )),
     },
     instructions: {
-      key: 'instructions',
-      text: 'Instructions',
-      textAlternate: '',
       height: ['250px', '250px', '240px', '240px', '290px'],
       width: ['unset', 'unset', '240px', '240px', '270px'],
-      content: <OverlayInstruction instructionsData={defaultData.instructions} />,
     },
     sound: {
-      key: 'sound',
-      text: 'Sound : ON',
-      textAlternate: 'Sound : OFF',
       height: ['160px', '160px', '240px', '240px', '290px'],
       width: ['140px', '140px', '180px', '180px', '180px'],
-      content: null,
     },
     languages: {
-      key: 'languages',
-      text: 'Languages',
-      textAlternate: '',
       height: ['160px', '160px', '240px', '240px', '290px'],
       width: ['140px', '140px', '180px', '180px', '180px'],
-      content: defaultData.languages?.map((language: string) => (
-        <LanguageOption key={language} name={language} transition={transition} />
-      )),
     },
     share: {
-      key: 'share',
-      text: 'Share',
-      textAlternate: '',
       height: ['0px'],
       width: ['0px'],
-      content: null,
     },
   };
 
@@ -99,12 +65,12 @@ function Overlay({ activeScene, setActiveScene, overlayData, active }: OverlayPr
         originalContent = renderMap[overlayElement.key as keyof typeof renderMap](overlayElement?.content);
       }
 
-      const fallbackContent = menuOptionsFallbackContent[overlayElement.key as keyof typeof menuOptionsFallbackContent];
+      const fallbackContent = menuOptionsDimensions[overlayElement.key as keyof typeof menuOptionsDimensions];
 
-      const content = originalContent || fallbackContent?.content;
-      const text = overlayElement?.text || fallbackContent?.text;
-      const textAlternate = overlayElement?.textAlternate || fallbackContent?.textAlternate;
-      const key = overlayElement?.key || fallbackContent?.key;
+      const content = originalContent;
+      const text = overlayElement?.text;
+      const textAlternate = overlayElement?.textAlternate;
+      const key = overlayElement?.key;
 
       return {
         height: fallbackContent?.height,
@@ -117,17 +83,29 @@ function Overlay({ activeScene, setActiveScene, overlayData, active }: OverlayPr
     });
 
     setTransformedOverlayData(transformedOverlayData);
-  }, [overlayData, activeScene]);
+  }, [overlayData, activeScene, activeLang, activeSound]);
 
   const renderLanguageItems = (languages: string[]) => {
     return languages?.map((language: string) => (
-      <LanguageOption key={language} name={language} transition={transition} />
+      <LanguageOption
+        active={language === activeLang}
+        key={language}
+        name={language}
+        transition={transition}
+        onClick={() => setActiveLang(language)}
+      />
     ));
   };
 
   const renderSoundItems = (sounds: SoundItem[]) => {
     return sounds?.map((sound: SoundItem) => (
-      <SoundOption key={sound.name} name={sound.name} transition={transition} />
+      <SoundOption
+        active={sound.name === activeSound}
+        key={sound.name}
+        name={sound.name}
+        transition={transition}
+        onClick={() => setActiveSound(sound.name)}
+      />
     ));
   };
 
@@ -266,7 +244,7 @@ function Overlay({ activeScene, setActiveScene, overlayData, active }: OverlayPr
           display={['none', 'none', 'unset']}
           w={activeOverlayData?.width}
           h="100%"
-          maxHeight={menuOptionsFallbackContent[activeMenuOption as keyof typeof menuOptionsFallbackContent]?.height}
+          maxHeight={menuOptionsDimensions[activeMenuOption as keyof typeof menuOptionsDimensions]?.height}
           ml={activeMenuOption !== '' ? ['20px'] : '0px'}
           overflowY="auto"
           overflowX="hidden"

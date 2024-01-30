@@ -1,12 +1,5 @@
 import { Box, Text } from '@chakra-ui/react';
-
-interface SizeProps {
-  active?: boolean;
-  transition: string;
-  sizeName: string;
-  available: boolean;
-  onSizeClick: () => void;
-}
+import { SizeProps } from '../../interfaces';
 
 function Size({ active = false, transition, sizeName, available, onSizeClick }: SizeProps) {
   return (

@@ -1,5 +1,5 @@
 // Components
-import { ChakraProvider, Image, Spinner } from '@chakra-ui/react';
+import { ChakraProvider, Spinner } from '@chakra-ui/react';
 import Overlay from './components/Overlay';
 import WelcomeScreen from './components/WelcomeScreen';
 import InfoDrawer from './components/InfoDrawer';
@@ -7,7 +7,7 @@ import InfoModal from './components/InfoModal';
 import Instructions from './components/Instructions';
 import ProductDrawer from './components/ProductDrawer';
 import { CustomTheme } from './theme/theme';
-import BG from './assets/images/alexander-slattery-LI748t0BK8w-unsplash.jpeg';
+// import BG from './assets/images/alexander-slattery-LI748t0BK8w-unsplash.jpeg';
 
 // Styles
 import 'slick-carousel/slick/slick.css';
@@ -19,24 +19,18 @@ import * as Font from 'expo-font';
 import { useEffect, useState } from 'react';
 import { isTemplateTag } from './library/devTools';
 import { Platform } from 'react-native';
-import {
-  fallbackWelcomeData,
-  fallOverlayData,
-  fallbackInstructionsData,
-  fallbackInfoData,
-  fallbackProductData,
-} from './fallbackData';
+import { fallbackData } from './fallbackData';
 import {
   InstructionsState,
   WelcomeState,
   InfoState,
   OverlayState,
-  UIReadyData,
   WelcomeData,
   InstructionsData,
   InfoData,
   ProductState,
   ProductData,
+  OverlayElement,
 } from './interfaces';
 
 // Dev Mode Web Compatibility
@@ -55,81 +49,94 @@ Font.loadAsync({
 
 const App = () => {
   const [activeScene, setActiveScene] = useState('room_1');
+  const [activeLang, setActiveLang] = useState('Language 1');
+  const [activeSound, setActiveSound] = useState('Sound 1');
   const [productDrawerLoading, setProductDrawerLoading] = useState(false);
   const [productDrawerData, setProductDrawerData] = useState<ProductState>({
-    data: fallbackProductData,
+    data: null,
     active: false,
   });
   const [instructionsData, setInstructionsData] = useState<InstructionsState>({
-    data: fallbackInstructionsData,
+    data: null,
     active: false,
   });
   const [welcomeData, setWelcomeData] = useState<WelcomeState>({
-    data: fallbackWelcomeData,
+    data: null,
     active: false,
   });
   const [infoFloatingData, setInfoFloatingData] = useState<InfoState>({
-    data: fallbackInfoData,
+    data: null,
     active: false,
   });
   const [infoData, setInfoData] = useState<InfoState>({
-    data: fallbackInfoData,
+    data: null,
     active: false,
   });
   const [overlayData, setOverlayData] = useState<OverlayState>({
-    data: fallOverlayData,
+    data: null,
     active: false,
   });
 
   const eventMap = {
-    uiReady: (uiReadyData: UIReadyData) => onUIReady(uiReadyData),
-    openWelcome: (welcomeData: WelcomeData) => openWelcomeModal(welcomeData),
-    openInstructions: (instructionsData: InstructionsData) => openInstructionsModal(instructionsData),
-    openProduct: (productData: ProductData) => openProductModal(productData),
-    openInfo: (infoData: InfoData) => openInfoModal(infoData),
+    uiReady: () => onUIReady(),
+    openWelcome: () => openWelcomeModal(),
+    openInstructions: () => openInstructionsModal(),
+    openProduct: (productVariantId: string) => openProductModal(productVariantId),
+    openInfo: (infoModalId: string) => openInfoModal(infoModalId),
   };
 
-  const onUIReady = (uiReadyData: UIReadyData) => {
-    setWelcomeData({
-      data: uiReadyData?.welcome || fallbackWelcomeData,
-      active: true,
+  const onUIReady = () => {
+    const welcomeData: WelcomeData =
+      window.emperia?.data.ui.uiConfig['welcome'] || fallbackData.data.ui.uiConfig['welcome'];
+    const instructionsData: InstructionsData =
+      window.emperia?.data.ui.uiConfig['instructions'] || fallbackData.data.ui.uiConfig['instructions'];
+    const overlayData: OverlayElement[] =
+      window.emperia?.data.ui.uiConfig['overlay'] || fallbackData.data.ui.uiConfig['overlay'];
+
+    setWelcomeData({ data: welcomeData, active: true });
+    setInstructionsData({
+      data: instructionsData,
+      active: false,
     });
     setOverlayData({
-      data: uiReadyData?.overlay || fallOverlayData,
-      active: false,
-    });
-    setInstructionsData({
-      data: uiReadyData?.instructions || fallbackInstructionsData,
+      data: overlayData,
       active: false,
     });
   };
 
-  const openProductModal = (productData: ProductData) => {
+  const openProductModal = (productVariantId: string) => {
     setProductDrawerLoading(true);
 
     setTimeout(() => {
       setProductDrawerLoading(false);
-      setProductDrawerData({ data: productData || fallbackProductData, active: true });
+      const productData: ProductData =
+        window.emperia?.data.ui.pdpModels[productVariantId] || fallbackData.data.ui.pdpModels[productVariantId];
+      setProductDrawerData({ data: productData, active: true });
     }, 2000);
   };
 
-  const openInfoModal = (infoData: InfoData) => {
-    setInfoData({ data: infoData || fallbackInfoData, active: true });
+  const openInfoModal = (infoModalId: string) => {
+    const infoData: InfoData =
+      window.emperia?.data.ui.infoModels[infoModalId] || fallbackData.data.ui.infoModels[infoModalId];
+    setInfoData({ data: infoData, active: true });
   };
 
-  const openWelcomeModal = (welcomeData: WelcomeData) => {
-    setWelcomeData({ data: welcomeData || fallbackWelcomeData, active: true });
+  const openWelcomeModal = () => {
+    const welcomeData: WelcomeData =
+      window.emperia?.data.ui.uiConfig['welcome'] || fallbackData.data.ui.uiConfig['welcome'];
+    setWelcomeData({ data: welcomeData, active: true });
   };
 
-  const openInstructionsModal = (instructionsData: InstructionsData) => {
+  const openInstructionsModal = () => {
+    const instructionsData: InstructionsData =
+      window.emperia?.data.ui.uiConfig['instructions'] || fallbackData.data.ui.uiConfig['instructions'];
     setInstructionsData({
-      data: instructionsData || fallbackInstructionsData,
+      data: instructionsData,
       active: true,
     });
   };
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const eventListener = (interceptedEvent: CustomEvent) => {
       const eventType = interceptedEvent.detail.name as keyof typeof eventMap;
       const eventData = interceptedEvent.detail.data;
@@ -144,17 +151,21 @@ const App = () => {
     window.addEventListener('fromExperience', eventListener);
 
     return () => {
-      window.emperia?.event?.removeEventListener('fromExperience', eventListener);
+      window.emperia?.events?.removeEventListener('fromExperience', eventListener);
       window.removeEventListener('fromExperience', eventListener);
     };
   }, []);
 
   return (
     <ChakraProvider theme={CustomTheme}>
-      <Image position="absolute" height="100vh" w="100%" src={BG} objectFit="cover" />
+      {/* <Image position="absolute" height="100vh" w="100%" src={BG} objectFit="cover" /> */}
       <Overlay
         activeScene={activeScene}
+        activeLang={activeLang}
+        activeSound={activeSound}
         setActiveScene={(scene) => setActiveScene(scene)}
+        setActiveLang={(lang) => setActiveLang(lang)}
+        setActiveSound={(sound) => setActiveSound(sound)}
         overlayData={overlayData?.data}
         active={overlayData?.active}
       />

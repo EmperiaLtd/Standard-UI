@@ -7,10 +7,7 @@ import ReactPlayer from 'react-player';
 import Slider from 'react-slick';
 import { LeftStemArrow } from '../../assets/icons/LeftStemArrow';
 import { RightStemArrow } from '../../assets/icons/RightStemArrow';
-
-interface OverlayInstructionsProps {
-  instructionsData: string[];
-}
+import { OverlayInstructionsProps } from '../../interfaces';
 
 function OverlayInstruction({ instructionsData }: OverlayInstructionsProps) {
   const videos = [HoldAndDrag, TapToMove, ClickToOpen];

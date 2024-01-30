@@ -1,12 +1,5 @@
 import { Box } from '@chakra-ui/react';
-
-interface SwatchProps {
-  active?: boolean;
-  transition: string;
-  colorName: string;
-  available: boolean;
-  onSwatchClick: () => void;
-}
+import { SwatchProps } from '../../interfaces';
 
 function Swatch({ active = false, transition, colorName, available, onSwatchClick }: SwatchProps) {
   return (
