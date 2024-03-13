@@ -30,7 +30,7 @@ import {
   InfoData,
   ProductState,
   ProductData,
-  OverlayElement,
+  OverlayElementObject,
 } from './interfaces';
 
 // Dev Mode Web Compatibility
@@ -90,7 +90,7 @@ const App = () => {
       window.emperia?.data.ui.uiConfig['welcome'] || fallbackData.data.ui.uiConfig['welcome'];
     const instructionsData: InstructionsData =
       window.emperia?.data.ui.uiConfig['instructions'] || fallbackData.data.ui.uiConfig['instructions'];
-    const overlayData: OverlayElement[] =
+    const overlayData: OverlayElementObject =
       window.emperia?.data.ui.uiConfig['overlay'] || fallbackData.data.ui.uiConfig['overlay'];
 
     setWelcomeData({ data: welcomeData, active: true });
@@ -142,7 +142,6 @@ const App = () => {
       const eventData = interceptedEvent.detail.data;
 
       if (eventMap[eventType]) {
-        console.log(interceptedEvent);
         eventMap[eventType](eventData);
       }
     };

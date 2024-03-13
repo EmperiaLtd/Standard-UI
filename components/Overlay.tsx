@@ -58,32 +58,62 @@ function Overlay({
   };
 
   useEffect(() => {
-    const transformedOverlayData = overlayData?.map((overlayElement: OverlayElement) => {
-      let originalContent;
+    const transformedOverlayData =
+      overlayData &&
+      Object?.values(overlayData)?.map((overlayElement: OverlayElement) => {
+        let originalContent;
 
-      if (overlayElement?.content) {
-        originalContent = renderMap[overlayElement.key as keyof typeof renderMap](overlayElement?.content);
-      }
+        if (overlayElement?.content) {
+          originalContent = renderMap[overlayElement.key as keyof typeof renderMap](overlayElement.content);
+        }
 
-      const fallbackContent = menuOptionsDimensions[overlayElement.key as keyof typeof menuOptionsDimensions];
+        const fallbackContent = menuOptionsDimensions[overlayElement.key as keyof typeof menuOptionsDimensions];
 
-      const content = originalContent;
-      const text = overlayElement?.text;
-      const textAlternate = overlayElement?.textAlternate;
-      const key = overlayElement?.key;
+        const content = originalContent || overlayElement.content;
+        const text = overlayElement.text;
+        const textAlternate = overlayElement.textAlternate;
+        const key = overlayElement.key;
 
-      return {
-        height: fallbackContent?.height,
-        width: fallbackContent?.width,
-        key: key,
-        text: text,
-        textAlternate: textAlternate,
-        content: content,
-      };
-    });
+        return {
+          height: fallbackContent?.height,
+          width: fallbackContent?.width,
+          key: key,
+          text: text,
+          textAlternate: textAlternate,
+          content: content,
+        };
+      });
 
     setTransformedOverlayData(transformedOverlayData);
   }, [overlayData, activeScene, activeLang, activeSound]);
+
+  // useEffect(() => {
+  //   const transformedOverlayData = overlayData?.map((overlayElement: OverlayElement) => {
+  //     let originalContent;
+
+  //     if (overlayElement?.content) {
+  //       originalContent = renderMap[overlayElement.key as keyof typeof renderMap](overlayElement?.content);
+  //     }
+
+  //     const fallbackContent = menuOptionsDimensions[overlayElement.key as keyof typeof menuOptionsDimensions];
+
+  //     const content = originalContent;
+  //     const text = overlayElement?.text;
+  //     const textAlternate = overlayElement?.textAlternate;
+  //     const key = overlayElement?.key;
+
+  //     return {
+  //       height: fallbackContent?.height,
+  //       width: fallbackContent?.width,
+  //       key: key,
+  //       text: text,
+  //       textAlternate: textAlternate,
+  //       content: content,
+  //     };
+  //   });
+
+  //   setTransformedOverlayData(transformedOverlayData);
+  // }, [overlayData, activeScene, activeLang, activeSound]);
 
   const renderLanguageItems = (languages: string[]) => {
     return languages?.map((language: string) => (

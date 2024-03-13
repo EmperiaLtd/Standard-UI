@@ -65,7 +65,7 @@ function WelcomeScreen({ welcomeData, active, close }: WelcomeProps) {
           fontFamily="Montserrat-Bold"
           width="100%"
           fontSize={['23px', '23px', '35px', '35px', '40px']}
-          lineHeight={['23px', '23px', '35px', '35px', '40px']}
+          lineHeight={['28px', '28px', '40px', '40px', '45px']}
           color="white"
           textAlign="center"
           noOfLines={1}

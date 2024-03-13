@@ -7,7 +7,7 @@ export interface OverlayProps {
   setActiveScene: (scene) => void;
   setActiveLang: (lang) => void;
   setActiveSound: (sound) => void;
-  overlayData: OverlayElement[];
+  overlayData: OverlayElementObject;
   active: boolean;
 }
 export interface TransformedOverlayData {
@@ -18,18 +18,31 @@ export interface TransformedOverlayData {
   textAlternate: string;
   content: any;
 }
+
 export interface OverlayState {
-  data: OverlayElement[];
+  data: OverlayElementObject;
   active: boolean;
 }
+
+export interface OverlayElementObject {
+  [key: string]: OverlayElement;
+}
+
 export interface OverlayElement {
   key: string;
   text: string;
+  hotspot?: string;
   textAlternate?: string;
   content?: any;
-  [key: string]: any;
 }
 
+export interface OverlayContent {
+  roomName?: string;
+  description?: string;
+  scene?: string;
+  name?: string;
+  fileURL?: string;
+}
 export interface LanguageOptionProps {
   active: boolean;
   name: string;
@@ -250,6 +263,20 @@ export type Emperia = {
 };
 
 // Data Events
+export interface FallBackData {
+  data: {
+    ui: {
+      uiConfig: {
+        overlay: OverlayElementObject;
+        welcome: WelcomeData;
+        instructions: InstructionsData;
+      };
+      infoModels: InfoModels;
+      pdpModels: PDPModels;
+    };
+  };
+}
+
 export type EventData = {
   ui: {
     uiConfig: UiConfig;
@@ -259,16 +286,16 @@ export type EventData = {
 };
 
 type UiConfig = {
-  overlay: OverlayElement[];
+  overlay: OverlayElementObject;
   welcome: WelcomeData;
   instructions: InstructionsData;
 };
 
-type InfoModels = {
+export type InfoModels = {
   [modelName: string]: InfoData;
 };
 
-type PDPModels = {
+export type PDPModels = {
   [productId: string]: ProductData;
 };
 

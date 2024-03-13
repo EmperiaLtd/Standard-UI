@@ -1,42 +1,41 @@
-export const fallbackData = {
+import { FallBackData } from './interfaces';
+
+export const fallbackData: FallBackData = {
   data: {
     ui: {
       uiConfig: {
-        overlay: [
-          {
-            key: 'changeRooms',
-            text: 'Change Rooms',
+        overlay: {
+          changeRooms: {
             content: [
               {
-                roomName: 'Room One',
-                description: 'Desc Room One',
+                roomName: 'Room 1 SDK',
+                description: 'Desc Room 1',
                 scene: 'room_1',
               },
               {
-                roomName: 'Room Two',
-                description: 'Desc Room Two',
+                roomName: 'Room 2',
+                description: 'Desc Room 2',
                 scene: 'room_2',
               },
-              {
-                roomName: 'Room Three',
-                description: 'Desc Room Three',
-                scene: 'room_3',
-              },
             ],
+            hotspot: 'None',
+            key: 'changeRooms',
+            text: 'Change Rooms',
+            textAlternate: '',
           },
-          {
+          instructionsOverlay: {
+            content: ['First', 'Second', 'Third One'],
             key: 'instructions',
             text: 'Instructions',
-            content: [
-              'Hold and Drag to look around',
-              'Click on floor to move',
-              'Hover or Click on objects to learn more',
-            ],
+            textAlternate: '',
           },
-          {
-            key: 'sound',
-            text: 'Sound : ON',
-            textAlternate: 'Sound : OFF',
+          languages: {
+            content: ['Lang1', 'Lang2 Two', 'Lang3'],
+            key: 'languages',
+            text: 'Languages',
+            textAlternate: '',
+          },
+          sounds: {
             content: [
               {
                 name: 'Sound 1',
@@ -46,29 +45,20 @@ export const fallbackData = {
                 name: 'Sound 2',
                 fileURL: '',
               },
-              {
-                name: 'Sound 3',
-                fileURL: '',
-              },
-              {
-                name: 'Sound 4',
-                fileURL: '',
-              },
             ],
+            key: 'sound',
+            text: 'Sound : ON',
+            textAlternate: 'Sound : OFF',
           },
-          {
-            key: 'languages',
-            text: 'Languages',
-            content: ['Language 1', 'Language 2', 'Lang3', 'Lang4'],
-          },
-          {
+          share: {
             key: 'share',
             text: 'Share',
+            textAlternate: '',
           },
-        ],
+        },
         welcome: {
           collectionImage: 'https://picsum.photos/600/600',
-          collectionTitle: 'Title Goes Here',
+          collectionTitle: 'Title Goes Here SDK',
           jumboTitle: 'Experience Name',
           tagline: 'Tagline Here',
           enterCTA: 'Enter',
