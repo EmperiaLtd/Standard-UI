@@ -1,5 +1,5 @@
 // Components
-import { ChakraProvider, Spinner } from '@chakra-ui/react';
+import { ChakraProvider, Spinner, Image } from '@chakra-ui/react';
 import Overlay from './components/Overlay';
 import WelcomeScreen from './components/WelcomeScreen';
 import InfoDrawer from './components/InfoDrawer';
@@ -7,7 +7,7 @@ import InfoModal from './components/InfoModal';
 import Instructions from './components/Instructions';
 import ProductDrawer from './components/ProductDrawer';
 import { CustomTheme } from './theme/theme';
-// import BG from './assets/images/alexander-slattery-LI748t0BK8w-unsplash.jpeg';
+import BG from './assets/images/alexander-slattery-LI748t0BK8w-unsplash.jpeg';
 
 // Styles
 import 'slick-carousel/slick/slick.css';
@@ -155,9 +155,14 @@ const App = () => {
     };
   }, []);
 
+  useEffect(() => {
+    // onUIReady();
+    openProductModal('000112');
+  }, []);
+
   return (
     <ChakraProvider theme={CustomTheme}>
-      {/* <Image position="absolute" height="100vh" w="100%" src={BG} objectFit="cover" /> */}
+      <Image position="absolute" height="100vh" w="100%" src={BG} objectFit="cover" />
       <Overlay
         activeScene={activeScene}
         activeLang={activeLang}

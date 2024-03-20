@@ -1,15 +1,33 @@
-import { Box, Button, Text, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerOverlay } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Text,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerFooter,
+  Image,
+  Slide,
+  Slider,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderTrack,
+} from '@chakra-ui/react';
 import { CrossIcon } from '../assets/icons/CrossIcon';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import Size from './PDP/Size';
 import Swatch from './PDP/Swatch';
 import ImageSlider from './PDP/ImageSlider';
 import { ProductDrawerProps, ProductMedia, ProductVariant, ProductVariantType } from '../interfaces';
 import { sortSizes } from '../utils/helper/index.ts';
+import { useWindowDimensions } from 'react-native';
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 
 function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps) {
   const transition = 'all 0.2s ease-in-out';
+  const { width } = useWindowDimensions();
 
+  const [mobileDrawerActive, setMobileDrawerActive] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>();
   const [currency, setCurrency] = useState('');
@@ -18,6 +36,12 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
   const [currentSizes, setCurrentSizes] = useState<ProductVariantType[]>([]);
   const [currentImages, setCurrentImages] = useState<ProductMedia[]>([]);
   const [productVariants, setProductVariants] = useState<ProductVariant[]>([]);
+
+  const [imageNo, setImageNo] = useState(1);
+
+  const formatImageNo = (number) => {
+    return number.toString().padStart(2, '0');
+  };
 
   useEffect(() => {
     if (active) {
@@ -87,186 +111,304 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
   };
 
   return (
-    <Drawer
-      isOpen={active}
-      placement="right"
-      onClose={close}
-      size={['full', 'full', 'sm', 'sm', 'md']}
-      closeOnOverlayClick={false}
-    >
-      <DrawerOverlay bg="transparent" />
-      <DrawerContent
-        background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
-        backdropFilter="blur(12px)"
-        boxShadow="-4px 0px 4px 0px rgba(0, 0, 0, 0.25)"
+    <Fragment>
+      <Box
+        as={Slide}
+        direction={width < 769 ? 'bottom' : 'left'}
+        in={active}
+        zIndex={['999', '999', '9999']}
+        position="fixed"
+        height="100vh"
+        maxW={['100%', '100%', 'calc(100vw - 448px)', 'calc(100vw - 448px)', 'calc(100vw - 512px)']}
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
       >
         <CrossIcon
-          zIndex="20"
+          display={['unset', 'unset', 'none']}
+          zIndex="25"
           boxSize={4}
-          stroke="black"
+          stroke="white"
           position="absolute"
-          filter="drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.5))"
+          filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
           top="15px"
           right="15px"
           cursor="pointer"
-          onClick={close}
+          onClick={() => close()}
         />
 
-        <DrawerBody padding="0px">
-          <ImageSlider
-            highlightImage={selectedImage}
-            images={currentImages.map((currentImage: ProductMedia) => currentImage.url)}
-            setHighLightImage={(image) => setSelectedImage(image)}
+        <Box
+          width="100%"
+          height={['-webkit-fill-available']}
+          padding={['20px']}
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          backdropFilter="blur(6px)"
+          gap={5}
+        >
+          <Image
+            objectFit="contain"
+            src={`https://images.stockx.com/360/Air-Jordan-4-Retro-Metallic-Gold-Womens/Images/Air-Jordan-4-Retro-Metallic-Gold-Womens/Lv2/img${formatImageNo(
+              imageNo,
+            )}.jpg?fm=avif&auto=compress&w=576&dpr=2&updated_at=1709050803&h=384&q=60`}
+            height={['auto']}
+            maxHeight={['300px', '300px', '350px', '350px', '400px']}
+            width={['auto']}
           />
-          <Box
-            h={['fit-content', 'fit-content', '450px', '450px', '470px']}
-            w={['100%', '100%', '100%', '100%', '100%']}
-            display="flex"
-            flexDirection="column"
-            justifyContent="space-between"
-            p={['20px', '20px', '30px', '30px', '30px']}
-          >
-            <Box>
-              <Text fontFamily="Montserrat-Bold" fontSize={['20px']} color="white">
-                {productDrawerData?.title}
-              </Text>
-              <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white" mt={['5px']}>
-                {productDrawerData?.short_description}
-              </Text>
-              <Box display="flex" justifyContent="space-between" alignItems="center" width={['85px']} mt={['5px']}>
-                <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white">
-                  {`${currency} ${selectedSize?.price}`}
-                </Text>
-                <Text fontFamily="Montserrat-Bold" fontSize={['14px']} color="white" textDecoration="line-through">
-                  {`${currency} ${selectedVariant?.retail_price}`}
-                </Text>
-              </Box>
-              <Text
-                fontFamily="Montserrat"
-                fontSize={['12px']}
-                color="white"
-                mt={['10px']}
-                maxH={['200px']}
-                h="auto"
-                overflow="auto"
-              >
-                {productDrawerData?.long_description}
-              </Text>
 
-              {/* Variant */}
-              <Box
-                mt={['15px', '15px', '20px', '20px', '20px']}
-                height={['auto']}
-                display="flex"
-                flexDirection="column"
-              >
-                <Box display="flex" justifyContent="flex-start" alignItems="center">
-                  <Text fontFamily="Montserrat-Bold" fontSize={['13px', '13px', '14px', '14px', '14px']} color="white">
-                    Variant:
+          <Box px={8} width={['250px', '300px', '300px', '300px', '300px']}>
+            <Slider
+              min={0}
+              max={100}
+              step={2.77777777778}
+              defaultValue={0}
+              onChange={(value) => {
+                const finalValue = Math.trunc(value / 2.77777777778) + 1;
+                setImageNo(finalValue);
+              }}
+            >
+              <SliderTrack bg="white">
+                <SliderFilledTrack bg="white" />
+              </SliderTrack>
+              <SliderThumb boxSize={4} filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))" />
+            </Slider>
+          </Box>
+        </Box>
+
+        <Box
+          width={['100%']}
+          height={['auto']}
+          background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
+          backdropFilter="blur(12px)"
+          display={['unset', 'unset', 'none']}
+          borderTopRadius="10px"
+        >
+          <Box borderBottom="1px solid white" width={['100%']} p={['5px']} display="flex" justifyContent="center">
+            <ChevronUpIcon cursor="pointer" color="white" boxSize={[8]} onClick={() => setMobileDrawerActive(true)} />
+          </Box>
+          <Box p="20px">
+            <Text fontFamily="Montserrat-Bold" fontSize={['20px']} color="white">
+              {productDrawerData?.title}
+            </Text>
+            <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white" mt={['5px']}>
+              {productDrawerData?.short_description}
+            </Text>
+            <Box display="flex" justifyContent="space-between" alignItems="center" width={['85px']} mt={['5px']}>
+              <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white">
+                {`${currency} ${selectedSize?.price}`}
+              </Text>
+              <Text fontFamily="Montserrat-Bold" fontSize={['14px']} color="white" textDecoration="line-through">
+                {`${currency} ${selectedVariant?.retail_price}`}
+              </Text>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+
+      <Drawer
+        isOpen={width < 769 ? mobileDrawerActive && active : active}
+        placement={width < 769 ? 'bottom' : 'right'}
+        onClose={close}
+        size={['full', 'full', 'sm', 'sm', 'md']}
+        autoFocus={false}
+        closeOnOverlayClick={false}
+      >
+        <DrawerContent
+          background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
+          backdropFilter="blur(12px)"
+          boxShadow="-4px 0px 4px 0px rgba(0, 0, 0, 0.25)"
+        >
+          <ChevronDownIcon
+            display={['unset', 'unset', 'none']}
+            zIndex="25"
+            boxSize={8}
+            color="white"
+            position="absolute"
+            top="15px"
+            right="15px"
+            cursor="pointer"
+            onClick={() => setMobileDrawerActive(false)}
+          />
+          <CrossIcon
+            display={['none', 'none', 'unset']}
+            zIndex="25"
+            boxSize={4}
+            stroke="white"
+            filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
+            position="absolute"
+            top="15px"
+            right="15px"
+            cursor="pointer"
+            onClick={() => close()}
+          />
+
+          <DrawerBody padding="0px">
+            <ImageSlider
+              highlightImage={selectedImage}
+              images={currentImages.map((currentImage: ProductMedia) => currentImage.url)}
+              setHighLightImage={(image) => setSelectedImage(image)}
+            />
+            <Box
+              h={['fit-content', 'fit-content', '450px', '450px', '470px']}
+              w={['100%', '100%', '100%', '100%', '100%']}
+              display="flex"
+              flexDirection="column"
+              justifyContent="space-between"
+              p={['20px', '20px', '30px', '30px', '30px']}
+            >
+              <Box>
+                <Text fontFamily="Montserrat-Bold" fontSize={['20px']} color="white">
+                  {productDrawerData?.title}
+                </Text>
+                <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white" mt={['5px']}>
+                  {productDrawerData?.short_description}
+                </Text>
+                <Box display="flex" justifyContent="space-between" alignItems="center" width={['85px']} mt={['5px']}>
+                  <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white">
+                    {`${currency} ${selectedSize?.price}`}
                   </Text>
-                  <Text
-                    ml={['5px']}
-                    fontFamily="Montserrat"
-                    fontSize={['13px', '13px', '14px', '14px', '14px']}
-                    color="white"
-                    textTransform="capitalize"
-                  >
-                    {selectedColor}
+                  <Text fontFamily="Montserrat-Bold" fontSize={['14px']} color="white" textDecoration="line-through">
+                    {`${currency} ${selectedVariant?.retail_price}`}
                   </Text>
                 </Box>
-
-                <Box
-                  display="flex"
-                  overflowY={['hidden', 'hidden', 'hidden', 'hidden', 'hidden']}
-                  overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
-                  height={['40px', '40px', '50px', '50px', '50px']}
-                  w={['100%']}
-                  alignItems="center"
-                  justifyContent="flex-start"
+                <Text
+                  fontFamily="Montserrat"
+                  fontSize={['12px']}
+                  color="white"
+                  mt={['10px']}
+                  maxH={['200px']}
+                  h="auto"
+                  overflow="auto"
                 >
-                  {productVariants?.map((productVariant: ProductVariant) => (
-                    <Swatch
-                      key={productVariant.variant_id}
-                      transition={transition}
-                      active={selectedVariant.color_swatch === productVariant.color_swatch}
-                      colorName={productVariant.color_swatch}
-                      available={productVariant.available_stock > 0}
-                      onSwatchClick={() => updateVariant(productVariant)}
-                    />
-                  ))}
-                </Box>
-              </Box>
+                  {productDrawerData?.long_description}
+                </Text>
 
-              {/* Size */}
-              <Box
-                mt={['15px', '15px', '20px', '20px', '20px']}
-                height={['auto']}
-                display="flex"
-                flexDirection="column"
-              >
-                <Box display="flex" justifyContent="space-between" alignItems="center" width={['100%']}>
-                  <Text fontFamily="Montserrat-Bold" fontSize={['13px', '13px', '14px', '14px', '14px']} color="white">
-                    Size:
-                  </Text>
-                  <Text
-                    fontFamily="Montserrat"
-                    fontSize={['13px', '13px', '14px', '14px', '14px']}
-                    color="white"
-                    textDecoration="underline"
-                    cursor="pointer"
-                    _hover={{ color: '#CCCCCC' }}
-                    transition={transition}
-                  >
-                    Size Guide
-                  </Text>
-                </Box>
-
+                {/* Variant */}
                 <Box
-                  mt={['5px']}
-                  display="flex"
-                  flexWrap="wrap"
-                  overflowY={['hidden', 'hidden', 'hidden', 'hidden', 'hidden']}
-                  overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
+                  mt={['15px', '15px', '20px', '20px', '20px']}
                   height={['auto']}
-                  w={['100%']}
-                  alignItems="center"
-                  justifyContent="flex-start"
+                  display="flex"
+                  flexDirection="column"
                 >
-                  {currentSizes?.map((size: ProductVariantType) => (
-                    <Size
-                      key={size.value}
-                      active={selectedSize?.value === size.value && size.available_stock > 0}
+                  <Box display="flex" justifyContent="flex-start" alignItems="center">
+                    <Text
+                      fontFamily="Montserrat-Bold"
+                      fontSize={['13px', '13px', '14px', '14px', '14px']}
+                      color="white"
+                    >
+                      Variant:
+                    </Text>
+                    <Text
+                      ml={['5px']}
+                      fontFamily="Montserrat"
+                      fontSize={['13px', '13px', '14px', '14px', '14px']}
+                      color="white"
+                      textTransform="capitalize"
+                    >
+                      {selectedColor}
+                    </Text>
+                  </Box>
+
+                  <Box
+                    display="flex"
+                    overflowY={['hidden', 'hidden', 'hidden', 'hidden', 'hidden']}
+                    overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
+                    height={['40px', '40px', '50px', '50px', '50px']}
+                    w={['100%']}
+                    alignItems="center"
+                    justifyContent="flex-start"
+                  >
+                    {productVariants?.map((productVariant: ProductVariant) => (
+                      <Swatch
+                        key={productVariant.variant_id}
+                        transition={transition}
+                        active={selectedVariant.color_swatch === productVariant.color_swatch}
+                        colorName={productVariant.color_swatch}
+                        available={productVariant.available_stock > 0}
+                        onSwatchClick={() => updateVariant(productVariant)}
+                      />
+                    ))}
+                  </Box>
+                </Box>
+
+                {/* Size */}
+                <Box
+                  mt={['15px', '15px', '20px', '20px', '20px']}
+                  height={['auto']}
+                  display="flex"
+                  flexDirection="column"
+                >
+                  <Box display="flex" justifyContent="space-between" alignItems="center" width={['100%']}>
+                    <Text
+                      fontFamily="Montserrat-Bold"
+                      fontSize={['13px', '13px', '14px', '14px', '14px']}
+                      color="white"
+                    >
+                      Size:
+                    </Text>
+                    <Text
+                      fontFamily="Montserrat"
+                      fontSize={['13px', '13px', '14px', '14px', '14px']}
+                      color="white"
+                      textDecoration="underline"
+                      cursor="pointer"
+                      _hover={{ color: '#CCCCCC' }}
                       transition={transition}
-                      sizeName={size.value}
-                      available={size.available_stock > 0}
-                      onSizeClick={() => setSelectedSize(size)}
-                    />
-                  ))}
+                    >
+                      Size Guide
+                    </Text>
+                  </Box>
+
+                  <Box
+                    mt={['5px']}
+                    display="flex"
+                    flexWrap="wrap"
+                    overflowY={['hidden', 'hidden', 'hidden', 'hidden', 'hidden']}
+                    overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
+                    height={['auto']}
+                    w={['100%']}
+                    alignItems="center"
+                    justifyContent="flex-start"
+                  >
+                    {currentSizes?.map((size: ProductVariantType) => (
+                      <Size
+                        key={size.value}
+                        active={selectedSize?.value === size.value && size.available_stock > 0}
+                        transition={transition}
+                        sizeName={size.value}
+                        available={size.available_stock > 0}
+                        onSizeClick={() => setSelectedSize(size)}
+                      />
+                    ))}
+                  </Box>
                 </Box>
               </Box>
             </Box>
-          </Box>
-        </DrawerBody>
+          </DrawerBody>
 
-        <DrawerFooter p="0px">
-          <Box p={['20px', '20px', '20px', '30px', '30px']} width={['100%']}>
-            <Button
-              width={['100%']}
-              textTransform="uppercase"
-              fontFamily="Montserrat"
-              bg="rgba(0, 0, 0, 0.1)"
-              _hover={{ bg: 'rgba(0, 0, 0, 0.3)' }}
-              border="1px solid rgba(255, 255, 255, 0.80)"
-              boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25);"
-              backdropFilter="blur(12px)"
-              color="white"
-            >
-              Add To Bag
-            </Button>
-          </Box>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+          <DrawerFooter p="0px">
+            <Box p={['20px', '20px', '20px', '30px', '30px']} width={['100%']}>
+              <Button
+                width={['100%']}
+                textTransform="uppercase"
+                fontFamily="Montserrat"
+                bg="rgba(0, 0, 0, 0.1)"
+                _hover={{ bg: 'rgba(0, 0, 0, 0.3)' }}
+                border="1px solid rgba(255, 255, 255, 0.80)"
+                boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25);"
+                backdropFilter="blur(12px)"
+                color="white"
+              >
+                Add To Bag
+              </Button>
+            </Box>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </Fragment>
   );
 }
 
