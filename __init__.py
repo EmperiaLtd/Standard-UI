@@ -4,13 +4,9 @@ from core.library import Path, client, dirname, realpath
 class Client(client.NativeClient):
   ENV:str = __file__.replace('__init__.py', '.env')
   DIR:str = Path(dirname(realpath(__file__))).parts[-1]
-  NAME:str = "VR Experience"
+  NAME:str = "Standard UI"
   PWA:bool = False
-  API_DOMAIN:str = "https://emperiavr.com"
-  VARS = {
-    'experienceOrg': 'bicester',
-    'experienceName': 'lavalee'
-  }
+  API_DOMAIN:str = ""
 
   def __init__(self) -> None:
     super().__init__()

@@ -3,12 +3,10 @@
     "target": "es5",
     "module": "es2015",
     "moduleResolution": "node",
-    "outDir": "dist",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "outDir": "web-build",
+    "baseUrl": "src",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "declaration": true,
     "allowJs": true,
     "noImplicitAny": false,
     "removeComments": true,
@@ -24,10 +22,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "./*"
-  ],
+  "include": ["./*", "src", "types"],
   "extends": "expo/tsconfig.base"
 }

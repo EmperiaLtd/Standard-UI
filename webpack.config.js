@@ -1,10 +1,20 @@
 const createExpoWebpackConfigAsync = require("@expo/webpack-config");
 const path = require("path");
 const WorkboxWebpackPlugin = require("workbox-webpack-plugin");
+const { exec } = require('child_process');
 
 module.exports = async function (env, argv) {
-  const isEnvProduction = env.mode === "production";
   const config = await createExpoWebpackConfigAsync(env, argv);
+  var isEnvProduction = false;
+  exec('git symbolic-ref --short HEAD', (err, stdout, stderr) => {
+    if (err) {
+      console.error("Could not understand the branch name.")
+      return;
+    }
+    if (typeof stdout === 'string' && (stdout.trim() === 'Production')) {
+      isEnvProduction = true;
+    }
+});
   config.module.rules.push(
     {
       test: /\.html$/i,
@@ -14,7 +24,6 @@ module.exports = async function (env, argv) {
       }
     }
   );
-
   if (isEnvProduction) {
     config.plugins.push(
       new WorkboxWebpackPlugin.InjectManifest({
@@ -27,9 +36,10 @@ module.exports = async function (env, argv) {
           /\.js\.gz$/,
           /(apple-touch-startup-image|chrome-icon|apple-touch-icon).*\.png$/,
         ],
-        maximumFileSizeToCacheInBytes: 12 * 1024 * 1024
+        maximumFileSizeToCacheInBytes: 25 * 1024 * 1024
       })
     );
+
   }
   return config;
 };

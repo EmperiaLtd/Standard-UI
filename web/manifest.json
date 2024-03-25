@@ -1,9 +1,9 @@
 {
   "display": "standalone",
   "lang": "en",
-  "name": "Experience",
-  "short_name": "Experience",
-  "start_url": "/",
+  "name": "Standard",
+  "short_name": "Standard",
+  "start_url": "/Testing/UI/0.0.0",
   "orientation": "portrait",
   "background_color": "#202029",
   "theme_color": "#202029",
