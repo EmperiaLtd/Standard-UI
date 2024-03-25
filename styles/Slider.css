@@ -4,13 +4,6 @@
   height: calc(100% - 0px);
 }
 
-.slick-active,
-.slick-current {
-  div {
-    height: 100% !important;
-  }
-}
-
 .slick-prev {
   z-index: 1;
   width: 20px;
@@ -18,7 +11,7 @@
   left: 15px;
 
   &:before {
-    content: "" !important;
+    content: '' !important;
   }
 }
 
@@ -30,7 +23,7 @@
   right: 15px;
 
   &:before {
-    content: "" !important;
+    content: '' !important;
   }
 }
 
@@ -39,7 +32,7 @@
     left: 10px;
 
     &:before {
-      content: "" !important;
+      content: '' !important;
     }
   }
 
@@ -47,7 +40,7 @@
     right: 15px;
 
     &:before {
-      content: "" !important;
+      content: '' !important;
     }
   }
 }
@@ -57,7 +50,7 @@
     left: 10px;
 
     &:before {
-      content: "" !important;
+      content: '' !important;
     }
   }
 
@@ -65,7 +58,7 @@
     right: 15px;
 
     &:before {
-      content: "" !important;
+      content: '' !important;
     }
   }
 }
@@ -75,7 +68,7 @@
     left: 10px;
 
     &:before {
-      content: "" !important;
+      content: '' !important;
     }
   }
 
@@ -83,7 +76,7 @@
     right: 15px;
 
     &:before {
-      content: "" !important;
+      content: '' !important;
     }
   }
 }

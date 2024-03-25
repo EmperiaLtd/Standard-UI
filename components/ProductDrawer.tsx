@@ -6,12 +6,7 @@ import {
   DrawerBody,
   DrawerContent,
   DrawerFooter,
-  Image,
   Slide,
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
 } from '@chakra-ui/react';
 import { CrossIcon } from '../assets/icons/CrossIcon';
 import { Fragment, useEffect, useState } from 'react';
@@ -36,12 +31,6 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
   const [currentSizes, setCurrentSizes] = useState<ProductVariantType[]>([]);
   const [currentImages, setCurrentImages] = useState<ProductMedia[]>([]);
   const [productVariants, setProductVariants] = useState<ProductVariant[]>([]);
-
-  const [imageNo, setImageNo] = useState(1);
-
-  const formatImageNo = (number) => {
-    return number.toString().padStart(2, '0');
-  };
 
   useEffect(() => {
     if (active) {
@@ -112,7 +101,7 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
 
   return (
     <Fragment>
-      <Box
+     <Box
         as={Slide}
         direction={width < 769 ? 'bottom' : 'left'}
         in={active}
@@ -122,8 +111,8 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
         maxW={['100%', '100%', 'calc(100vw - 448px)', 'calc(100vw - 448px)', 'calc(100vw - 512px)']}
         display="flex"
         flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
+        justifyContent="flex-end"
+        alignItems="flex-end"
       >
         <CrossIcon
           display={['unset', 'unset', 'none']}
@@ -138,45 +127,7 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
           onClick={() => close()}
         />
 
-        <Box
-          width="100%"
-          height={['-webkit-fill-available']}
-          padding={['20px']}
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          alignItems="center"
-          backdropFilter="blur(6px)"
-          gap={5}
-        >
-          <Image
-            objectFit="contain"
-            src={`https://images.stockx.com/360/Air-Jordan-4-Retro-Metallic-Gold-Womens/Images/Air-Jordan-4-Retro-Metallic-Gold-Womens/Lv2/img${formatImageNo(
-              imageNo,
-            )}.jpg?fm=avif&auto=compress&w=576&dpr=2&updated_at=1709050803&h=384&q=60`}
-            height={['auto']}
-            maxHeight={['300px', '300px', '350px', '350px', '400px']}
-            width={['auto']}
-          />
-
-          <Box px={8} width={['250px', '300px', '300px', '300px', '300px']}>
-            <Slider
-              min={0}
-              max={100}
-              step={2.77777777778}
-              defaultValue={0}
-              onChange={(value) => {
-                const finalValue = Math.trunc(value / 2.77777777778) + 1;
-                setImageNo(finalValue);
-              }}
-            >
-              <SliderTrack bg="white">
-                <SliderFilledTrack bg="white" />
-              </SliderTrack>
-              <SliderThumb boxSize={4} filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))" />
-            </Slider>
-          </Box>
-        </Box>
+        <Box width={['100%']} height={['-webkit-fill-available']} bg="transparent" onClick={close} />
 
         <Box
           width={['100%']}
@@ -196,11 +147,11 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
             <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white" mt={['5px']}>
               {productDrawerData?.short_description}
             </Text>
-            <Box display="flex" justifyContent="space-between" alignItems="center" width={['85px']} mt={['5px']}>
-              <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white">
-                {`${currency} ${selectedSize?.price}`}
+            <Box display="flex" alignItems="center" gap={3}>
+              <Text fontFamily="Montserrat-Medium" fontSize={['18px']} color="black">
+                {`${currency} ${productDrawerData?.base_price}`}
               </Text>
-              <Text fontFamily="Montserrat-Bold" fontSize={['14px']} color="white" textDecoration="line-through">
+              <Text fontFamily="Montserrat-Bold" fontSize={['18px']} color="black" textDecoration="line-through">
                 {`${currency} ${selectedVariant?.retail_price}`}
               </Text>
             </Box>

@@ -156,8 +156,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    // onUIReady();
-    openProductModal('000112');
+    onUIReady();
   }, []);
 
   return (

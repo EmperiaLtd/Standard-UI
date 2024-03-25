@@ -241,7 +241,7 @@ function Overlay({
                 contentHeight={overlayElement?.height}
                 activeMenuOption={activeMenuOption === key}
                 leftIcon={key}
-                additionalOptions={content !== null}
+                additionalOptions={content}
                 text={
                   overlayElement.key === 'sound'
                     ? audioActive
@@ -253,14 +253,13 @@ function Overlay({
                 menuOptionHovered={menuOptionHoveredOrActive === key}
                 transition={transition}
                 onMenuOptionClick={() => {
-                  if (overlayElement.key === 'sound') {
-                    setAudioActive(!audioActive);
-                  }
-
-                  if (content !== null) {
+                  if (content) {
                     const updatedValue = activeMenuOption === key ? '' : key;
                     setActiveMenuOption(updatedValue);
+                  } else if (overlayElement.key === 'sound') {
+                    setAudioActive(!audioActive);
                   } else {
+                    setActiveMenuOption('');
                     console.log('Regular Click');
                   }
                 }}

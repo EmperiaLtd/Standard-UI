@@ -108,6 +108,14 @@ function OverlayInstruction({ instructionsData }: OverlayInstructionsProps) {
           alignItems="center"
         >
           <IconButton
+            isDisabled={activeImageIndex.newIndex === 0}
+            _disabled={{
+              background: 'rgba(0, 0, 0, 0.55)',
+              color: 'grey',
+              pointerEvents: 'none',
+              cursor:'unset',
+            }}
+            color="white"
             aria-label="Move Left"
             onClick={prevSlide}
             w={['40px', '40px', '50px', '50px', '60px']}
@@ -116,11 +124,19 @@ function OverlayInstruction({ instructionsData }: OverlayInstructionsProps) {
             _hover={{ background: 'rgba(0, 0, 0, 0.25)' }}
             boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
             borderRadius="8px"
-            icon={<LeftStemArrow fill="white" boxSize={[4, 4, 5, 5, 6]} />}
+            icon={<LeftStemArrow fill="currentColor" boxSize={[4, 4, 5, 5, 6]} />}
           />
 
           <IconButton
-            aria-label="Move Left"
+            isDisabled={activeImageIndex.newIndex === videos.length - 1}
+            _disabled={{
+              background: 'rgba(0, 0, 0, 0.55)',
+              color: 'grey',
+              pointerEvents: 'none',
+              cursor: 'unset',
+            }}
+            color="white"
+            aria-label="Move Right"
             onClick={nextSlide}
             w={['40px', '40px', '50px', '50px', '60px']}
             height={['30px', '30px', '40px', '40px', '50px']}
@@ -128,7 +144,7 @@ function OverlayInstruction({ instructionsData }: OverlayInstructionsProps) {
             _hover={{ background: 'rgba(0, 0, 0, 0.25)' }}
             boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
             borderRadius="8px"
-            icon={<RightStemArrow fill="white" boxSize={[4, 4, 5, 5, 6]} />}
+            icon={<RightStemArrow fill="currentColor" boxSize={[4, 4, 5, 5, 6]} />}
           />
         </Box>
       </Box>
