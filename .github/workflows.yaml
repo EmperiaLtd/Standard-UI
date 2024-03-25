@@ -1,0 +1,51 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - development
+
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::601772211076:role/github-actions-role
+        role-session-name: deploy-ui-to-s3
+        aws-region: eu-west-2
+
+    - name: Get Previous Tag
+      id: previous-tag
+      uses: "WyriHaximus/github-action-get-previous-tag@v1"
+      with:
+        fallback: 1.0.0 # Optional fallback tag to use when no tag can be found
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build
+
+    - name: Copy files to S3
+      run: |
+        aws s3 cp web-build/ s3://ui.emperiavr.com/${GITHUB_REPOSITORY#*/}/${GITHUB_REF##*/}/${{ steps.previous-tag.outputs.tag }}/ --recursive
+
+    # - name: Invalidate Cloudfront files
+    #   run: |
+    #     aws cloudfront create-invalidation --distribution-id E1SNIBDII6A51A --paths "/${GITHUB_REF##*/}/latest/emperia-sdk.min.js" "/${GITHUB_REF##*/}/${{ steps.previous-tag.outputs.tag }}/emperia-sdk.min.js"
