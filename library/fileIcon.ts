@@ -29,7 +29,7 @@ import pythonSVG from '../assets/svgs/python.svg';
 import powerpointSVG from '../assets/svgs/powerpoint.svg';
 
 const fileExtRegex = /(?:\.([^.]+))?$/;
-const svgIcons:any = {
+const svgIcons: any = {
   ".db": dbSVG,
   ".ts": tsSVG,
   ".jsx": reactSVG,
@@ -113,7 +113,7 @@ const svgIcons:any = {
 };
 
 
-const fileIcon = (name:string, mimeType:string|undefined) => {
+const fileIcon = (name: string, mimeType: string | undefined) => {
   const svgMimeTypeIcon = svgIcons[`${mimeType}`];
   if (svgMimeTypeIcon !== undefined) return svgMimeTypeIcon;
 
@@ -121,7 +121,7 @@ const fileIcon = (name:string, mimeType:string|undefined) => {
   const svgFileTypeIcon =
     fileArray !== null && fileArray.length > 1 ?
       svgIcons[`.${fileArray[1]}`]
-    :
+      :
       undefined
 
   return svgMimeTypeIcon || svgFileTypeIcon || fileSVG;

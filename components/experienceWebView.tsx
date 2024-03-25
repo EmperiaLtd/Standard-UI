@@ -1,25 +1,27 @@
 import { useRef, useEffect } from 'react';
-import { Platform, NativeEventEmitter } from 'react-native';
+import { Platform } from 'react-native';
 import WebView from 'react-native-web-webview';
 import * as MobileWebView from 'react-native-webview';
 import { REACT_APP_ENV, experienceOrg, experienceName } from 'env';
 
-const eventEmitter = new NativeEventEmitter();
-const experienceURI = REACT_APP_ENV === 'Prd' ?
-  `https://emperia.digital/${experienceOrg}/${experienceName}/index.html`
-:
-  `https://emperia.digital/preview/${experienceOrg}/${experienceName}/index.html`;
+// const eventEmitter = new NativeEventEmitter();
+const experienceURI =
+  REACT_APP_ENV === 'Prd'
+    ? `https://emperia.digital/${experienceOrg}/${experienceName}/index.html`
+    : `https://emperia.digital/preview/${experienceOrg}/${experienceName}/index.html`;
 
-
-const ExperienceWebView = ({width, height, style, nativeBlur}:any) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ExperienceWebView = ({ width, height, style, nativeBlur }: any) => {
   const webView = useRef(null);
 
-  const onMessage = (event:any) => {
-    const eventData = typeof event.nativeEvent.data === 'string' ?
-      JSON.parse(event.nativeEvent.data) : event.nativeEvent.data;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const onMessage = (event: any) => {
+    const eventData =
+      typeof event.nativeEvent.data === 'string' ? JSON.parse(event.nativeEvent.data) : event.nativeEvent.data;
     const json = typeof eventData === 'string' ? JSON.parse(eventData) : eventData;
-    eventEmitter.emit(json.event, json.detail);
-  }
+    console.log(json);
+    // eventEmitter.emit(json.event, json.detail);
+  };
 
   useEffect(() => {
     if (nativeBlur && Platform.OS !== 'web') {
@@ -37,26 +39,30 @@ const ExperienceWebView = ({width, height, style, nativeBlur}:any) => {
     }
   }, [nativeBlur]);
 
-  if (Platform.OS === 'web') return <WebView
-    ref={webView}
-    source={{ uri: experienceURI }}
-    cacheEnabled={false}
-    originWhitelist={['*']}
-    javaScriptEnabled={true}
-    onMessage={onMessage}
-    style={[{ width: width, height: height }, style ]}
-  />;
+  if (Platform.OS === 'web')
+    return (
+      <WebView
+        ref={webView}
+        source={{ uri: experienceURI }}
+        cacheEnabled={false}
+        originWhitelist={['*']}
+        javaScriptEnabled={true}
+        onMessage={onMessage}
+        style={[{ width: width, height: height }, style]}
+      />
+    );
 
-  return <MobileWebView.WebView
-    ref={webView}
-    source={{ uri: experienceURI }}
-    cacheEnabled={false}
-    originWhitelist={['*']}
-    javaScriptEnabled={true}
-    onMessage={onMessage}
-    style={[{ width: width, height: height }, style ]}
-  />;
+  return (
+    <MobileWebView.WebView
+      ref={webView}
+      source={{ uri: experienceURI }}
+      cacheEnabled={false}
+      originWhitelist={['*']}
+      javaScriptEnabled={true}
+      onMessage={onMessage}
+      style={[{ width: width, height: height }, style]}
+    />
+  );
 };
-
 
 export default ExperienceWebView;
