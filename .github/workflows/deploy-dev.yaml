@@ -40,12 +40,16 @@ jobs:
       run: npm install
 
     - name: Build
-      run: npm run build
+      run: npx expo export:web --clear
 
-    - name: Copy files to S3
+    - name: Copy files to S3 (version)
       run: |
         aws s3 cp web-build/ s3://ui.emperiavr.com/${GITHUB_REPOSITORY#*/}/${GITHUB_REF##*/}/${{ steps.previous-tag.outputs.tag }}/ --recursive
+    
+    - name: Copy files to S3 (latest)
+      run: |
+        aws s3 cp web-build/ s3://ui.emperiavr.com/${GITHUB_REPOSITORY#*/}/${GITHUB_REF##*/}/latest/ --recursive
 
-    # - name: Invalidate Cloudfront files
-    #   run: |
-    #     aws cloudfront create-invalidation --distribution-id E1SNIBDII6A51A --paths "/${GITHUB_REF##*/}/latest/emperia-sdk.min.js" "/${GITHUB_REF##*/}/${{ steps.previous-tag.outputs.tag }}/emperia-sdk.min.js"
+     - name: Invalidate Cloudfront files
+       run: |
+         aws cloudfront create-invalidation --distribution-id EXN8X8Q5Z4GRT --paths "/${GITHUB_REPOSITORY#*/}/${GITHUB_REF##*/}/${{ steps.previous-tag.outputs.tag }}/*" "/${GITHUB_REPOSITORY#*/}/${GITHUB_REF##*/}/latest/*"
