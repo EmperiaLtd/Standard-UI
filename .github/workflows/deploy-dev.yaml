@@ -50,6 +50,6 @@ jobs:
       run: |
         aws s3 cp web-build/ s3://ui.emperiavr.com/${GITHUB_REPOSITORY#*/}/${GITHUB_REF##*/}/latest/ --recursive
 
-     - name: Invalidate Cloudfront files
-       run: |
-         aws cloudfront create-invalidation --distribution-id EXN8X8Q5Z4GRT --paths "/${GITHUB_REPOSITORY#*/}/${GITHUB_REF##*/}/${{ steps.previous-tag.outputs.tag }}/*" "/${GITHUB_REPOSITORY#*/}/${GITHUB_REF##*/}/latest/*"
+    - name: Invalidate Cloudfront files
+      run: |
+        aws cloudfront create-invalidation --distribution-id EXN8X8Q5Z4GRT --paths "/${GITHUB_REPOSITORY#*/}/${GITHUB_REF##*/}/${{ steps.previous-tag.outputs.tag }}/*" "/${GITHUB_REPOSITORY#*/}/${GITHUB_REF##*/}/latest/*"
