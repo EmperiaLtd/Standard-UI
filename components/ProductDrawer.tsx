@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Text,
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerFooter,
-  Slide,
-} from '@chakra-ui/react';
+import { Box, Button, Text, Drawer, DrawerBody, DrawerContent, DrawerFooter, Slide } from '@chakra-ui/react';
 import { CrossIcon } from '../assets/icons/CrossIcon';
 import { Fragment, useEffect, useState } from 'react';
 import Size from './PDP/Size';
@@ -101,7 +92,7 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
 
   return (
     <Fragment>
-     <Box
+      <Box
         as={Slide}
         direction={width < 769 ? 'bottom' : 'left'}
         in={active}

@@ -30,7 +30,16 @@ export const fallbackData: FallBackData = {
             textAlternate: '',
           },
           languages: {
-            content: ['Lang1', 'Lang2 Two', 'Lang3'],
+            content: [
+              {
+                key:"English",
+                locale:'en'
+              },
+              {
+                key:"French",
+                locale:'fr'
+              },
+            ],
             key: 'languages',
             text: 'Languages',
             textAlternate: '',

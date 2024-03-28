@@ -7,7 +7,7 @@ import SoundOption from './common/SoundOption';
 import { BurgerDots } from '../assets/icons/BurgerDots';
 import Emperia from '../assets/images/Emperia.png';
 import OverlayInstruction from './common/OverlayInstruction';
-import { OverlayProps, TransformedOverlayData, RoomItem, SoundItem, OverlayElement } from '../interfaces';
+import { OverlayProps, TransformedOverlayData, RoomItem, SoundItem, OverlayElement, LanguageItem } from '../interfaces';
 
 function Overlay({
   activeScene,
@@ -50,12 +50,12 @@ function Overlay({
     },
   };
 
-  const renderMap = {
-    changeRooms: (data: RoomItem[]) => renderRoomItems(data),
-    instructions: (data: string[]) => renderInstructions(data),
-    sound: (data: SoundItem[]) => renderSoundItems(data),
-    languages: (data: string[]) => renderLanguageItems(data),
-  };
+  // const renderMap = {
+  //   instructions: (data: string[]) => renderInstructions(data),
+  //   changeRooms: (data: RoomItem[]) => renderRoomItems(data),
+  //   sound: (data: SoundItem[]) => renderSoundItems(data),
+  //   languages: (data: LanguageItem[]) => renderLanguageItems(data),
+  // };
 
   useEffect(() => {
     const transformedOverlayData =
@@ -64,7 +64,23 @@ function Overlay({
         let originalContent;
 
         if (overlayElement?.content) {
-          originalContent = renderMap[overlayElement.key as keyof typeof renderMap](overlayElement.content);
+          switch (overlayElement.key) {
+            case 'instructions':
+              originalContent = renderInstructions(overlayElement.content as string[]);
+              break;
+            case 'changeRooms':
+              originalContent = renderRoomItems(overlayElement.content as RoomItem[]);
+              break;
+            case 'sound':
+              originalContent = renderSoundItems(overlayElement.content as SoundItem[]);
+              break;
+            case 'languages':
+              originalContent = renderLanguageItems(overlayElement.content as LanguageItem[]);
+              break;
+            default:
+              console.log('No Configuration For This Key', overlayElement.key);
+              break;
+          }
         }
 
         const fallbackContent = menuOptionsDimensions[overlayElement.key as keyof typeof menuOptionsDimensions];
@@ -115,14 +131,14 @@ function Overlay({
   //   setTransformedOverlayData(transformedOverlayData);
   // }, [overlayData, activeScene, activeLang, activeSound]);
 
-  const renderLanguageItems = (languages: string[]) => {
-    return languages?.map((language: string) => (
+  const renderLanguageItems = (languages: LanguageItem[]) => {
+    return languages?.map((language: LanguageItem) => (
       <LanguageOption
-        active={language === activeLang}
-        key={language}
-        name={language}
+        active={language.locale === activeLang}
+        key={language.key}
+        name={language.key}
         transition={transition}
-        onClick={() => setActiveLang(language)}
+        onClick={() => setActiveLang(language.locale)}
       />
     ));
   };

@@ -33,7 +33,25 @@ export interface OverlayElement {
   text: string;
   hotspot?: string;
   textAlternate?: string;
-  content?: any;
+  content?: OverlayElementContent;
+}
+
+export type OverlayElementContent = string[] | LanguageItem[] | RoomItem[] | SoundItem[];
+
+export interface RoomItem {
+  roomName: string;
+  description: string;
+  scene: string;
+}
+
+export interface LanguageItem {
+  key: string;
+  locale: string;
+}
+
+export interface SoundItem {
+  name: string;
+  fileURL: string;
 }
 
 export interface OverlayContent {
@@ -68,22 +86,11 @@ export interface MenuOptionProps {
   setMenuOptionHovered: (state: boolean) => void;
 }
 
-export interface SoundItem {
-  name: string;
-  fileURL: string;
-}
-
 export interface SoundOptionProps {
   active: boolean;
   name: string;
   transition: string;
   onClick: () => void;
-}
-
-export interface RoomItem {
-  roomName: string;
-  description: string;
-  scene: string;
 }
 
 export interface RoomOptionProps {

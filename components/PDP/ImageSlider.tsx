@@ -1,4 +1,4 @@
-import { Box, Image, SliderFilledTrack, SliderThumb, SliderTrack, Slider as ChakraSlider } from '@chakra-ui/react';
+import { Box, Image, Text, SliderTrack, Slider as ChakraSlider } from '@chakra-ui/react';
 import Slider, { CustomArrowProps } from 'react-slick';
 import { RightArrow } from '../../assets/icons/RightArrow';
 import { LeftArrow } from '../../assets/icons/LeftArrow';
@@ -57,6 +57,7 @@ const ImageSlider = ({ highlightImage, images, setHighLightImage }: ImageSliderP
     <Box
       className="identify"
       display="flex !important"
+      position="relative"
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
@@ -65,18 +66,25 @@ const ImageSlider = ({ highlightImage, images, setHighLightImage }: ImageSliderP
       h={['450px', '500px', '470px', '470px', '570px']}
       gap={5}
     >
-      <Image
-        objectFit="contain"
-        src={`https://images.stockx.com/360/Air-Jordan-4-Retro-Metallic-Gold-Womens/Images/Air-Jordan-4-Retro-Metallic-Gold-Womens/Lv2/img${formatImageNo(
-          imageNo,
-        )}.jpg?fm=avif&auto=compress&w=576&dpr=2&updated_at=1709050803&h=384&q=60`}
-        height={['auto']}
-        maxHeight={['300px', '300px', '350px', '350px', '400px']}
-        width={['80%']}
-      />
-
+      <Box
+        display="flex"
+        alignItems="center"
+        gap={2}
+        width="fit-content"
+        position="absolute"
+        padding="10px 20px"
+        left="0px"
+        right="0px"
+        bottom="60px"
+        margin="0 auto"
+      >
+        <ThreeDView fill="white" boxSize={[8]} />
+        <Text fontFamily="Montserrat-Medium" color="white" fontSize={['14px']}>
+          Drag To Rotate
+        </Text>
+      </Box>
       <ChakraSlider
-        width="50%"
+        width="80%"
         min={0}
         max={100}
         step={2.77777777778}
@@ -87,10 +95,23 @@ const ImageSlider = ({ highlightImage, images, setHighLightImage }: ImageSliderP
         }}
         className="chakra-custom-slider"
       >
-        <SliderTrack bg="lightgrey">
-          <SliderFilledTrack bg="lightgrey" />
+        <SliderTrack
+          bg="transparent"
+          h={['450px', '500px', '470px', '470px', '570px']}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Image
+            objectFit="contain"
+            src={`https://images.stockx.com/360/Air-Jordan-4-Retro-Metallic-Gold-Womens/Images/Air-Jordan-4-Retro-Metallic-Gold-Womens/Lv2/img${formatImageNo(
+              imageNo,
+            )}.jpg?fm=avif&auto=compress&w=576&dpr=2&updated_at=1709050803&h=384&q=60`}
+            height={['auto']}
+            maxHeight={['300px', '300px', '350px', '350px', '400px']}
+            width={['100%']}
+          />
         </SliderTrack>
-        <SliderThumb boxSize={4} bg="#0071CE" filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))" />
       </ChakraSlider>
     </Box>,
     ...images,

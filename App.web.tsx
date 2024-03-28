@@ -1,5 +1,5 @@
 // Components
-import { ChakraProvider, Spinner, Image } from '@chakra-ui/react';
+import { ChakraProvider, Spinner } from '@chakra-ui/react';
 import Overlay from './components/Overlay';
 import WelcomeScreen from './components/WelcomeScreen';
 import InfoDrawer from './components/InfoDrawer';
@@ -7,7 +7,6 @@ import InfoModal from './components/InfoModal';
 import Instructions from './components/Instructions';
 import ProductDrawer from './components/ProductDrawer';
 import { CustomTheme } from './theme/theme';
-import BG from './assets/images/alexander-slattery-LI748t0BK8w-unsplash.jpeg';
 
 // Styles
 import 'slick-carousel/slick/slick.css';
@@ -49,7 +48,7 @@ Font.loadAsync({
 
 const App = () => {
   const [activeScene, setActiveScene] = useState('room_1');
-  const [activeLang, setActiveLang] = useState('Language 1');
+  const [activeLang, setActiveLang] = useState('en');
   const [activeSound, setActiveSound] = useState('Sound 1');
   const [productDrawerLoading, setProductDrawerLoading] = useState(false);
   const [productDrawerData, setProductDrawerData] = useState<ProductState>({
@@ -83,6 +82,7 @@ const App = () => {
     openInstructions: () => openInstructionsModal(),
     openProduct: (productVariantId: string) => openProductModal(productVariantId),
     openInfo: (infoModalId: string) => openInfoModal(infoModalId),
+    updateLanguage: () => updateLanguage(),
   };
 
   const onUIReady = () => {
@@ -136,6 +136,34 @@ const App = () => {
     });
   };
 
+  const updateLanguage = () => {
+    const updatedWelcomeData: WelcomeData =
+      window.emperia?.data.ui.uiConfig['welcome'] || fallbackData.data.ui.uiConfig['welcome'];
+    const updatedInstructionsData: InstructionsData =
+      window.emperia?.data.ui.uiConfig['instructions'] || fallbackData.data.ui.uiConfig['instructions'];
+    const updatedOverlayData: OverlayElementObject =
+      window.emperia?.data.ui.uiConfig['overlay'] || fallbackData.data.ui.uiConfig['overlay'];
+
+    setWelcomeData({ data: updatedWelcomeData, active: welcomeData.active });
+    setInstructionsData({
+      data: updatedInstructionsData,
+      active: instructionsData.active,
+    });
+    setOverlayData({
+      data: updatedOverlayData,
+      active: overlayData.active,
+    });
+  };
+
+  const changeLanguage = (lang: string) => {
+    setActiveLang(lang);
+    window.emperia &&
+      window.emperia.events.dispatchEvent(
+        new CustomEvent('fromUserInterface', { detail: { name: 'changeLanguage', locale: lang } }),
+      );
+    window.dispatchEvent(new CustomEvent('fromUserInterface', { detail: { name: 'changeLanguage', locale: lang } }));
+  };
+
   useEffect(() => {
     const eventListener = (interceptedEvent: CustomEvent) => {
       const eventType = interceptedEvent.detail.name as keyof typeof eventMap;
@@ -156,18 +184,17 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    onUIReady();
+    openProductModal('000112');
   }, []);
 
   return (
     <ChakraProvider theme={CustomTheme}>
-      <Image position="absolute" height="100vh" w="100%" src={BG} objectFit="cover" />
       <Overlay
         activeScene={activeScene}
         activeLang={activeLang}
         activeSound={activeSound}
         setActiveScene={(scene) => setActiveScene(scene)}
-        setActiveLang={(lang) => setActiveLang(lang)}
+        setActiveLang={(lang) => changeLanguage(lang)}
         setActiveSound={(sound) => setActiveSound(sound)}
         overlayData={overlayData?.data}
         active={overlayData?.active}
