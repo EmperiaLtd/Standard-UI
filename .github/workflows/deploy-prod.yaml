@@ -1,0 +1,38 @@
+name: Deploy production
+on:
+  push:
+    branches:
+      - Production
+env:
+  CI: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: 'Get environment'
+        run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+
+      - name: Deploy production app build to S3 bucket
+        if: ${{ steps.extract_branch.outputs.branch == 'Production' }}
+        run: |
+            aws s3 sync web-build/ s3://${{secrets.AWS_PROD_DOMAIN_NAME}}/${{secrets.AWS_PROD_PATH}} --delete
+
+      - name: invalidate Cloudfront configuration
+        uses: chetan/invalidate-cloudfront-action@v2
+        env:
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION_PROD }}
+          PATHS: "/"
+          AWS_REGION: "eu-west-2"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

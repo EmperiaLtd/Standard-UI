@@ -1,7 +1,7 @@
 {
   "name": "standard",
   "version": "0.0.0",
-  "homepage": "Testing/UI/0.0.0/",
+  "homepage": "Staging/1.1.0/",
   "main": "node_modules/expo/AppEntry.js",
   "main-web": "src/expo/AppEntry.js",
   "scripts": {
