@@ -22,9 +22,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Build TRS App
+        run: npm install && npm run build
 
       - name: Deploy staging app build to S3 bucket
-        if: ${{ steps.extract_branch.outputs.branch == 'Development' }}
+        if: ${{ steps.extract_branch.outputs.branch == 'Development-Deployment' }}
         run: |
             aws s3 sync web-build/ s3://${{secrets.AWS_STAGING_DOMAIN_NAME}}/Standard-UI/${{secrets.AWS_DEV_PATH}} --delete
 
