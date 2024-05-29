@@ -26,7 +26,7 @@ jobs:
       - name: Deploy staging app build to S3 bucket
         if: ${{ steps.extract_branch.outputs.branch == 'Staging' }}
         run: |
-            aws s3 sync web-build/ s3://${{secrets.AWS_STAGING_DOMAIN_NAME}}/${{secrets.AWS_PATH}} --delete
+            aws s3 sync web-build/ s3://${{secrets.AWS_STAGING_DOMAIN_NAME}}/Standard-UI/${{secrets.AWS_PATH}} --delete
 
       - name: invalidate Cloudfront configuration
         uses: chetan/invalidate-cloudfront-action@v2
