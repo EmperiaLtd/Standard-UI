@@ -30,11 +30,12 @@ jobs:
         run: |
             aws s3 sync web-build/ s3://${{secrets.AWS_STAGING_DOMAIN_NAME}}/Standard-UI/${{secrets.AWS_DEV_PATH}} --delete
 
-      - name: invalidate Cloudfront configuration
-        uses: chetan/invalidate-cloudfront-action@v2
-        env:
-          DISTRIBUTION: ${{ secrets.DISTRIBUTION_STAGING }}
-          PATHS: "/"
-          AWS_REGION: "eu-west-2"
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #   add invalidation for cloudfront
+    #   - name: invalidate Cloudfront configuration
+    #     uses: chetan/invalidate-cloudfront-action@v2
+    #     env:
+    #       DISTRIBUTION: ${{ secrets.DISTRIBUTION_STAGING }}
+    #       PATHS: "/"
+    #       AWS_REGION: "eu-west-2"
+    #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
