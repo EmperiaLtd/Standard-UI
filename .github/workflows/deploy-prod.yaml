@@ -1,15 +1,15 @@
-name: Deploy staging
+name: Deploy production
 on:
   push:
     branches:
-      - Staging
+      - Production
 env:
   CI: false
 
 permissions:
   id-token: write
   contents: read
-
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,14 +29,15 @@ jobs:
           
       - name: Build TRS App
         run: npm install && npm run build
-
-      - name: Deploy staging app build to S3 bucket
-        if: ${{ steps.extract_branch.outputs.branch == 'Staging' }}
+        
+      - name: Deploy production app build to S3 bucket
+        if: ${{ steps.extract_branch.outputs.branch == 'Production' }}
         run: |
-            aws s3 sync web-build/ s3://${{secrets.AWS_STAGING_DOMAIN_NAME}}/Standard-UI/${{secrets.AWS_PATH}} --delete
+            aws s3 sync web-build/ s3://${{secrets.AWS_PROD_DOMAIN_NAME}}/Standard-UI/${{secrets.AWS_PROD_PATH}} --delete
 
       - name: invalidate Cloudfront configuration
         uses: chetan/invalidate-cloudfront-action@v2
         env:
-          DISTRIBUTION: ${{ secrets.DISTRIBUTION_STAGING }}
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION_PROD }}
           PATHS: "/"
+          AWS_REGION: "eu-west-2"
