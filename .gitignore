@@ -1,41 +1,27 @@
-# .gitignore
-#  Standardised Overlord Native Client gitingore file
-#  You may need to add your own exceptions
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Generic
-.expo/
-dist/
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
-.metro-health-check*
-*~
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-# Developer
-.vscode/
-.idea/
+# testing
+/coverage
 
-# Python
-.pytest_cache
-__pycache__
+# production
+/build-*
+/build*
+/build-copy
+/build
 
-# Node & NPM
-.env
-.env.*
-build/
-web-build/
-node_modules/
-npm-debug.*
-yarn.lock
-package-lock.json
-*.tsbuildinfo
-*.log
 
-# macOS
+# misc
 .DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Shared
-shared/*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
