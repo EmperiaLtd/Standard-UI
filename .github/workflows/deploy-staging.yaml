@@ -15,28 +15,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: 'Get environment'
         run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
-      
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          audience: "sts.amazonaws.com"
+          audience: 'sts.amazonaws.com'
           aws-region: ${{ secrets.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          
+
       - name: Build TRS App
-        run: npm install && npm run build
+        run: npm install && npm run build:staging
 
       - name: Deploy staging app build to S3 bucket
         if: ${{ steps.extract_branch.outputs.branch == 'Staging' }}
         run: |
-            aws s3 sync web-build/ s3://${{secrets.AWS_STAGING_DOMAIN_NAME}}/Standard-UI/${{secrets.AWS_PATH}} --delete
+          aws s3 sync build/ s3://${{secrets.AWS_STAGING_DOMAIN_NAME}}/Standard-UI/${{secrets.AWS_STAGING_PATH}} --delete
 
       - name: invalidate Cloudfront configuration
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.DISTRIBUTION_STAGING }}
-          PATHS: "/"
+          PATHS: '/'
