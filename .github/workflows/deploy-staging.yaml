@@ -30,7 +30,7 @@ jobs:
       - name: Build TRS App
         run: |
           npm install && npm run build:staging
-          python3.11 process.py --domain ${{secrets.AWS_STAGING_DOMAIN_NAME}} --path ${{secrets.AWS_STAGING_PATH}}
+          python process.py --domain ${{secrets.AWS_STAGING_DOMAIN_NAME}} --path ${{secrets.AWS_STAGING_PATH}}
 
       - name: Deploy staging app build to S3 bucket
         if: ${{ steps.extract_branch.outputs.branch == 'Staging' }}
