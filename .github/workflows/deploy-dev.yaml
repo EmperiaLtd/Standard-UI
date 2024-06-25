@@ -30,9 +30,6 @@ jobs:
       - name: Build TRS App
         run: |
           npm install && npm run build:development
-
-      - name: Rename Files
-        run: |
           python process.py --domain https://${{secrets.AWS_STAGING_DOMAIN_NAME}} --path ${{secrets.AWS_DEV_PATH}}
 
       - name: Deploy staging app build to S3 bucket
