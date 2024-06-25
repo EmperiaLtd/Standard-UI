@@ -108,6 +108,7 @@ const App = () => {
   };
 
   const onUIReady = () => {
+    console.log("on UI Ready")
     const welcomeData: WelcomeData =
       window.emperia?.data.ui.uiConfig['welcome'] || fallbackData.data.ui.uiConfig['welcome'];
     const instructionsData: InstructionsData =
