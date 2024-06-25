@@ -11,7 +11,6 @@ import { CustomTheme } from './theme';
 // Styles
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import './styles/index.scss';
 
 // Library
 import { useEffect, useState } from 'react';
@@ -29,12 +28,6 @@ import {
   OverlayElementObject,
 } from './interfaces';
 import React from 'react';
-
-// Font.loadAsync({
-//   Montserrat: require('./assets/fonts/Montserrat/Montserrat-Regular.ttf'),
-//   'Montserrat-Medium': require('./assets/fonts/Montserrat/Montserrat-Medium.ttf'),
-//   'Montserrat-Bold': require('./assets/fonts/Montserrat/Montserrat-Bold.ttf'),
-// });
 
 const App = () => {
   const [activeScene, setActiveScene] = useState('room_1');
