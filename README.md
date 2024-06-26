@@ -1,1 +1,1 @@
-# Walmart UI
+# Standard UI
