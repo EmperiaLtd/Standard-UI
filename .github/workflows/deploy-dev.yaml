@@ -42,4 +42,4 @@ jobs:
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.DISTRIBUTION_STAGING }}
-          PATHS: '/Standard-UI/${{secrets.AWS_DEV_PATH}}/'
+          PATHS: '/Standard-UI/${{secrets.AWS_DEV_PATH}}/*'

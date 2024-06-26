@@ -30,7 +30,7 @@ jobs:
       - name: Build TRS App
         run: |
           npm install && npm run build:production
-          python process.py --domain ${{secrets.AWS_PROD_DOMAIN_NAME}} --path ${{secrets.AWS_PROD_PATH}}
+          python process.py --domain https://${{secrets.AWS_PROD_DOMAIN_NAME}} --path Standard-UI/${{secrets.AWS_PROD_PATH}}
 
       - name: Deploy production app build to S3 bucket
         if: ${{ steps.extract_branch.outputs.branch == 'Production' }}
@@ -41,5 +41,5 @@ jobs:
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.DISTRIBUTION_PROD }}
-          PATHS: '/'
+          PATHS: '/Standard-UI/${{secrets.AWS_PROD_PATH}}/*'
           AWS_REGION: 'eu-west-2'
