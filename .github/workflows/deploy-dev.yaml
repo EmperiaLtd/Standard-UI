@@ -30,16 +30,16 @@ jobs:
       - name: Build TRS App
         run: |
           npm install && npm run build:development
-          python process.py --domain https://ui.emperiavr.com --path Standard-UI/Development/1.1.0
+          python process.py --domain https://${{secrets.AWS_STAGING_DOMAIN_NAME}} --path Standard-UI/${{secrets.AWS_DEV_PATH}}
 
       - name: Deploy staging app build to S3 bucket
         if: ${{ steps.extract_branch.outputs.branch == 'Development' }}
         run: |
-          aws s3 sync build-copy/ s3://ui.emperiavr.com/Standard-UI/Development/1.1.0 --delete
+          aws s3 sync build-copy/ s3://${{secrets.AWS_STAGING_DOMAIN_NAME}}/Standard-UI/${{secrets.AWS_DEV_PATH}} --delete
 
       #   add invalidation for cloudfront
       - name: invalidate Cloudfront configuration
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.DISTRIBUTION_STAGING }}
-          PATHS: '/'
+          PATHS: '/Standard-UI/${{secrets.AWS_DEV_PATH}}/'
