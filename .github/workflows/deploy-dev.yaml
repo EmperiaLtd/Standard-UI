@@ -30,7 +30,7 @@ jobs:
       - name: Build TRS App
         run: |
           npm install && npm run build:development
-          python process.py --domain https://ui.emperiavr.com --path Standard-UI/Development/1.1.0
+          python process.py --domain https://ui.emperiavr.com --path Test
 
       - name: Deploy staging app build to S3 bucket
         if: ${{ steps.extract_branch.outputs.branch == 'Development' }}
