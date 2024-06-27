@@ -166,14 +166,14 @@ const App = () => {
     const updatedOverlayData: OverlayElementObject =
       window.emperia?.data.ui.uiConfig['overlay'] || fallbackData.data.ui.uiConfig['overlay'];
 
-    setWelcomeData({ data: updatedWelcomeData, active: welcomeData.active });
+    setWelcomeData({ ...welcomeData, data: updatedWelcomeData });
     setInstructionsData({
+      ...instructionsData,
       data: updatedInstructionsData,
-      active: instructionsData.active,
     });
     setOverlayData({
+      ...overlayData,
       data: updatedOverlayData,
-      active: overlayData.active,
     });
   };
 
