@@ -166,8 +166,6 @@ const App = () => {
     const updatedOverlayData: OverlayElementObject =
       window.emperia?.data.ui.uiConfig['overlay'] || fallbackData.data.ui.uiConfig['overlay'];
 
-    console.log('welcomeData', welcomeData);
-
     setWelcomeData((prevState) => ({ ...prevState, data: updatedWelcomeData }));
     setInstructionsData((prevState) => ({ ...prevState, data: updatedInstructionsData }));
     setOverlayData((prevState) => ({ ...prevState, data: updatedOverlayData }));
@@ -185,7 +183,6 @@ const App = () => {
   useEffect(() => {
     const eventListener = (event: Event) => {
       const interceptedEvent = event as CustomEvent;
-      console.log('interceptedEvent in UI', interceptedEvent);
       const eventType = interceptedEvent.detail.name as keyof typeof eventMap;
       const eventData = interceptedEvent.detail.data;
 
