@@ -168,15 +168,9 @@ const App = () => {
 
     console.log('welcomeData', welcomeData);
 
-    setWelcomeData({ ...welcomeData, data: updatedWelcomeData });
-    setInstructionsData({
-      ...instructionsData,
-      data: updatedInstructionsData,
-    });
-    setOverlayData({
-      ...overlayData,
-      data: updatedOverlayData,
-    });
+    setWelcomeData((prevState) => ({ ...prevState, data: updatedWelcomeData }));
+    setInstructionsData((prevState) => ({ ...prevState, data: updatedInstructionsData }));
+    setOverlayData((prevState) => ({ ...prevState, data: updatedOverlayData }));
   };
 
   const changeLanguage = (lang: string) => {
