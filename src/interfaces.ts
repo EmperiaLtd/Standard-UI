@@ -280,7 +280,7 @@ export interface FallBackData {
         instructions: InstructionsData;
       };
       infoModels: InfoModels;
-      pdpModels: PDPModels;
+      pdpModels: PDPModels[];
     };
   };
 }
@@ -288,7 +288,7 @@ export interface FallBackData {
 export type EventData = {
   ui: {
     uiConfig: UiConfig;
-    pdpModels: PDPModels;
+    pdpModels: PDPModels[];
     infoModels: InfoModels;
   };
 };
@@ -304,7 +304,8 @@ export type InfoModels = {
 };
 
 export type PDPModels = {
-  [productId: string]: ProductData;
+  id: string;
+  pDPModel: ProductData;
 };
 
 // Misc Events
