@@ -100,7 +100,7 @@ export const fallbackData: FallBackData = {
       pdpModels: [
         {
           id: '000112',
-          pDPModel: {
+          pdpModel: {
             parent_id: '000100',
             parent_sku: '000100',
             market: 'Test',

@@ -104,14 +104,13 @@ const App = () => {
     openProduct: (productVariantId: string) => openProductModal(productVariantId),
     openInfo: (infoModalId: string) => openInfoModal(infoModalId),
     updateLanguage: () => updateLanguage(),
-    OpenPDP: ({ pid }: { pid: string }) => {
+    OpenPDP: (productVariantId: string) => {
       setProductDrawerLoading(true);
-
       setTimeout(() => {
         setProductDrawerLoading(false);
         const productData =
-          window.emperia?.data.ui.pdpModels.find((i) => i.id === pid)?.pDPModel ||
-          fallbackData.data.ui.pdpModels[0].pDPModel;
+          window.emperia?.data.ui.pdpModels.find((i) => i.id == productVariantId)?.pdpModel ||
+          fallbackData.data.ui.pdpModels[0].pdpModel;
         if (!productData) return;
         setProductDrawerData({ data: productData, active: true });
       }, 2000);
@@ -143,8 +142,8 @@ const App = () => {
     setTimeout(() => {
       setProductDrawerLoading(false);
       const productData =
-        window.emperia?.data.ui.pdpModels.find((i) => i.id === productVariantId)?.pDPModel ||
-        fallbackData.data.ui.pdpModels.find((i) => i.id === productVariantId)?.pDPModel;
+        window.emperia?.data.ui.pdpModels.find((i) => i.id === productVariantId)?.pdpModel ||
+        fallbackData.data.ui.pdpModels.find((i) => i.id === productVariantId)?.pdpModel;
       if (!productData) return;
       setProductDrawerData({ data: productData, active: true });
     }, 2000);
@@ -198,11 +197,6 @@ const App = () => {
       const interceptedEvent = event as CustomEvent;
       const eventType = interceptedEvent.detail.name as keyof typeof eventMap;
       const eventData = interceptedEvent.detail.data;
-      console.log({
-        eventType,
-        eventData,
-        map: eventMap[eventType],
-      });
       if (eventMap[eventType]) {
         eventMap[eventType](eventData);
       }
