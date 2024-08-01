@@ -305,7 +305,7 @@ export type InfoModels = {
 
 export type PDPModels = {
   id: string;
-  pDPModel: ProductData;
+  pdpModel: ProductData;
 };
 
 // Misc Events
