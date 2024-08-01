@@ -111,7 +111,7 @@ const App = () => {
         setProductDrawerLoading(false);
         const productData =
           window.emperia?.data.ui.pdpModels.find((i) => i.pDPModel.parent_id === pid)?.pDPModel ||
-          fallbackData.data.ui.pdpModels.find((i) => i.pDPModel.parent_id === pid)?.pDPModel;
+          fallbackData.data.ui.pdpModels[0].pDPModel;
         if (!productData) return;
         setProductDrawerData({ data: productData, active: true });
       }, 2000);
