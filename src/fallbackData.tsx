@@ -81,22 +81,28 @@ export const fallbackData: FallBackData = {
           ],
         },
       },
-      infoModels: {
-        modelOne: {
-          image: 'https://picsum.photos/500/500',
-          title: 'Title One',
-          subtitle: 'Subtitle One',
-          description: 'Description One',
-          moreCTA: 'Learn More',
+      infoModels: [
+        {
+          id: '000100',
+          infoModel: {
+            image: 'https://picsum.photos/500/500',
+            title: 'Title One',
+            subtitle: 'Subtitle One',
+            description: 'Description One',
+            moreCTA: 'Learn More',
+          },
         },
-        modelTwo: {
-          image: 'https://picsum.photos/700/700',
-          title: 'Title Two',
-          subtitle: 'Subtitle Two',
-          description: 'Description Two',
-          moreCTA: 'Learn More',
+        {
+          id: '000101',
+          infoModel: {
+            image: 'https://picsum.photos/600/600',
+            title: 'Title Two',
+            subtitle: 'Subtitle Two',
+            description: 'Description Two',
+            moreCTA: 'Learn More',
+          },
         },
-      },
+      ],
       pdpModels: [
         {
           id: '000112',
