@@ -279,7 +279,7 @@ export interface FallBackData {
         welcome: WelcomeData;
         instructions: InstructionsData;
       };
-      infoModels: InfoModels;
+      infoModels: InfoModels[];
       pdpModels: PDPModels[];
     };
   };
@@ -289,7 +289,7 @@ export type EventData = {
   ui: {
     uiConfig: UiConfig;
     pdpModels: PDPModels[];
-    infoModels: InfoModels;
+    infoModels: InfoModels[];
   };
 };
 
@@ -300,7 +300,8 @@ type UiConfig = {
 };
 
 export type InfoModels = {
-  [modelName: string]: InfoData;
+  id: string;
+  infoModel: InfoData;
 };
 
 export type PDPModels = {

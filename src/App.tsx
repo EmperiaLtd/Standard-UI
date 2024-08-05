@@ -102,7 +102,7 @@ const App = () => {
     openWelcome: () => openWelcomeModal(),
     openInstructions: () => openInstructionsModal(),
     openProduct: (productVariantId: string) => openProductModal(productVariantId),
-    openInfo: (infoModalId: string) => openInfoModal(infoModalId),
+    OpenInfo: (infoModalId: string) => openInfoModal(infoModalId),
     updateLanguage: () => updateLanguage(),
     OpenPDP: (productVariantId: string) => {
       setProductDrawerLoading(true);
@@ -114,6 +114,9 @@ const App = () => {
         if (!productData) return;
         setProductDrawerData({ data: productData, active: true });
       }, 2000);
+    },
+    OpenCustomModel: (customModelId: string) => {
+      console.log(customModelId);
     },
   };
 
@@ -151,8 +154,9 @@ const App = () => {
 
   const openInfoModal = (infoModalId: string) => {
     const infoData: InfoData =
-      window.emperia?.data.ui.infoModels[infoModalId] || fallbackData.data.ui.infoModels[infoModalId];
-    setInfoData({ data: infoData, active: true });
+      window.emperia?.data.ui.infoModels.find((i) => i.id == infoModalId)?.infoModel ||
+      fallbackData.data.ui.infoModels[0].infoModel;
+    setInfoFloatingData({ data: infoData, active: true });
   };
 
   const openWelcomeModal = () => {
