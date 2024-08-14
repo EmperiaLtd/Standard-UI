@@ -123,6 +123,8 @@ export const fallbackData: FallBackData = {
             tags: '',
             base_price: '399',
             variants_selection_order: ['size', 'color'],
+            turnTableURL:
+              'https://walmart.emperia-staging.com/assets/4c769101-b9e7-475b-b5a4-47499d4619f1/public/media/images/3DDE7110_1000x1000_36_imagesheet.png',
             variants: [
               {
                 default: true,
