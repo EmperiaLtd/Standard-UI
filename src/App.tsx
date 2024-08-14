@@ -24,7 +24,6 @@ import {
   InstructionsData,
   InfoData,
   ProductState,
-  ProductData,
   OverlayElementObject,
 } from './interfaces';
 import React from 'react';
@@ -103,8 +102,22 @@ const App = () => {
     openWelcome: () => openWelcomeModal(),
     openInstructions: () => openInstructionsModal(),
     openProduct: (productVariantId: string) => openProductModal(productVariantId),
-    openInfo: (infoModalId: string) => openInfoModal(infoModalId),
+    OpenInfo: (infoModalId: string) => openInfoModal(infoModalId),
     updateLanguage: () => updateLanguage(),
+    OpenPDP: (productVariantId: string) => {
+      setProductDrawerLoading(true);
+      setTimeout(() => {
+        setProductDrawerLoading(false);
+        const productData =
+          window.emperia?.data.ui.pdpModels.find((i) => i.id == productVariantId)?.pdpModel ||
+          fallbackData.data.ui.pdpModels[0].pdpModel;
+        if (!productData) return;
+        setProductDrawerData({ data: productData, active: true });
+      }, 2000);
+    },
+    OpenCustomModel: (customModelId: string) => {
+      console.log(customModelId);
+    },
   };
 
   const onUIReady = () => {
@@ -131,16 +144,19 @@ const App = () => {
 
     setTimeout(() => {
       setProductDrawerLoading(false);
-      const productData: ProductData =
-        window.emperia?.data.ui.pdpModels[productVariantId] || fallbackData.data.ui.pdpModels[productVariantId];
+      const productData =
+        window.emperia?.data.ui.pdpModels.find((i) => i.id === productVariantId)?.pdpModel ||
+        fallbackData.data.ui.pdpModels.find((i) => i.id === productVariantId)?.pdpModel;
+      if (!productData) return;
       setProductDrawerData({ data: productData, active: true });
     }, 2000);
   };
 
   const openInfoModal = (infoModalId: string) => {
     const infoData: InfoData =
-      window.emperia?.data.ui.infoModels[infoModalId] || fallbackData.data.ui.infoModels[infoModalId];
-    setInfoData({ data: infoData, active: true });
+      window.emperia?.data.ui.infoModels.find((i) => i.id == infoModalId)?.infoModel ||
+      fallbackData.data.ui.infoModels[0].infoModel;
+    setInfoFloatingData({ data: infoData, active: true });
   };
 
   const openWelcomeModal = () => {
@@ -185,7 +201,6 @@ const App = () => {
       const interceptedEvent = event as CustomEvent;
       const eventType = interceptedEvent.detail.name as keyof typeof eventMap;
       const eventData = interceptedEvent.detail.data;
-
       if (eventMap[eventType]) {
         eventMap[eventType](eventData);
       }

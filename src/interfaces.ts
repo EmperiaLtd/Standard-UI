@@ -279,8 +279,8 @@ export interface FallBackData {
         welcome: WelcomeData;
         instructions: InstructionsData;
       };
-      infoModels: InfoModels;
-      pdpModels: PDPModels;
+      infoModels: InfoModels[];
+      pdpModels: PDPModels[];
     };
   };
 }
@@ -288,8 +288,8 @@ export interface FallBackData {
 export type EventData = {
   ui: {
     uiConfig: UiConfig;
-    pdpModels: PDPModels;
-    infoModels: InfoModels;
+    pdpModels: PDPModels[];
+    infoModels: InfoModels[];
   };
 };
 
@@ -300,11 +300,13 @@ type UiConfig = {
 };
 
 export type InfoModels = {
-  [modelName: string]: InfoData;
+  id: string;
+  infoModel: InfoData;
 };
 
 export type PDPModels = {
-  [productId: string]: ProductData;
+  id: string;
+  pdpModel: ProductData;
 };
 
 // Misc Events
