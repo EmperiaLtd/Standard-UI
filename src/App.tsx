@@ -29,8 +29,8 @@ import {
 import React from 'react';
 
 const App = () => {
-  const [activeScene, setActiveScene] = useState('room_1');
   const [activeLang, setActiveLang] = useState('en');
+  const [activeScene, setActiveScene] = useState('room_1');
   const [activeSound, setActiveSound] = useState('Sound 1');
   const [productDrawerLoading, setProductDrawerLoading] = useState(false);
   const [productDrawerData, setProductDrawerData] = useState<ProductState>({
@@ -52,6 +52,7 @@ const App = () => {
       base_price: '',
       variants_selection_order: [],
       variants: [],
+      turnTableURL: '',
     },
     active: false,
   });
@@ -214,7 +215,6 @@ const App = () => {
       window.removeEventListener('fromExperience', eventListener);
     };
   }, []);
-
   return (
     <ChakraProvider theme={CustomTheme}>
       <Overlay

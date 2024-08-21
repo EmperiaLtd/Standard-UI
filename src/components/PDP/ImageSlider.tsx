@@ -18,12 +18,10 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
   const slider = useRef<Slider>(null);
   const [activeImageIndex, setActiveImageIndex] = useState({ oldIndex: 0, newIndex: 0 });
   const [imageNo, setImageNo] = useState(0);
-
   useEffect(() => {
     if (turnTableUrl?.length > 0) {
-      const baseUrl = `${process.env.REACT_APP_DOMAIN_NAME}/${turnTableUrl}`;
       const totalFrames = 36;
-      preloadImagesWithFrames(baseUrl, totalFrames);
+      preloadImagesWithFrames(turnTableUrl, totalFrames);
     }
   }, [turnTableUrl]);
 
@@ -109,7 +107,7 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
             loading="eager"
             objectFit="contain"
             transform={'scale(1.3)'}
-            src={`${process.env.REACT_APP_DOMAIN_NAME}/${turnTableUrl}?frame=${imageNo}&width=400`}
+            src={`${turnTableUrl}?frame=${imageNo}&width=400`}
             height={['auto']}
             maxHeight={['300px', '350px', '350px', '350px', '400px']}
             width={['100%']}
