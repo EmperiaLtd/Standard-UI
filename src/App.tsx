@@ -52,6 +52,7 @@ const App = () => {
       base_price: '',
       variants_selection_order: [],
       variants: [],
+      turnTableURL: '',
     },
     active: false,
   });
@@ -214,7 +215,6 @@ const App = () => {
       window.removeEventListener('fromExperience', eventListener);
     };
   }, []);
-
   return (
     <ChakraProvider theme={CustomTheme}>
       <Overlay

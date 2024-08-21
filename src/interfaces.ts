@@ -205,6 +205,7 @@ export type ProductData = {
   base_price: string;
   variants_selection_order: string[];
   variants: ProductVariant[];
+  turnTableURL: string;
 };
 
 export type ProductVariant = {

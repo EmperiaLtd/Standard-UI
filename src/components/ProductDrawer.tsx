@@ -198,7 +198,7 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
             overflowX="hidden"
           >
             <ImageSlider
-              turnTableUrl="assets/0D543C07_1000x1000_36_imagesheet.png"
+              turnTableUrl={productDrawerData?.turnTableURL}
               highlightImage={selectedImage}
               images={currentImages.map((currentImage: ProductMedia) => currentImage.url)}
               setHighLightImage={(image) => setSelectedImage(image)}
