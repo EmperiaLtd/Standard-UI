@@ -29,8 +29,8 @@ import {
 import React from 'react';
 
 const App = () => {
-  const [activeScene, setActiveScene] = useState('room_1');
   const [activeLang, setActiveLang] = useState('en');
+  const [activeScene, setActiveScene] = useState('room_1');
   const [activeSound, setActiveSound] = useState('Sound 1');
   const [productDrawerLoading, setProductDrawerLoading] = useState(false);
   const [productDrawerData, setProductDrawerData] = useState<ProductState>({
