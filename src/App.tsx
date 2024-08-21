@@ -216,7 +216,7 @@ const App = () => {
     };
   }, []);
   return (
-    <ChakraProvider theme={CustomTheme}>
+    <ChakraProvider theme={CustomTheme} cssVarsRoot="#standard-ui">
       <Overlay
         activeScene={activeScene}
         activeLang={activeLang}
