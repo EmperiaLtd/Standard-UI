@@ -9,6 +9,7 @@ import { sortSizes } from '../utils/helper';
 import useWindowDimensions from '../utils/hooks/useWindowDimensions';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import React from 'react';
+import ParagraphWithSeeMore from './PDP/ParagraphWithSeeMore';
 
 function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps) {
   const transition = 'all 0.2s ease-in-out';
@@ -237,17 +238,7 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
                   )}
                 </Box>
                 {productDrawerData?.long_description && (
-                  <Text
-                    fontFamily="Montserrat"
-                    fontSize={['12px']}
-                    color="white"
-                    mt={['10px']}
-                    maxH={['200px']}
-                    h="auto"
-                    overflow="auto"
-                  >
-                    {productDrawerData?.long_description}
-                  </Text>
+                  <ParagraphWithSeeMore text={productDrawerData?.long_description} maxLines={3} />
                 )}
 
                 {/* Variant */}
