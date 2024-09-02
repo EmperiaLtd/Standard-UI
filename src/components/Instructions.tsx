@@ -1,7 +1,10 @@
 import { Box, Button, IconButton, Text } from '@chakra-ui/react';
 import HoldAndDrag from '../assets/videos/HoldAndDrag.webm';
+import HoldAndDragSafari from '../assets/videos/HoldAndDrag.mov';
 import TapToMove from '../assets/videos/TapToMove.webm';
+import TapToMoveSafari from '../assets/videos/TapToMove.mov';
 import ClickToOpen from '../assets/videos/ClickToOpen.webm';
+import ClickToOpenSafari from '../assets/videos/ClickToOpen.mov';
 import Slider from 'react-slick';
 import ReactPlayer from 'react-player';
 import { RightStemArrow } from '../Icons/RightStemArrow';
@@ -11,8 +14,15 @@ import { InstructionsProps } from '../interfaces';
 import React from 'react';
 
 function Instructions({ instructionsData, active, close }: InstructionsProps) {
+  function isSafari() {
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  }
+  const videos = [
+    !isSafari() ? HoldAndDrag : HoldAndDragSafari,
+    !isSafari() ? TapToMove : TapToMoveSafari,
+    !isSafari() ? ClickToOpen : ClickToOpenSafari,
+  ];
   const transition = 'all 0.2s ease-in-out';
-  const videos = [HoldAndDrag, TapToMove, ClickToOpen];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [slider, setSlider] = useState<any>();
   const [activeImageIndex, setActiveImageIndex] = useState({
