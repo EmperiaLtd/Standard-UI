@@ -9,6 +9,7 @@ import { sortSizes } from '../utils/helper';
 import useWindowDimensions from '../utils/hooks/useWindowDimensions';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import React from 'react';
+import ParagraphWithSeeMore from './PDP/ParagraphWithSeeMore';
 
 function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps) {
   const transition = 'all 0.2s ease-in-out';
@@ -197,12 +198,14 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
             }}
             overflowX="hidden"
           >
-            <ImageSlider
-              turnTableUrl={productDrawerData?.turnTableURL}
-              highlightImage={selectedImage}
-              images={currentImages.map((currentImage: ProductMedia) => currentImage.url)}
-              setHighLightImage={(image) => setSelectedImage(image)}
-            />
+            {productDrawerData?.turnTableURL && (
+              <ImageSlider
+                turnTableUrl={productDrawerData?.turnTableURL}
+                highlightImage={selectedImage}
+                images={currentImages.map((currentImage: ProductMedia) => currentImage.url)}
+                setHighLightImage={(image) => setSelectedImage(image)}
+              />
+            )}
             <Box
               h={['fit-content', 'fit-content', 'auto', 'auto', 'auto']}
               w={['100%', '100%', '100%', '100%', '100%']}
@@ -212,135 +215,139 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
               p={['20px', '20px', '30px', '30px', '30px']}
             >
               <Box>
-                <Text fontFamily="Montserrat-Bold" fontSize={['20px']} color="white">
-                  {productDrawerData?.title}
-                </Text>
-                <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white" mt={['5px']}>
-                  {productDrawerData?.short_description}
-                </Text>
+                {productDrawerData?.title && (
+                  <Text fontFamily="Montserrat-Bold" fontSize={['20px']} color="white">
+                    {productDrawerData?.title}
+                  </Text>
+                )}
+                {productDrawerData.short_description && (
+                  <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white" mt={['5px']}>
+                    {productDrawerData?.short_description}
+                  </Text>
+                )}
                 <Box display="flex" justifyContent="space-between" alignItems="center" width={['85px']} mt={['5px']}>
-                  <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white">
-                    {`${currency} ${selectedSize?.price}`}
-                  </Text>
-                  <Text fontFamily="Montserrat-Bold" fontSize={['14px']} color="white" textDecoration="line-through">
-                    {`${currency} ${selectedVariant?.retail_price}`}
-                  </Text>
+                  {selectedSize?.price && (
+                    <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white">
+                      {`${currency} ${selectedSize?.price}`}
+                    </Text>
+                  )}
+                  {selectedVariant?.retail_price && (
+                    <Text fontFamily="Montserrat-Bold" fontSize={['14px']} color="white" textDecoration="line-through">
+                      {`${currency} ${selectedVariant?.retail_price}`}
+                    </Text>
+                  )}
                 </Box>
-                <Text
-                  fontFamily="Montserrat"
-                  fontSize={['12px']}
-                  color="white"
-                  mt={['10px']}
-                  maxH={['200px']}
-                  h="auto"
-                  overflow="auto"
-                >
-                  {productDrawerData?.long_description}
-                </Text>
+                {productDrawerData?.long_description && (
+                  <ParagraphWithSeeMore text={productDrawerData?.long_description} maxLines={3} />
+                )}
 
                 {/* Variant */}
-                <Box
-                  mt={['15px', '15px', '20px', '20px', '20px']}
-                  height={['auto']}
-                  display="flex"
-                  flexDirection="column"
-                >
-                  <Box display="flex" justifyContent="flex-start" alignItems="center">
-                    <Text
-                      fontFamily="Montserrat-Bold"
-                      fontSize={['13px', '13px', '14px', '14px', '14px']}
-                      color="white"
-                    >
-                      Variant:
-                    </Text>
-                    <Text
-                      ml={['5px']}
-                      fontFamily="Montserrat"
-                      fontSize={['13px', '13px', '14px', '14px', '14px']}
-                      color="white"
-                      textTransform="capitalize"
-                    >
-                      {selectedColor}
-                    </Text>
-                  </Box>
-
+                {productVariants.length > 0 && (
                   <Box
+                    mt={['15px', '15px', '20px', '20px', '20px']}
+                    height={['auto']}
                     display="flex"
-                    overflowY={['hidden', 'hidden', 'hidden', 'hidden', 'hidden']}
-                    overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
-                    height={['40px', '40px', '50px', '50px', '50px']}
-                    w={['100%']}
-                    alignItems="center"
-                    justifyContent="flex-start"
+                    flexDirection="column"
                   >
-                    {productVariants?.map((productVariant: ProductVariant) => (
-                      <Swatch
-                        key={productVariant.variant_id}
-                        transition={transition}
-                        active={selectedVariant?.color_swatch === productVariant.color_swatch}
-                        colorName={productVariant.color_swatch}
-                        available={productVariant.available_stock > 0}
-                        onSwatchClick={() => updateVariant(productVariant)}
-                      />
-                    ))}
+                    <Box display="flex" justifyContent="flex-start" alignItems="center">
+                      <Text
+                        fontFamily="Montserrat-Bold"
+                        fontSize={['13px', '13px', '14px', '14px', '14px']}
+                        color="white"
+                      >
+                        Variant:
+                      </Text>
+                      <Text
+                        ml={['5px']}
+                        fontFamily="Montserrat"
+                        fontSize={['13px', '13px', '14px', '14px', '14px']}
+                        color="white"
+                        textTransform="capitalize"
+                      >
+                        {selectedColor}
+                      </Text>
+                    </Box>
+
+                    <Box
+                      display="flex"
+                      overflowY={['hidden', 'hidden', 'hidden', 'hidden', 'hidden']}
+                      overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
+                      height={['40px', '40px', '50px', '50px', '50px']}
+                      w={['100%']}
+                      alignItems="center"
+                      justifyContent="flex-start"
+                    >
+                      {productVariants?.map((productVariant: ProductVariant) => (
+                        <Swatch
+                          key={productVariant.variant_id}
+                          transition={transition}
+                          active={selectedVariant?.color_swatch === productVariant.color_swatch}
+                          colorName={productVariant.color_swatch}
+                          available={productVariant.available_stock > 0}
+                          onSwatchClick={() => updateVariant(productVariant)}
+                        />
+                      ))}
+                    </Box>
                   </Box>
-                </Box>
+                )}
 
                 {/* Size */}
-                <Box
-                  mt={['15px', '15px', '20px', '20px', '20px']}
-                  height={['auto']}
-                  display="flex"
-                  flexDirection="column"
-                >
-                  <Box display="flex" justifyContent="space-between" alignItems="center" width={['100%']}>
-                    <Text
-                      fontFamily="Montserrat-Bold"
-                      fontSize={['13px', '13px', '14px', '14px', '14px']}
-                      color="white"
-                    >
-                      Size:
-                    </Text>
-                    <Text
-                      fontFamily="Montserrat"
-                      fontSize={['13px', '13px', '14px', '14px', '14px']}
-                      color="white"
-                      textDecoration="underline"
-                      cursor="pointer"
-                      _hover={{ color: '#CCCCCC' }}
-                      transition={transition}
-                    >
-                      Size Guide
-                    </Text>
-                  </Box>
-
+                {currentSizes.length > 0 && (
                   <Box
-                    mt={['5px']}
-                    display="flex"
-                    flexWrap="wrap"
-                    overflowY={['hidden', 'hidden', 'hidden', 'hidden', 'hidden']}
-                    overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
+                    mt={['15px', '15px', '20px', '20px', '20px']}
                     height={['auto']}
-                    w={['100%']}
-                    alignItems="center"
-                    justifyContent="flex-start"
+                    display="flex"
+                    flexDirection="column"
                   >
-                    {currentSizes?.map((size: ProductVariantType) => (
-                      <Size
-                        key={size.value}
-                        active={
-                          selectedSize?.value === size.value && size?.available_stock
-                            ? size?.available_stock > 0
-                            : false
-                        }
+                    <Box display="flex" justifyContent="space-between" alignItems="center" width={['100%']}>
+                      <Text
+                        fontFamily="Montserrat-Bold"
+                        fontSize={['13px', '13px', '14px', '14px', '14px']}
+                        color="white"
+                      >
+                        Size:
+                      </Text>
+                      <Text
+                        fontFamily="Montserrat"
+                        fontSize={['13px', '13px', '14px', '14px', '14px']}
+                        color="white"
+                        textDecoration="underline"
+                        cursor="pointer"
+                        _hover={{ color: '#CCCCCC' }}
                         transition={transition}
-                        sizeName={size.value}
-                        available={size?.available_stock ? size?.available_stock > 0 : false}
-                        onSizeClick={() => setSelectedSize(size)}
-                      />
-                    ))}
+                      >
+                        Size Guide
+                      </Text>
+                    </Box>
+
+                    <Box
+                      mt={['5px']}
+                      display="flex"
+                      flexWrap="wrap"
+                      overflowY={['hidden', 'hidden', 'hidden', 'hidden', 'hidden']}
+                      overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
+                      height={['auto']}
+                      w={['100%']}
+                      alignItems="center"
+                      justifyContent="flex-start"
+                    >
+                      {currentSizes?.map((size: ProductVariantType) => (
+                        <Size
+                          key={size.value}
+                          active={
+                            selectedSize?.value === size.value && size?.available_stock
+                              ? size?.available_stock > 0
+                              : false
+                          }
+                          transition={transition}
+                          sizeName={size.value}
+                          available={size?.available_stock ? size?.available_stock > 0 : false}
+                          onSizeClick={() => setSelectedSize(size)}
+                        />
+                      ))}
+                    </Box>
                   </Box>
-                </Box>
+                )}
               </Box>
             </Box>
           </DrawerBody>
