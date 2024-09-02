@@ -198,14 +198,12 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
             }}
             overflowX="hidden"
           >
-            {productDrawerData?.turnTableURL && (
-              <ImageSlider
-                turnTableUrl={productDrawerData?.turnTableURL}
-                highlightImage={selectedImage}
-                images={currentImages.map((currentImage: ProductMedia) => currentImage.url)}
-                setHighLightImage={(image) => setSelectedImage(image)}
-              />
-            )}
+            <ImageSlider
+              turnTableUrl={productDrawerData?.turnTableURL}
+              highlightImage={selectedImage}
+              images={currentImages.map((currentImage: ProductMedia) => currentImage.url)}
+              setHighLightImage={(image) => setSelectedImage(image)}
+            />
             <Box
               h={['fit-content', 'fit-content', 'auto', 'auto', 'auto']}
               w={['100%', '100%', '100%', '100%', '100%']}
