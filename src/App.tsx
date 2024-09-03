@@ -128,7 +128,11 @@ const App = () => {
       window.emperia?.data.ui.uiConfig['instructions'] || fallbackData.data.ui.uiConfig['instructions'];
     const overlayData: OverlayElementObject =
       window.emperia?.data.ui.uiConfig['overlay'] || fallbackData.data.ui.uiConfig['overlay'];
-
+    if (overlayData) {
+      delete overlayData.languages; // TODO: undo this later when the languages are ready
+      delete overlayData.sounds; // TODO: undo this later when the sounds are ready
+    }
+    console.log(overlayData);
     setWelcomeData({ data: welcomeData, active: true });
     setInstructionsData({
       data: instructionsData,
