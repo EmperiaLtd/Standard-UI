@@ -132,14 +132,16 @@ const App = () => {
       delete overlayData.languages; // TODO: undo this later when the languages are ready
       delete overlayData.sounds; // TODO: undo this later when the sounds are ready
     }
-    console.log(overlayData);
     setWelcomeData({ data: welcomeData, active: true });
     setInstructionsData({
       data: instructionsData,
       active: false,
     });
     setOverlayData({
-      data: overlayData,
+      data: {
+        ...overlayData,
+        instructionsOverlay: { ...overlayData.instructionsOverlay, content: instructionsData.content },
+      },
       active: false,
     });
   };
