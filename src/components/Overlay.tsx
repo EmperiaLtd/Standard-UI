@@ -1,4 +1,4 @@
-import { Box, Image, Link, Text } from '@chakra-ui/react';
+import { Box, Image, Link, Text, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import MenuOption from './common/MenuOption';
 import RoomOption from './common/RoomOption';
@@ -25,6 +25,7 @@ function Overlay({
   const [menuHovered, setMenuHovered] = useState(false);
   const [menuOptionHoveredOrActive, setMenuOptionHoveredOrActive] = useState('');
   const [activeMenuOption, setActiveMenuOption] = useState('');
+  const toast = useToast();
 
   const [transformedOverlayData, setTransformedOverlayData] = useState<TransformedOverlayData[]>();
 
@@ -177,6 +178,51 @@ function Overlay({
     (overlayElement: TransformedOverlayData) => overlayElement.key === activeMenuOption,
   );
 
+  const handleCopy = async (text: string) => {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+          document.execCommand('copy');
+        } catch (err) {
+          console.error('Fallback: Oops, unable to copy', err);
+        }
+        document.body.removeChild(textArea);
+      }
+    } catch (err) {
+      console.error('Async: Could not copy text', err);
+    }
+  };
+
+  const handleShare = async () => {
+    const productUrl = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Title',
+          text: 'Check out this space!',
+          url: productUrl,
+        });
+      } catch (error) {
+        console.error('Error sharing content:', error);
+      }
+    } else {
+      handleCopy(productUrl);
+      toast({
+        title: `Link Copied`,
+        position: 'top',
+        status: 'success',
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <>
       <Box
@@ -275,6 +321,8 @@ function Overlay({
                     setActiveMenuOption(updatedValue);
                   } else if (overlayElement.key === 'sound') {
                     setAudioActive(!audioActive);
+                  } else if (overlayElement.key === 'share') {
+                    handleShare();
                   } else {
                     setActiveMenuOption('');
                     console.log('Regular Click');
