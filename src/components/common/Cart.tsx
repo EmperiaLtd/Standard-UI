@@ -74,7 +74,11 @@ function CartDrawer({ data, active, close, setCartItems }: CartDrawerProps) {
   return (
     <Drawer isOpen={active} placement="right" onClose={close} size={['full', 'sm', 'sm', 'sm', 'sm']} autoFocus={false}>
       <DrawerOverlay />
-      <DrawerContent maxH={height}>
+      <DrawerContent
+        maxH={height}
+        background={'linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%), rgba(184, 184, 184, 0.2)'}
+        backdropFilter="blur(12px)"
+      >
         <Box
           boxSize={8}
           display="flex"
@@ -87,7 +91,7 @@ function CartDrawer({ data, active, close, setCartItems }: CartDrawerProps) {
           cursor="pointer"
           onClick={close}
         >
-          <Close stroke="black" boxSize={[4, 4, 4]} />
+          <Close stroke="white" boxSize={[4, 4, 4]} />
         </Box>
         <DrawerBody p={['20px', '20px', '40px']}>
           {data.length == 0 ? (
@@ -104,19 +108,21 @@ function CartDrawer({ data, active, close, setCartItems }: CartDrawerProps) {
                 <Image src={Emptycart} width={['100px', '100px', '150px']} />
                 <Text
                   fontSize={['20px', '20px', '24px']}
-                  fontFamily="Bogle"
+                  fontFamily="Montserrat"
                   fontWeight="700"
                   letterSpacing="-0.02em"
                   textAlign="center"
+                  color="white"
                 >
                   {`Nothing to see here.`}
                 </Text>
                 <Text
                   fontSize={['20px', '20px', '24px']}
-                  fontFamily="Bogle"
+                  fontFamily="Montserrat"
                   fontWeight="700"
                   letterSpacing="-0.02em"
                   textAlign="center"
+                  color="white"
                 >
                   {`Let's fix that`}
                 </Text>
@@ -131,7 +137,7 @@ function CartDrawer({ data, active, close, setCartItems }: CartDrawerProps) {
                 border="1px solid #FFFFFF4D"
                 fontSize="18px"
                 fontWeight="700"
-                fontFamily="Bogle-Bold"
+                fontFamily="Montserrat-Bold"
                 _hover={{ background: 'radial-gradient(100% 131.41% at 100% 100%, #007CF2 0%, #012D58 100%)' }}
                 _active={{ background: 'radial-gradient(100% 131.41% at 100% 100%, #0255A6 0%, #041E40 100%)' }}
                 _focus={{ background: 'radial-gradient(100% 131.41% at 100% 100%, #0255A6 0%, #041E40 100%)' }}
@@ -149,11 +155,12 @@ function CartDrawer({ data, active, close, setCartItems }: CartDrawerProps) {
               <Text
                 fontSize={['32px', '32px']}
                 lineHeight={['42px', '42px']}
-                fontFamily="Bogle"
+                fontFamily="Montserrat"
                 fontWeight="700"
                 letterSpacing="-0.02em"
                 textAlign="left"
                 mt="1"
+                color="white"
               >
                 Your cart
               </Text>
@@ -177,12 +184,12 @@ function CartDrawer({ data, active, close, setCartItems }: CartDrawerProps) {
           )}
         </DrawerBody>
         {data.length > 0 && (
-          <DrawerFooter p={['16px 20px 32px 20px']} pt={'0px'} bg="#E6F1FC" display="flex" flexDir="column" gap="3">
-            <Box display="flex" justifyContent="space-between" w="100%" minH="40px">
-              <Text fontSize={['18px', '18px']} fontFamily="Bogle" fontWeight="700" letterSpacing="-0.02em">
+          <DrawerFooter p={['16px 20px 32px 20px']} pt={'0px'} display="flex" flexDir="column" gap="3">
+            <Box display="flex" justifyContent="space-between" w="100%" minH="40px" color={'white'}>
+              <Text fontSize={['18px', '18px']} fontFamily="Montserrat" fontWeight="700" letterSpacing="-0.02em">
                 Subtotal
               </Text>
-              <Text fontSize={['18px', '18px']} fontFamily="Bogle" fontWeight="700" letterSpacing="-0.02em">
+              <Text fontSize={['18px', '18px']} fontFamily="Montserrat" fontWeight="700" letterSpacing="-0.02em">
                 ${cartSubtotal.toFixed(2)}
               </Text>
             </Box>
@@ -191,24 +198,22 @@ function CartDrawer({ data, active, close, setCartItems }: CartDrawerProps) {
               color="white"
               padding={['16px 32px']}
               borderRadius="40px"
-              background="radial-gradient(100% 131.41% at 100% 100%, #1A97FF 0%, #004F9A 100%);"
               border="1px solid #FFFFFF4D"
               fontSize="14px"
               fontWeight="700"
-              fontFamily="Bogle-Bold"
-              _hover={{ background: 'radial-gradient(100% 131.41% at 100% 100%, #007CF2 0%, #012D58 100%)' }}
-              _active={{ background: 'radial-gradient(100% 131.41% at 100% 100%, #0255A6 0%, #041E40 100%)' }}
-              _focus={{ background: 'radial-gradient(100% 131.41% at 100% 100%, #0255A6 0%, #041E40 100%)' }}
+              fontFamily="Montserrat-Bold"
               transition="all 0.2s ease-in-out"
               cursor="pointer"
               w="100%"
               h="45px"
               onClick={checkout}
+              bg="rgba(0, 0, 0, 0.1)"
+              _hover={{ bg: 'rgba(0, 0, 0, 0.3)' }}
             >
               <Text
                 fontSize={['18px', '18px']}
                 lineHeight={['24px', '24px']}
-                fontFamily="Bogle"
+                fontFamily="Montserrat"
                 fontWeight="700"
                 letterSpacing="-0.02em"
               >

@@ -16,17 +16,18 @@ function Counter({ count, onIncrease, onDecrease }: CounterProps) {
       alignItems="center"
       gap={4}
     >
-      <MinusIcon onClick={onDecrease} boxSize={[3]} cursor="pointer" transition="0.2s all" />
+      <MinusIcon color={'white'} onClick={onDecrease} boxSize={[3]} cursor="pointer" transition="0.2s all" />
       <Text
         fontSize={['14px', '14px', '16px', '20px', '22px']}
         lineHeight={['18px', '18px', '18px', '22px', '22px']}
-        fontFamily="Bogle"
+        fontFamily="Montserrat"
         fontWeight="700"
         textAlign="center"
+        color={count === 0 ? 'gray.400' : 'white'}
       >
         {count}
       </Text>
-      <AddIcon onClick={onIncrease} boxSize={[3]} cursor="pointer" transition="0.2s all" />
+      <AddIcon color={'white'} onClick={onIncrease} boxSize={[3]} cursor="pointer" transition="0.2s all" />
     </Box>
   );
 }

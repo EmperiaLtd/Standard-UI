@@ -52,11 +52,11 @@ function CartItem({
             <Text
               fontSize={['14px', '14px']}
               lineHeight={['18px', '18px']}
-              fontFamily="Bogle"
+              fontFamily="Montserrat"
               fontWeight="700"
               letterSpacing="-0.02em"
               textAlign="left"
-              color="#041F41;"
+              color="white"
             >
               {name}
             </Text>
@@ -66,20 +66,22 @@ function CartItem({
                 <Text
                   fontSize={['14px', '14px']}
                   lineHeight={['18px', '18px']}
-                  fontFamily="Bogle"
+                  fontFamily="Montserrat"
                   fontWeight="700"
                   letterSpacing="-0.02em"
                   textAlign="left"
+                  color="white"
                 >
                   {(selectedVariantAttributes as SelectedVariantTypeState)[parseInt(key)].type}:
                 </Text>
                 <Text
                   fontSize={['14px', '14px']}
                   lineHeight={['18px', '18px']}
-                  fontFamily="Bogle"
+                  fontFamily="Montserrat"
                   fontWeight="400"
                   letterSpacing="-0.02em"
                   textAlign="left"
+                  color="white"
                 >
                   {(selectedVariantAttributes as SelectedVariantTypeState)[parseInt(key)].value}
                 </Text>
@@ -94,10 +96,11 @@ function CartItem({
             <Text
               fontSize={['18px', '18px']}
               lineHeight={['24px', '24px']}
-              fontFamily="Bogle"
+              fontFamily="Montserrat"
               fontWeight="700"
               letterSpacing="-0.02em"
               textAlign="right"
+              color="white"
             >
               ${(productCount * price).toFixed(2)}
             </Text>
@@ -108,7 +111,7 @@ function CartItem({
             variant="link"
             fontSize={['12px', '12px']}
             lineHeight={['16px', '16px']}
-            fontFamily="Bogle"
+            fontFamily="Montserrat"
             fontWeight="400"
             textAlign="right"
             color="#757575"

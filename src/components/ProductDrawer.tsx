@@ -349,7 +349,7 @@ function ProductDrawer({
                   leftIcon={<ArViewerIcon boxSize={[6]} />}
                   variant="link"
                   fontSize={['14px']}
-                  fontFamily="Bogle-Bold"
+                  fontFamily="Montserrat-Bold"
                   color="white"
                 >
                   View in your space
@@ -383,7 +383,7 @@ function ProductDrawer({
               <Box>
                 {productDrawerData?.brand && (
                   <Text
-                    fontFamily="Bogle"
+                    fontFamily="Montserrat"
                     fontWeight="400"
                     fontSize={['14px', '14px']}
                     lineHeight={['18px', '18px']}
@@ -397,7 +397,7 @@ function ProductDrawer({
                 )}
                 {productDrawerData?.title && (
                   <Text
-                    fontFamily="Bogle"
+                    fontFamily="Montserrat"
                     fontWeight="700"
                     fontSize={['18px', '18px']}
                     lineHeight={['24px', '24px']}
@@ -412,7 +412,7 @@ function ProductDrawer({
                 {selectedVariant?.sale_price && (
                   <Box display="flex" alignItems="center" justifyContent="space-between">
                     <Text
-                      fontFamily="Bogle"
+                      fontFamily="Montserrat"
                       fontWeight="700"
                       fontSize={['18px', '18px']}
                       lineHeight={['24px', '24px']}
@@ -429,7 +429,7 @@ function ProductDrawer({
                     <Button
                       variant="link"
                       leftIcon={<Share boxSize={['16px']} />}
-                      fontFamily="Bogle"
+                      fontFamily="Montserrat"
                       fontWeight="700"
                       fontSize={['14px', '14px']}
                       lineHeight={['18px', '18px']}
@@ -459,7 +459,7 @@ function ProductDrawer({
                         >
                           <Box display="flex" justifyContent="flex-start" alignItems="center">
                             <Text
-                              fontFamily="Bogle"
+                              fontFamily="Montserrat"
                               fontWeight="700"
                               fontSize={['14px', '14px', '14px', '14px', '14px']}
                               lineHeight={['18px', '18px', '14px', '14px', '14px']}
@@ -470,7 +470,7 @@ function ProductDrawer({
                             </Text>
                             <Text
                               ml={['5px']}
-                              fontFamily="Bogle"
+                              fontFamily="Montserrat"
                               fontSize={['14px', '14px', '14px', '14px', '14px']}
                               lineHeight={['18px', '18px', '14px', '14px', '14px']}
                               color="white"

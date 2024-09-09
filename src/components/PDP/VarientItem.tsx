@@ -71,7 +71,7 @@ function VariantItem({ active = false, transition, name, available, onClick }: V
       transition={transition}
     >
       <Text
-        fontFamily="Bogle"
+        fontFamily="Montserrat"
         fontWeight="700"
         fontSize={['14px', '14px', '12px', '14px']}
         lineHeight={['18px', '18px']}

@@ -33,7 +33,6 @@ function PDPFooter({
       p={['20px', '20px', '20px', '30px', '30px']}
       width={['100%']}
       border-top="1px solid #FFFFFF4D"
-      background="radial-gradient(100% 131.36% at 0% 0%, rgba(158, 158, 158, 0.3) 0%, rgba(158, 158, 158, 0.1) 100%), linear-gradient(0deg, rgba(4, 31, 65, 0.6), rgba(4, 31, 65, 0.6));"
       w="100%"
     >
       {itemAddedToCart ? (
@@ -46,7 +45,7 @@ function PDPFooter({
           padding="0px 24px"
         >
           <Text
-            fontFamily="Bogle"
+            fontFamily="Montserrat"
             fontWeight="700"
             fontSize={['18px', '18px']}
             lineHeight={['24px', '24px']}
@@ -63,18 +62,17 @@ function PDPFooter({
             color="white"
             padding={['16px 32px']}
             borderRadius="40px"
-            background="radial-gradient(100% 131.41% at 100% 100%, #1A97FF 0%, #004F9A 100%);"
             border="1px solid #FFFFFF4D"
             fontSize={['18px', '18px']}
             fontWeight="700"
-            fontFamily="Bogle"
-            _hover={{ background: 'radial-gradient(100% 131.41% at 100% 100%, #007CF2 0%, #012D58 100%)' }}
-            _active={{ background: 'radial-gradient(100% 131.41% at 100% 100%, #0255A6 0%, #041E40 100%)' }}
+            fontFamily="Montserrat"
             cursor="pointer"
             pointerEvents="auto"
             w="100%"
             h="44px"
             mb="3"
+            bg="rgba(0, 0, 0, 0.1)"
+            _hover={{ bg: 'rgba(0, 0, 0, 0.3)' }}
             onClick={() => {
               setItemAddedToCart(false);
               openCart();
@@ -86,13 +84,12 @@ function PDPFooter({
             variant="solid"
             color="white"
             borderRadius="40px"
-            background="radial-gradient(115.63% 520.41% at 0% -15.63%, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.09) 100%), linear-gradient(0deg, rgba(4, 31, 65, 0.3), rgba(4, 31, 65, 0.3));"
+            bg="rgba(0, 0, 0, 0.1)"
+            _hover={{ bg: 'rgba(0, 0, 0, 0.3)' }}
             border="1px solid #FFFFFF99"
             fontSize={['18px', '18px']}
             fontWeight="700"
-            fontFamily="Bogle"
-            _hover={{ background: '#1A1A1A66' }}
-            _active={{ background: '#1A1A1ABF' }}
+            fontFamily="Montserrat"
             cursor="pointer"
             pointerEvents="auto"
             w="100%"
@@ -120,13 +117,12 @@ function PDPFooter({
             color="white"
             padding={['16px 32px']}
             borderRadius="40px"
-            background="radial-gradient(100% 131.41% at 100% 100%, #1A97FF 0%, #004F9A 100%);"
+            bg="rgba(0, 0, 0, 0.1)"
+            _hover={{ bg: 'rgba(0, 0, 0, 0.3)' }}
             border="1px solid #FFFFFF4D"
             fontSize={['18px', '18px']}
             fontWeight="700"
-            fontFamily="Bogle"
-            _hover={{ background: 'radial-gradient(100% 131.41% at 100% 100%, #007CF2 0%, #012D58 100%)' }}
-            _active={{ background: 'radial-gradient(100% 131.41% at 100% 100%, #0255A6 0%, #041E40 100%)' }}
+            fontFamily="Montserrat"
             cursor="pointer"
             pointerEvents="auto"
             w={['60%', '60%', '70%']}

@@ -27,7 +27,7 @@ function ProductCounter({ count, available, onIncrease, onDecrease }: CounterPro
       <Text
         fontSize={['14px', '14px', '16px', '20px', '22px']}
         lineHeight={['18px', '18px', '18px', '22px', '22px']}
-        fontFamily="Bogle"
+        fontFamily="Montserrat"
         fontWeight="700"
         letterSpacing="-0.02em"
         textAlign="center"
