@@ -164,11 +164,9 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         position="relative"
       >
         <Slider ref={slider} {...settings}>
-          {turnTableUrl?.length > 0
-            ? sliderImages?.map((image: string | React.ReactNode, index: number) =>
-                !isString(image) ? (
-                  image
-                ) : (
+          {turnTableUrl.length > 0
+            ? sliderImages.map((image: string | React.ReactNode, index: number) =>
+                isString(image) ? (
                   <ChakraImage
                     key={index}
                     cursor="pointer"
@@ -179,9 +177,11 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
                     objectPosition="top"
                     src={typeof image === 'string' ? image : ''}
                   />
+                ) : (
+                  image
                 ),
               )
-            : images?.map((image: string, index: number) => (
+            : sliderImages.map((image: string | React.ReactNode, index: number) => (
                 <ChakraImage
                   key={index}
                   cursor="pointer"
@@ -190,7 +190,7 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
                   h={['400px', '450px', '470px', '470px', '550px']}
                   objectFit={['cover', 'contain', 'contain']}
                   objectPosition="top"
-                  src={image}
+                  src={image as string}
                 />
               ))}
         </Slider>

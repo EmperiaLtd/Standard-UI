@@ -37,46 +37,47 @@ function InfoModal({ infoData, active, close }: InfoModalProps) {
         cursor="pointer"
         onClick={close}
       />
-
-      <Box
-        width="100%"
-        height="100%"
-        display="flex"
-        flexDirection="column"
-        padding={['20px', '20px', '25px', '25px', '25px']}
-      >
-        <Box w="100%" height="auto" display="flex" flexDirection="column" justifyContent="space-between" mb="40px">
-          <Text fontFamily="Montserrat-Bold" fontSize={['20px']} textTransform="uppercase" color="white">
-            {infoData?.title}
-          </Text>
-          <Text m="10px 0px" fontFamily="Montserrat-Medium" fontSize={['14px']} color="white">
-            {infoData?.subtitle}
-          </Text>
-          <Text
-            fontFamily="Montserrat"
-            fontSize={['12px']}
-            color="white"
-            maxH={['105px', '160px', '145px', '145px', '200px']}
-            overflow="auto"
-          >
-            {infoData?.description}
-          </Text>
-        </Box>
-        <Button
-          marginTop="auto"
-          maxW="200px"
-          textTransform="uppercase"
-          fontFamily="Montserrat"
-          bg="rgba(0, 0, 0, 0.1)"
-          _hover={{ bg: 'rgba(0, 0, 0, 0.3)' }}
-          border="1px solid rgba(255, 255, 255, 0.80)"
-          boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25);"
-          backdropFilter="blur(12px)"
-          color="white"
+      {infoData?.title && (
+        <Box
+          width="100%"
+          height="100%"
+          display="flex"
+          flexDirection="column"
+          padding={['20px', '20px', '25px', '25px', '25px']}
         >
-          {infoData?.moreCTA}
-        </Button>
-      </Box>
+          <Box w="100%" height="auto" display="flex" flexDirection="column" justifyContent="space-between" mb="40px">
+            <Text fontFamily="Montserrat-Bold" fontSize={['20px']} textTransform="uppercase" color="white">
+              {infoData?.title}
+            </Text>
+            <Text m="10px 0px" fontFamily="Montserrat-Medium" fontSize={['14px']} color="white">
+              {infoData?.subtitle}
+            </Text>
+            <Text
+              fontFamily="Montserrat"
+              fontSize={['12px']}
+              color="white"
+              maxH={['105px', '160px', '145px', '145px', '200px']}
+              overflow="auto"
+            >
+              {infoData?.description}
+            </Text>
+          </Box>
+          <Button
+            marginTop="auto"
+            maxW="200px"
+            textTransform="uppercase"
+            fontFamily="Montserrat"
+            bg="rgba(0, 0, 0, 0.1)"
+            _hover={{ bg: 'rgba(0, 0, 0, 0.3)' }}
+            border="1px solid rgba(255, 255, 255, 0.80)"
+            boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25);"
+            backdropFilter="blur(12px)"
+            color="white"
+          >
+            {infoData?.moreCTA}
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 }
