@@ -26,12 +26,13 @@ import {
   ProductState,
   OverlayElementObject,
   CartItemProps,
+  RoomItem,
 } from './interfaces';
 import React from 'react';
 
 const App = () => {
   const [activeLang, setActiveLang] = useState('en');
-  const [activeScene, setActiveScene] = useState('doododo');
+  const [activeScene, setActiveScene] = useState('');
   const [activeSound, setActiveSound] = useState('Sound 1');
   const [productDrawerLoading, setProductDrawerLoading] = useState(false);
   const [productDrawerData, setProductDrawerData] = useState<ProductState>({
@@ -137,6 +138,11 @@ const App = () => {
       delete overlayData.languages; // TODO: undo this later when the languages are ready
       delete overlayData.sounds; // TODO: undo this later when the sounds are ready
     }
+    const room = overlayData?.changeRooms;
+    if (room && room?.content) {
+      const roomPPt = room.content[0] as RoomItem;
+      setActiveScene(roomPPt.scene || '');
+    }
     setWelcomeData({ data: welcomeData, active: true });
     setInstructionsData({
       data: instructionsData,
@@ -232,7 +238,10 @@ const App = () => {
         activeScene={activeScene}
         activeLang={activeLang}
         activeSound={activeSound}
-        setActiveScene={(scene) => setActiveScene(scene)}
+        setActiveScene={(scene) => {
+          setActiveScene(scene);
+          window?.emperia?.experience?.krpano.call(`loadscene(${scene}, null, MERGE, BLEND(0.5));`);
+        }}
         setActiveLang={(lang) => changeLanguage(lang)}
         setActiveSound={(sound) => setActiveSound(sound)}
         overlayData={overlayData?.data}
