@@ -1,58 +1,103 @@
-import { Box, Button, Text, Drawer, DrawerBody, DrawerContent, DrawerFooter, Slide } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Text,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerOverlay,
+  useToast,
+  Divider,
+} from '@chakra-ui/react';
 import { CrossIcon } from '../Icons/CrossIcon';
 import { Fragment, useEffect, useState } from 'react';
-import Size from './PDP/Size';
 import Swatch from './PDP/Swatch';
 import ImageSlider from './PDP/ImageSlider';
-import { ProductDrawerProps, ProductMedia, ProductVariant, ProductVariantType } from '../interfaces';
-import { sortSizes } from '../utils/helper';
+import {
+  CartItemProps,
+  ProductDrawerProps,
+  ProductMedia,
+  ProductVariant,
+  ProductVariantType,
+  SelectedVariantTypeState,
+} from '../interfaces';
+import { getOpSys, getSorted, handleCopy } from '../utils/helper';
 import useWindowDimensions from '../utils/hooks/useWindowDimensions';
-import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import React from 'react';
 import ParagraphWithSeeMore from './PDP/ParagraphWithSeeMore';
+import ArViewer from './PDP/ArViewer';
+import { LeftArrow } from '../Icons/LeftArrow';
+import { ARAndoirdUrls, ARIOSUrls, ARPCUrls, turnTableUrls } from '../fallbackData';
+import { ArViewer as ArViewerIcon } from '../Icons/ArViewer';
+import { Share } from '../Icons/Share';
+import VariantItem from './PDP/VarientItem';
+import PDPFooter from './PDP/PDPFooter';
+import { onIframeCartChange } from '../utils/helper/cart';
 
-function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps) {
+const selectedVariantTypeDefaultData: SelectedVariantTypeState = {
+  0: {
+    index: 0,
+    type: '',
+    value: '',
+  },
+};
+function ProductDrawer({
+  productId,
+  productDrawerData,
+  active,
+  close,
+  openProductModal,
+  productIdTrail,
+  openCart,
+  setCartItems,
+}: ProductDrawerProps) {
   const transition = 'all 0.2s ease-in-out';
   const { width, height } = useWindowDimensions();
 
-  const [mobileDrawerActive, setMobileDrawerActive] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>();
-  const [currency, setCurrency] = useState('');
-  const [selectedSize, setSelectedSize] = useState<ProductVariantType>();
-  const [selectedColor, setSelectedColor] = useState('');
-  const [currentSizes, setCurrentSizes] = useState<ProductVariantType[]>([]);
   const [currentImages, setCurrentImages] = useState<ProductMedia[]>([]);
+  const [itemAddedToCart, setItemAddedToCart] = useState<boolean>(false);
+  const [itemsCountToAdd, setItemsCountToAdd] = useState<number>(0);
   const [productVariants, setProductVariants] = useState<ProductVariant[]>([]);
+  const [ARViewerActive, setARViewerActive] = useState(false);
+  const [count, setCount] = useState<number>(1);
+  const [selectedVariantAttributes, setSelectedVariantAttributes] =
+    useState<SelectedVariantTypeState>(selectedVariantTypeDefaultData);
+  const [selectedVariantType, setSelectedVariantType] =
+    useState<SelectedVariantTypeState>(selectedVariantTypeDefaultData);
+  const [turnTableUrl, setTurnTableUrl] = useState('');
 
+  const toast = useToast();
   useEffect(() => {
     if (active) {
       //Set Product Variants
-      const variants = productDrawerData.variants;
+      const variants = productDrawerData?.variants;
       setProductVariants(variants);
 
       //set Default Variant
-      const defaultVariant = variants.find((variant: ProductVariant) => variant.default);
+      const defaultVariant = variants?.find((variant: ProductVariant) => variant.bDefault) || (variants && variants[0]);
       if (defaultVariant) {
-        defaultVariant && setSelectedVariant(defaultVariant);
+        setSelectedVariant(defaultVariant);
+        //Set Turntable Url
+        setTurnTableUrl(productDrawerData?.turnTableURL || turnTableUrls[productId as keyof typeof turnTableUrls]);
       }
 
-      //Get Default Color
-      const colorName = defaultVariant?.variants.find(
-        (variant: ProductVariantType) => variant.variant_type === 'color',
-      );
-      colorName?.name && setSelectedColor(colorName?.name);
+      const selectedVariantTypeObj: SelectedVariantTypeState = {};
 
-      // Get Sizes
-      const sizes = defaultVariant?.variants.filter((variant: ProductVariantType) => variant.variant_type === 'size');
-      const sortedSizes = sizes && sortSizes(sizes);
-      sortedSizes && setCurrentSizes(sortedSizes);
+      // Set variant type data
+      productDrawerData.variants_selection_order?.map((variantType: string, index: number) => {
+        const data = defaultVariant?.variants.find((v: ProductVariantType) => v.variant_type === variantType);
+        selectedVariantTypeObj[index] = {
+          index,
+          type: data?.variant_type || '',
+          value: data?.value || '',
+          name: data?.name || '',
+        };
+      });
 
-      //Get First Size
-      sortedSizes && setSelectedSize(sortedSizes[0]);
-
-      //Set Currency
-      setCurrency(productDrawerData.currency);
+      setSelectedVariantType(selectedVariantTypeObj);
+      setSelectedVariantAttributes(selectedVariantTypeObj);
 
       // Get Images
       defaultVariant?.media && setCurrentImages(defaultVariant?.media);
@@ -67,130 +112,216 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
 
     setSelectedVariant(variant);
 
-    //Set  Color
-    const colorName = variant?.variants.find((variant: ProductVariantType) => variant.variant_type === 'color');
-    colorName?.name && setSelectedColor(colorName.name);
-
-    // Get Sizes
-    const sizes = variant?.variants.filter((variant: ProductVariantType) => variant.variant_type === 'size');
-    const sortedSizes = sizes && sortSizes(sizes);
-    sortedSizes && setCurrentSizes(sortedSizes);
-
-    // Check if prev selected size is available in new selected color
-    const prevSelectedSizeAvailable = variant?.variants.find(
-      (variant: ProductVariantType) => variant.value === selectedSize?.value,
-    );
-
-    prevSelectedSizeAvailable &&
-      prevSelectedSizeAvailable.available_stock &&
-      prevSelectedSizeAvailable?.available_stock > 0 &&
-      setSelectedSize(prevSelectedSizeAvailable);
-
     // Get Images
-    variant?.media && setCurrentImages(variant?.media);
+    variant?.media && setCurrentImages(variant.media);
 
     // Set Default Image
-    variant?.media[0].url && setSelectedImage(variant?.media[0].url);
+    variant?.media[0].url && setSelectedImage(variant.media[0].url);
+  };
+
+  const openARViewer = () => {
+    const redirectLink = process.env.REACT_APP_DOMAIN_NAME || '';
+    const somethingWentWrongText = 'Something went wrong';
+    const ModelFilename = ARPCUrls[productId as keyof typeof ARPCUrls]?.split('=')[1];
+
+    const anchor = document.createElement('a');
+
+    const detectedOs = getOpSys();
+
+    if (detectedOs === 'IOS') {
+      const fileDirectory = `${process.env.REACT_APP_DOMAIN_NAME}/` + ARIOSUrls[productId as keyof typeof ARIOSUrls];
+      anchor.setAttribute('rel', 'ar');
+      anchor.appendChild(document.createElement('img'));
+      anchor.setAttribute('href', fileDirectory + '#allowsContentScaling=0');
+      anchor.click();
+    } else if (detectedOs === 'Android') {
+      const fileDirectory =
+        `${process.env.REACT_APP_DOMAIN_NAME}/` + ARAndoirdUrls[productId as keyof typeof ARAndoirdUrls];
+      const fallbackUrl =
+        'https://arvr.google.com/scene-viewer?file=' +
+        encodeURIComponent(fileDirectory) +
+        '&link=' +
+        encodeURIComponent(redirectLink) +
+        '&title=' +
+        somethingWentWrongText +
+        '';
+
+      const intentConstruct =
+        '?file=' +
+        fileDirectory +
+        '&title=' +
+        ModelFilename +
+        '&mode=ar_preferred#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url=' +
+        fallbackUrl +
+        ';end;';
+
+      const sceneViewerUrl = 'intent://arvr.google.com/scene-viewer/1.0' + intentConstruct;
+
+      anchor.href = sceneViewerUrl;
+      anchor.appendChild(document.createElement('img'));
+      document.body.appendChild(anchor);
+      anchor.click();
+    } else {
+      setARViewerActive(true);
+    }
+  };
+  const getUniqueVariants = (productVariants: ProductVariant[]) => {
+    const uniqueVariantMap = new Map<string, ProductVariant>();
+
+    productVariants.forEach((productVariant) => {
+      productVariant.variants.forEach((variant) => {
+        const variantKey = `${variant.variant_type}:${variant.value}`;
+        const existingVariant = uniqueVariantMap.get(variantKey);
+
+        if (!existingVariant || (!existingVariant.in_stock && productVariant.in_stock)) {
+          // Add or replace the existing out-of-stock variant with the in-stock one
+          uniqueVariantMap.set(variantKey, productVariant);
+        }
+      });
+    });
+
+    // Use a Set to further ensure uniqueness based on the first variant value
+    const uniqueProductSet = new Set<string>();
+    const uniqueProductVariants: ProductVariant[] = [];
+
+    uniqueVariantMap.forEach((productVariant) => {
+      if (!uniqueProductSet.has(productVariant.variants[0].value)) {
+        uniqueProductSet.add(productVariant.variants[0].value);
+        uniqueProductVariants.push(productVariant);
+      }
+    });
+
+    return uniqueProductVariants;
+  };
+  const filterVariantsByParentVariantType = (parentVariantTypeIndex: number) =>
+    productDrawerData.variants.filter((variant) => {
+      const cond = Object.values(selectedVariantType).map((_, z) =>
+        parentVariantTypeIndex === selectedVariantType?.[z]?.index
+          ? true
+          : variant.variants[selectedVariantType?.[z]?.index]?.value === selectedVariantType?.[z]?.value,
+      );
+      return cond.every((c) => c);
+    });
+
+  const handleShare = async () => {
+    // const defaultVariant = productVariants.find((variant: ProductVariant) => variant.default);
+    const domain = `${process.env.REACT_APP_DOMAIN_NAME}/#/`;
+    const productUrl = domain + `viewer/${productId}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: productDrawerData.title,
+          text: 'Check out this product I found on Walmart Realm',
+          url: productUrl,
+        });
+      } catch (error) {
+        console.error('Error sharing content:', error);
+      }
+    } else {
+      handleCopy(productUrl);
+      toast({
+        title: `Link Copied`,
+        position: 'top',
+        status: 'success',
+        isClosable: true,
+      });
+    }
+  };
+
+  const onHandleVariantClick = (productVariant: ProductVariant, parentVariantTypeIndex: number) => {
+    const obj = {
+      [parentVariantTypeIndex]: {
+        index: parentVariantTypeIndex,
+        type: productVariant.variants[parentVariantTypeIndex].variant_type,
+        value: productVariant.variants[parentVariantTypeIndex].value,
+        name: productVariant.variants[parentVariantTypeIndex].name,
+      },
+    };
+    setSelectedVariantType(obj);
+    setSelectedVariantAttributes(obj);
+    updateVariant(productVariant);
+  };
+  const updateVariantTypeData = (prev: SelectedVariantTypeState, index: number, productVariant: ProductVariant) => {
+    const prevVal = { ...prev };
+
+    Object.keys(prevVal).forEach((key: string) => {
+      if (parseInt(key) > index) {
+        delete prevVal[parseInt(key)];
+      }
+    });
+
+    return {
+      ...prevVal,
+      [index]: {
+        index,
+        type: productVariant.variants[index].variant_type,
+        value: productVariant.variants[index].value,
+        name: productVariant.variants[index].name,
+      },
+    };
+  };
+  const onAddToCart = (data: CartItemProps) => {
+    setItemsCountToAdd(data.quantity);
+
+    const existingCart = localStorage.getItem('ct_cart');
+    if (existingCart === null) {
+      localStorage.setItem('ct_cart', JSON.stringify([data]));
+      setCartItems([data]);
+      onIframeCartChange([data]);
+    } else {
+      const _newCart = JSON.parse(existingCart);
+      const index = _newCart.findIndex((rec: CartItemProps) => rec.id === data.id);
+      if (index !== -1) {
+        _newCart[index].quantity += data.quantity;
+      } else {
+        _newCart.push(data);
+      }
+      localStorage.setItem('ct_cart', JSON.stringify(_newCart));
+      setCartItems(_newCart);
+      onIframeCartChange(_newCart);
+    }
+
+    setItemAddedToCart(true);
+  };
+
+  const onAddToCartClick = () => {
+    const cartImage = currentImages.find((currentImage: ProductMedia) => currentImage.bMain);
+
+    if (selectedVariant?.in_stock) {
+      const item: CartItemProps = {
+        id: selectedVariant?.variant_id ? selectedVariant?.variant_id : '',
+        imageSrc: cartImage?.url || '',
+        name: productDrawerData.title,
+        quantity: count,
+        price: selectedVariant?.retail_price || 0,
+        selectedVariantAttributes,
+      };
+
+      Object.keys(selectedVariantAttributes).forEach((key: string) => {
+        const formattedKey = selectedVariantAttributes[parseInt(key)].type.toLowerCase();
+        item[formattedKey] = selectedVariantAttributes[parseInt(key)].value;
+      });
+      onAddToCart(item);
+    }
   };
 
   return (
-    <Fragment>
-      <Box
-        as={Slide}
-        direction={width < 769 ? 'bottom' : 'left'}
-        in={active}
-        zIndex={['999', '999', '9999']}
-        position="fixed"
-        height="100vh"
-        maxW={['100%', '100%', 'calc(100vw - 448px)', 'calc(100vw - 448px)', 'calc(100vw - 512px)']}
-        display="flex"
-        flexDirection="column"
-        justifyContent="flex-end"
-        alignItems="flex-end"
-      >
-        <CrossIcon
-          display={['unset', 'unset', 'none']}
-          zIndex="25"
-          boxSize={4}
-          stroke="white"
-          position="absolute"
-          filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
-          top="15px"
-          right="15px"
-          cursor="pointer"
-          onClick={() => close()}
-        />
-
-        <Box width={['100%']} height={['-webkit-fill-available']} bg="transparent" onClick={close} />
-
-        <Box
-          width={['100%']}
-          height={['auto']}
-          background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
-          backdropFilter="blur(12px)"
-          display={['unset', 'unset', 'none']}
-          borderTopRadius="10px"
-        >
-          <Box borderBottom="1px solid white" width={['100%']} p={['5px']} display="flex" justifyContent="center">
-            <ChevronUpIcon cursor="pointer" color="white" boxSize={[8]} onClick={() => setMobileDrawerActive(true)} />
-          </Box>
-          <Box p="20px">
-            <Text fontFamily="Montserrat-Bold" fontSize={['20px']} color="white">
-              {productDrawerData?.title}
-            </Text>
-            <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white" mt={['5px']}>
-              {productDrawerData?.short_description}
-            </Text>
-            <Box display="flex" alignItems="center" gap={3}>
-              <Text fontFamily="Montserrat-Medium" fontSize={['18px']} color="black">
-                {`${currency} ${productDrawerData?.base_price}`}
-              </Text>
-              <Text fontFamily="Montserrat-Bold" fontSize={['18px']} color="black" textDecoration="line-through">
-                {`${currency} ${selectedVariant?.retail_price}`}
-              </Text>
-            </Box>
-          </Box>
-        </Box>
-      </Box>
-
+    <Fragment key={productId}>
+      <ArViewer pId={productId} active={ARViewerActive} close={() => setARViewerActive(false)} />
       <Drawer
-        isOpen={width < 769 ? mobileDrawerActive && active : active}
+        isOpen={active}
         placement={width < 769 ? 'bottom' : 'right'}
         onClose={close}
         size={['full', 'full', 'sm', 'sm', 'md']}
         autoFocus={false}
-        closeOnOverlayClick={false}
       >
+        <DrawerOverlay />
         <DrawerContent
           maxH={height}
           background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
           backdropFilter="blur(12px)"
-          boxShadow="-4px 0px 4px 0px rgba(0, 0, 0, 0.25)"
         >
-          <ChevronDownIcon
-            display={['unset', 'unset', 'none']}
-            zIndex="25"
-            boxSize={8}
-            color="white"
-            position="absolute"
-            top="15px"
-            right="15px"
-            cursor="pointer"
-            onClick={() => setMobileDrawerActive(false)}
-          />
-          <CrossIcon
-            display={['none', 'none', 'unset']}
-            zIndex="25"
-            boxSize={4}
-            stroke="white"
-            filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
-            position="absolute"
-            top="15px"
-            right="15px"
-            cursor="pointer"
-            onClick={() => close()}
-          />
-
           <DrawerBody
             padding="0px"
             style={{
@@ -198,11 +329,48 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
             }}
             overflowX="hidden"
           >
+            <Box
+              height="50px"
+              width="100%"
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              padding={['0px 20px']}
+            >
+              <Box onClick={() => openProductModal(productId)} height="100%" display="flex" alignItems="center">
+                {productIdTrail.length > 0 && <LeftArrow cursor="pointer" stroke="white" boxSize={4} />}
+              </Box>
+
+              {ARPCUrls[productId as keyof typeof ARPCUrls]?.length > 0 && (
+                <Button
+                  onClick={() => {
+                    openARViewer();
+                  }}
+                  leftIcon={<ArViewerIcon boxSize={[6]} />}
+                  variant="link"
+                  fontSize={['14px']}
+                  fontFamily="Montserrat-Bold"
+                  color="white"
+                >
+                  View in your space
+                </Button>
+              )}
+
+              <CrossIcon
+                cursor="pointer"
+                onClick={close}
+                boxSize={4}
+                stroke="white"
+                filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
+              />
+            </Box>
+
             <ImageSlider
-              turnTableUrl={productDrawerData?.turnTableURL}
+              turnTableUrl={turnTableUrl}
               highlightImage={selectedImage}
-              images={currentImages.map((currentImage: ProductMedia) => currentImage.url)}
+              images={getSorted(currentImages).map((currentImage: ProductMedia) => currentImage.url)}
               setHighLightImage={(image) => setSelectedImage(image)}
+              product={productDrawerData}
             />
             <Box
               h={['fit-content', 'fit-content', 'auto', 'auto', 'auto']}
@@ -213,160 +381,199 @@ function ProductDrawer({ productDrawerData, active, close }: ProductDrawerProps)
               p={['20px', '20px', '30px', '30px', '30px']}
             >
               <Box>
+                {productDrawerData?.brand && (
+                  <Text
+                    fontFamily="Montserrat"
+                    fontWeight="400"
+                    fontSize={['14px', '14px']}
+                    lineHeight={['18px', '18px']}
+                    letterSpacing="-0.02em"
+                    color="white"
+                    textAlign="left"
+                    mb="4"
+                  >
+                    {productDrawerData?.brand}
+                  </Text>
+                )}
                 {productDrawerData?.title && (
-                  <Text fontFamily="Montserrat-Bold" fontSize={['20px']} color="white">
+                  <Text
+                    fontFamily="Montserrat"
+                    fontWeight="700"
+                    fontSize={['18px', '18px']}
+                    lineHeight={['24px', '24px']}
+                    letterSpacing="-0.02em"
+                    color="white"
+                    textAlign="left"
+                    mb="4"
+                  >
                     {productDrawerData?.title}
                   </Text>
                 )}
-                {productDrawerData.short_description && (
-                  <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white" mt={['5px']}>
-                    {productDrawerData?.short_description}
-                  </Text>
+                {selectedVariant?.sale_price && (
+                  <Box display="flex" alignItems="center" justifyContent="space-between">
+                    <Text
+                      fontFamily="Montserrat"
+                      fontWeight="700"
+                      fontSize={['18px', '18px']}
+                      lineHeight={['24px', '24px']}
+                      letterSpacing="-0.02em"
+                      color="white"
+                      textAlign="left"
+                      mb="4"
+                    >
+                      {`$${
+                        Number(selectedVariant?.sale_price).toFixed(2) ||
+                        Number(productDrawerData?.base_price).toFixed(2)
+                      }`}
+                    </Text>
+                    <Button
+                      variant="link"
+                      leftIcon={<Share boxSize={['16px']} />}
+                      fontFamily="Montserrat"
+                      fontWeight="700"
+                      fontSize={['14px', '14px']}
+                      lineHeight={['18px', '18px']}
+                      letterSpacing="-0.02em"
+                      color="white"
+                      textAlign="left"
+                      onClick={handleShare}
+                    >
+                      Share
+                    </Button>
+                  </Box>
                 )}
-                <Box display="flex" justifyContent="space-between" alignItems="center" width={['85px']} mt={['5px']}>
-                  {selectedSize?.price && (
-                    <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white">
-                      {`${currency} ${selectedSize?.price}`}
-                    </Text>
+                <Divider />
+
+                {productDrawerData &&
+                  productDrawerData.variants_selection_order?.map(
+                    (variantType: string, index: number) =>
+                      (index === 0 ||
+                        (selectedVariantType?.[index - 1] &&
+                          filterVariantsByParentVariantType(index).length !== 0)) && (
+                        <Box
+                          key={variantType}
+                          mt={['20px', '20px', '20px', '20px', '20px']}
+                          height={['auto']}
+                          display="flex"
+                          flexDirection="column"
+                        >
+                          <Box display="flex" justifyContent="flex-start" alignItems="center">
+                            <Text
+                              fontFamily="Montserrat"
+                              fontWeight="700"
+                              fontSize={['14px', '14px', '14px', '14px', '14px']}
+                              lineHeight={['18px', '18px', '14px', '14px', '14px']}
+                              color="white"
+                              letterSpacing="-0.02em"
+                            >
+                              {variantType}:
+                            </Text>
+                            <Text
+                              ml={['5px']}
+                              fontFamily="Montserrat"
+                              fontSize={['14px', '14px', '14px', '14px', '14px']}
+                              lineHeight={['18px', '18px', '14px', '14px', '14px']}
+                              color="white"
+                              textTransform="capitalize"
+                              letterSpacing="-0.02em"
+                            >
+                              {selectedVariantAttributes[index]?.name || selectedVariantAttributes[index]?.value}
+                            </Text>
+                          </Box>
+
+                          <Box
+                            display="flex"
+                            overflowY={['hidden', 'hidden', 'hidden', 'hidden', 'hidden']}
+                            overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
+                            height={['60px', '60px', '70px', '70px', '70px']}
+                            w={['100%']}
+                            alignItems="center"
+                            justifyContent="flex-start"
+                            mt="10px"
+                          >
+                            {index === 0
+                              ? getUniqueVariants(productVariants)?.map((productVariant: ProductVariant) =>
+                                  productVariant.variants[index].variant_type === 'Color' ? (
+                                    <Swatch
+                                      key={productVariant.variant_id}
+                                      transition={transition}
+                                      active={
+                                        selectedVariantAttributes?.[index]?.value ===
+                                        productVariant.variants[index].value
+                                      }
+                                      colorName={
+                                        productVariant.color_swatch ||
+                                        productVariant.media.find((media) => media.media_type === 'PRIMARY')
+                                          ?.thumbnail_url ||
+                                        ''
+                                      }
+                                      available={productVariant?.in_stock || false}
+                                      onSwatchClick={() => onHandleVariantClick(productVariant, index)}
+                                    />
+                                  ) : (
+                                    <VariantItem
+                                      key={productVariant.variant_id}
+                                      active={
+                                        selectedVariantAttributes?.[index]?.value ===
+                                        productVariant.variants[index].value
+                                      }
+                                      transition={transition}
+                                      name={productVariant.variants?.[index]?.value ?? ''}
+                                      available={productVariant?.in_stock || false}
+                                      onClick={() => onHandleVariantClick(productVariant, index)}
+                                    />
+                                  ),
+                                )
+                              : filterVariantsByParentVariantType(index)?.map((productVariant) => {
+                                  return (
+                                    <VariantItem
+                                      key={productVariant.variant_id}
+                                      active={
+                                        selectedVariantAttributes?.[index]?.value ===
+                                        productVariant.variants[index].value
+                                      }
+                                      transition={transition}
+                                      name={
+                                        productVariant.variants?.[selectedVariantAttributes?.[index - 1]?.index + 1]
+                                          ?.value ?? ''
+                                      }
+                                      available={productVariant?.in_stock || false}
+                                      onClick={() => {
+                                        updateVariant(productVariant);
+                                        setSelectedVariantAttributes((prev: SelectedVariantTypeState) =>
+                                          updateVariantTypeData(prev, index, productVariant),
+                                        );
+                                        if (productDrawerData.variants_selection_order?.length - 1 !== index) {
+                                          setSelectedVariantType((prev: SelectedVariantTypeState) =>
+                                            updateVariantTypeData(prev, index, productVariant),
+                                          );
+                                        }
+                                      }}
+                                    />
+                                  );
+                                })}
+                          </Box>
+                        </Box>
+                      ),
                   )}
-                  {selectedVariant?.retail_price && (
-                    <Text fontFamily="Montserrat-Bold" fontSize={['14px']} color="white" textDecoration="line-through">
-                      {`${currency} ${selectedVariant?.retail_price}`}
-                    </Text>
-                  )}
-                </Box>
                 {productDrawerData?.long_description && (
                   <ParagraphWithSeeMore text={productDrawerData?.long_description} maxLines={3} />
-                )}
-
-                {/* Variant */}
-                {productVariants.length > 0 && (
-                  <Box
-                    mt={['15px', '15px', '20px', '20px', '20px']}
-                    height={['auto']}
-                    display="flex"
-                    flexDirection="column"
-                  >
-                    <Box display="flex" justifyContent="flex-start" alignItems="center">
-                      <Text
-                        fontFamily="Montserrat-Bold"
-                        fontSize={['13px', '13px', '14px', '14px', '14px']}
-                        color="white"
-                      >
-                        Variant:
-                      </Text>
-                      <Text
-                        ml={['5px']}
-                        fontFamily="Montserrat"
-                        fontSize={['13px', '13px', '14px', '14px', '14px']}
-                        color="white"
-                        textTransform="capitalize"
-                      >
-                        {selectedColor}
-                      </Text>
-                    </Box>
-
-                    <Box
-                      display="flex"
-                      overflowY={['hidden', 'hidden', 'hidden', 'hidden', 'hidden']}
-                      overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
-                      height={['40px', '40px', '50px', '50px', '50px']}
-                      w={['100%']}
-                      alignItems="center"
-                      justifyContent="flex-start"
-                    >
-                      {productVariants?.map((productVariant: ProductVariant) => (
-                        <Swatch
-                          key={productVariant.variant_id}
-                          transition={transition}
-                          active={selectedVariant?.color_swatch === productVariant.color_swatch}
-                          colorName={productVariant.color_swatch}
-                          available={productVariant.available_stock > 0}
-                          onSwatchClick={() => updateVariant(productVariant)}
-                        />
-                      ))}
-                    </Box>
-                  </Box>
-                )}
-
-                {/* Size */}
-                {currentSizes.length > 0 && (
-                  <Box
-                    mt={['15px', '15px', '20px', '20px', '20px']}
-                    height={['auto']}
-                    display="flex"
-                    flexDirection="column"
-                  >
-                    <Box display="flex" justifyContent="space-between" alignItems="center" width={['100%']}>
-                      <Text
-                        fontFamily="Montserrat-Bold"
-                        fontSize={['13px', '13px', '14px', '14px', '14px']}
-                        color="white"
-                      >
-                        Size:
-                      </Text>
-                      <Text
-                        fontFamily="Montserrat"
-                        fontSize={['13px', '13px', '14px', '14px', '14px']}
-                        color="white"
-                        textDecoration="underline"
-                        cursor="pointer"
-                        _hover={{ color: '#CCCCCC' }}
-                        transition={transition}
-                      >
-                        Size Guide
-                      </Text>
-                    </Box>
-
-                    <Box
-                      mt={['5px']}
-                      display="flex"
-                      flexWrap="wrap"
-                      overflowY={['hidden', 'hidden', 'hidden', 'hidden', 'hidden']}
-                      overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
-                      height={['auto']}
-                      w={['100%']}
-                      alignItems="center"
-                      justifyContent="flex-start"
-                    >
-                      {currentSizes?.map((size: ProductVariantType) => (
-                        <Size
-                          key={size.value}
-                          active={
-                            selectedSize?.value === size.value && size?.available_stock
-                              ? size?.available_stock > 0
-                              : false
-                          }
-                          transition={transition}
-                          sizeName={size.value}
-                          available={size?.available_stock ? size?.available_stock > 0 : false}
-                          onSizeClick={() => setSelectedSize(size)}
-                        />
-                      ))}
-                    </Box>
-                  </Box>
                 )}
               </Box>
             </Box>
           </DrawerBody>
-
-          <DrawerFooter p="0px">
-            <Box p={['20px', '20px', '20px', '30px', '30px']} width={['100%']}>
-              <Button
-                width={['100%']}
-                textTransform="uppercase"
-                fontFamily="Montserrat"
-                bg="rgba(0, 0, 0, 0.1)"
-                _hover={{ bg: 'rgba(0, 0, 0, 0.3)' }}
-                border="1px solid rgba(255, 255, 255, 0.80)"
-                boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25);"
-                backdropFilter="blur(12px)"
-                color="white"
-              >
-                Add To Bag
-              </Button>
-            </Box>
-          </DrawerFooter>
+          <PDPFooter
+            count={selectedVariant?.in_stock ? count : 0}
+            selectedVariantInStock={selectedVariant?.in_stock || false}
+            itemAddedToCart={itemAddedToCart}
+            itemsCountToAdd={itemsCountToAdd}
+            setItemAddedToCart={(state) => setItemAddedToCart(state)}
+            openCart={() => openCart()}
+            addToCart={() => onAddToCartClick()}
+            increaseCount={() => setCount((state) => ++state)}
+            decreaseCount={() => count > 0 && setCount((state) => --state)}
+            close={() => close()}
+          />
         </DrawerContent>
       </Drawer>
     </Fragment>

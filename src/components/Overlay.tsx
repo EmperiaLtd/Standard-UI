@@ -9,6 +9,8 @@ import Emperia from '../assets/images/Emperia.png';
 import OverlayInstruction from './common/OverlayInstruction';
 import { OverlayProps, TransformedOverlayData, RoomItem, SoundItem, OverlayElement, LanguageItem } from '../interfaces';
 import React from 'react';
+import { handleCopy } from '../utils/helper';
+import CartDrawer from './common/Cart';
 
 function Overlay({
   activeScene,
@@ -19,6 +21,10 @@ function Overlay({
   setActiveSound,
   overlayData,
   active,
+  cartActive,
+  cartItems,
+  setCartItems,
+  setCartActive,
 }: OverlayProps) {
   const transition = 'all 0.2s ease-in-out';
   const [audioActive, setAudioActive] = useState(false);
@@ -178,28 +184,6 @@ function Overlay({
     (overlayElement: TransformedOverlayData) => overlayElement.key === activeMenuOption,
   );
 
-  const handleCopy = async (text: string) => {
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-      } else {
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-          document.execCommand('copy');
-        } catch (err) {
-          console.error('Fallback: Oops, unable to copy', err);
-        }
-        document.body.removeChild(textArea);
-      }
-    } catch (err) {
-      console.error('Async: Could not copy text', err);
-    }
-  };
-
   const handleShare = async () => {
     const productUrl = window.location.href;
     if (navigator.share) {
@@ -222,6 +206,13 @@ function Overlay({
       });
     }
   };
+
+  useEffect(() => {
+    const cart = localStorage.getItem('wm_cart');
+    if (cart !== null) {
+      setCartItems(JSON.parse(cart));
+    }
+  }, []);
 
   return (
     <>
@@ -401,6 +392,8 @@ function Overlay({
           <Image src={Emperia} width={['80px', '80px', '100px']} />
         </Box>
       </Link>
+
+      <CartDrawer data={cartItems} active={cartActive} close={() => setCartActive(false)} setCartItems={setCartItems} />
     </>
   );
 }

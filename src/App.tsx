@@ -25,12 +25,14 @@ import {
   InfoData,
   ProductState,
   OverlayElementObject,
+  CartItemProps,
+  RoomItem,
 } from './interfaces';
 import React from 'react';
 
 const App = () => {
   const [activeLang, setActiveLang] = useState('en');
-  const [activeScene, setActiveScene] = useState('room_1');
+  const [activeScene, setActiveScene] = useState('');
   const [activeSound, setActiveSound] = useState('Sound 1');
   const [productDrawerLoading, setProductDrawerLoading] = useState(false);
   const [productDrawerData, setProductDrawerData] = useState<ProductState>({
@@ -49,7 +51,8 @@ const App = () => {
       age_group: '',
       default_url: '',
       tags: '',
-      base_price: '',
+      base_price: 0,
+      retail_price: 0,
       variants_selection_order: [],
       variants: [],
       turnTableURL: '',
@@ -97,6 +100,9 @@ const App = () => {
     data: {},
     active: false,
   });
+  const [productIdTrail, setProductIdTrail] = useState<string[]>([]);
+  const [cartActive, setCartActive] = useState<boolean>(false);
+  const [cartItems, setCartItems] = useState<CartItemProps[]>([]);
 
   const eventMap = {
     uiReady: () => onUIReady(),
@@ -131,6 +137,11 @@ const App = () => {
     if (overlayData) {
       delete overlayData.languages; // TODO: undo this later when the languages are ready
       delete overlayData.sounds; // TODO: undo this later when the sounds are ready
+    }
+    const room = overlayData?.changeRooms;
+    if (room && room?.content) {
+      const roomPPt = room.content[0] as RoomItem;
+      setActiveScene(roomPPt.scene || '');
     }
     setWelcomeData({ data: welcomeData, active: true });
     setInstructionsData({
@@ -227,11 +238,18 @@ const App = () => {
         activeScene={activeScene}
         activeLang={activeLang}
         activeSound={activeSound}
-        setActiveScene={(scene) => setActiveScene(scene)}
+        setActiveScene={(scene) => {
+          setActiveScene(scene);
+          window?.emperia?.experience?.krpano.call(`loadscene(${scene}, null, MERGE, BLEND(0.5));`);
+        }}
         setActiveLang={(lang) => changeLanguage(lang)}
         setActiveSound={(sound) => setActiveSound(sound)}
         overlayData={overlayData?.data}
         active={overlayData?.active}
+        cartActive={cartActive}
+        cartItems={cartItems}
+        setCartItems={setCartItems}
+        setCartActive={setCartActive}
       />
       <WelcomeScreen
         welcomeData={welcomeData?.data}
@@ -269,7 +287,17 @@ const App = () => {
           active={productDrawerData.active}
           close={() => {
             setProductDrawerData({ ...productDrawerData, active: false });
+            setProductIdTrail([]);
+            setProductDrawerData({ ...productDrawerData, active: false });
           }}
+          openCart={() => {
+            setCartActive(true);
+            setProductDrawerData({ ...productDrawerData, active: false });
+          }}
+          setCartItems={setCartItems}
+          openProductModal={openProductModal}
+          productIdTrail={productIdTrail}
+          productId={productDrawerData.data.parent_id}
         />
       )}
 
