@@ -80,8 +80,8 @@ function ProductDrawer({
       if (defaultVariant) {
         setSelectedVariant(defaultVariant);
         //Set Turntable Url
-        setTurnTableUrl(productDrawerData?.turnTableURL || turnTableUrls[productId as keyof typeof turnTableUrls]);
       }
+      setTurnTableUrl(productDrawerData?.turnTableURL || turnTableUrls[productId as keyof typeof turnTableUrls] || '');
 
       const selectedVariantTypeObj: SelectedVariantTypeState = {};
 
@@ -372,6 +372,7 @@ function ProductDrawer({
               setHighLightImage={(image) => setSelectedImage(image)}
               product={productDrawerData}
             />
+
             <Box
               h={['fit-content', 'fit-content', 'auto', 'auto', 'auto']}
               w={['100%', '100%', '100%', '100%', '100%']}

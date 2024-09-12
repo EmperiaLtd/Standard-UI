@@ -50,7 +50,7 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
   };
 
   const sliderImages: (string | React.ReactNode)[] = [
-    ...images,
+    ...(images ?? []),
     <Box
       key={'dynamicKey'}
       className="identify"
@@ -143,7 +143,7 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         </ChakraSlider>
       </Box>
     </Box>,
-  ];
+  ].filter((image) => image !== null);
 
   function isString(value: string | React.ReactNode): value is string {
     return typeof value === 'string';
@@ -176,6 +176,7 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
                     objectFit={['cover', 'contain', 'contain']}
                     objectPosition="top"
                     src={typeof image === 'string' ? image : ''}
+                    alt="product-image"
                   />
                 ) : (
                   image
