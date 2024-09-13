@@ -27,7 +27,7 @@ import React from 'react';
 import ParagraphWithSeeMore from './PDP/ParagraphWithSeeMore';
 import ArViewer from './PDP/ArViewer';
 import { LeftArrow } from '../Icons/LeftArrow';
-import { ARAndoirdUrls, ARIOSUrls, ARPCUrls, turnTableUrls } from '../fallbackData';
+import { ARAndoirdUrls, ARIOSUrls, ARPCUrls } from '../fallbackData';
 import { ArViewer as ArViewerIcon } from '../Icons/ArViewer';
 import { Share } from '../Icons/Share';
 import VariantItem from './PDP/VarientItem';
@@ -81,7 +81,7 @@ function ProductDrawer({
         setSelectedVariant(defaultVariant);
         //Set Turntable Url
       }
-      setTurnTableUrl(productDrawerData?.turnTableURL || turnTableUrls[productId as keyof typeof turnTableUrls] || '');
+      setTurnTableUrl(productDrawerData?.turnTableURL || '');
 
       const selectedVariantTypeObj: SelectedVariantTypeState = {};
 
@@ -364,14 +364,15 @@ function ProductDrawer({
                 filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
               />
             </Box>
-
-            <ImageSlider
-              turnTableUrl={turnTableUrl}
-              highlightImage={selectedImage}
-              images={getSorted(currentImages).map((currentImage: ProductMedia) => currentImage.url)}
-              setHighLightImage={(image) => setSelectedImage(image)}
-              product={productDrawerData}
-            />
+            {(turnTableUrl.length > 0 || currentImages.length > 0) && (
+              <ImageSlider
+                turnTableUrl={turnTableUrl}
+                highlightImage={selectedImage}
+                images={getSorted(currentImages).map((currentImage: ProductMedia) => currentImage.url)}
+                setHighLightImage={(image) => setSelectedImage(image)}
+                product={productDrawerData}
+              />
+            )}
 
             <Box
               h={['fit-content', 'fit-content', 'auto', 'auto', 'auto']}
@@ -411,39 +412,41 @@ function ProductDrawer({
                   </Text>
                 )}
                 {selectedVariant?.sale_price && (
-                  <Box display="flex" alignItems="center" justifyContent="space-between">
-                    <Text
-                      fontFamily="Montserrat"
-                      fontWeight="700"
-                      fontSize={['18px', '18px']}
-                      lineHeight={['24px', '24px']}
-                      letterSpacing="-0.02em"
-                      color="white"
-                      textAlign="left"
-                      mb="4"
-                    >
-                      {`$${
-                        Number(selectedVariant?.sale_price).toFixed(2) ||
-                        Number(productDrawerData?.base_price).toFixed(2)
-                      }`}
-                    </Text>
-                    <Button
-                      variant="link"
-                      leftIcon={<Share boxSize={['16px']} />}
-                      fontFamily="Montserrat"
-                      fontWeight="700"
-                      fontSize={['14px', '14px']}
-                      lineHeight={['18px', '18px']}
-                      letterSpacing="-0.02em"
-                      color="white"
-                      textAlign="left"
-                      onClick={handleShare}
-                    >
-                      Share
-                    </Button>
-                  </Box>
+                  <>
+                    <Box display="flex" alignItems="center" justifyContent="space-between">
+                      <Text
+                        fontFamily="Montserrat"
+                        fontWeight="700"
+                        fontSize={['18px', '18px']}
+                        lineHeight={['24px', '24px']}
+                        letterSpacing="-0.02em"
+                        color="white"
+                        textAlign="left"
+                        mb="4"
+                      >
+                        {`$${
+                          Number(selectedVariant?.sale_price).toFixed(2) ||
+                          Number(productDrawerData?.base_price).toFixed(2)
+                        }`}
+                      </Text>
+                      <Button
+                        variant="link"
+                        leftIcon={<Share boxSize={['16px']} />}
+                        fontFamily="Montserrat"
+                        fontWeight="700"
+                        fontSize={['14px', '14px']}
+                        lineHeight={['18px', '18px']}
+                        letterSpacing="-0.02em"
+                        color="white"
+                        textAlign="left"
+                        onClick={handleShare}
+                      >
+                        Share
+                      </Button>
+                    </Box>
+                    <Divider />
+                  </>
                 )}
-                <Divider />
 
                 {productDrawerData &&
                   productDrawerData.variants_selection_order?.map(
