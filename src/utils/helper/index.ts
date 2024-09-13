@@ -1,4 +1,4 @@
-import { ProductVariantType } from '../../interfaces';
+import { ProductMedia, ProductVariantType } from '../../interfaces';
 
 const ORDER = [
   'one size',
@@ -96,4 +96,55 @@ export const sortSizes = (sizes: ProductVariantType[]) => {
   });
 
   return sizes;
+};
+export const handleCopy = async (text: string) => {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+      } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+      }
+      document.body.removeChild(textArea);
+    }
+  } catch (err) {
+    console.error('Async: Could not copy text', err);
+  }
+};
+
+export const getOpSys = () => {
+  let os = '';
+
+  const userAgent = window.navigator.userAgent;
+  const platform = window.navigator.platform;
+  const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
+  const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
+  const iosPlatforms = ['iPhone', 'iPad', 'iPod'];
+
+  if (macosPlatforms.indexOf(platform) !== -1) {
+    os = 'Mac OS';
+  } else if (iosPlatforms.indexOf(platform) !== -1) {
+    os = 'IOS';
+  } else if (windowsPlatforms.indexOf(platform) !== -1) {
+    os = 'Windows';
+  } else if (/Android/.test(userAgent)) {
+    os = 'Android';
+  } else if (/Linux/.test(platform)) {
+    os = 'Linux';
+  }
+
+  return os;
+};
+
+export const getSorted = (images: ProductMedia[]) => {
+  return images.sort((a, b) => {
+    return a.bMain === b.bMain ? 0 : a.bMain ? -1 : 1;
+  });
 };

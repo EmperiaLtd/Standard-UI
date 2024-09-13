@@ -9,6 +9,10 @@ export interface OverlayProps {
   setActiveSound: (sound: string) => void;
   overlayData: OverlayElementObject;
   active: boolean;
+  cartActive: boolean;
+  cartItems: CartItemProps[];
+  setCartItems: (data: CartItemProps[]) => void;
+  setCartActive: (state: boolean) => void;
 }
 export interface TransformedOverlayData {
   height: string[];
@@ -157,6 +161,11 @@ export interface ProductDrawerProps {
   productDrawerData: ProductData;
   active: boolean;
   close: () => void;
+  productId: string;
+  openProductModal: (productId: string) => void;
+  productIdTrail: string[];
+  setCartItems: (data: CartItemProps[]) => void;
+  openCart: () => void;
 }
 
 export interface ProductState {
@@ -169,6 +178,7 @@ export interface ImageSliderProps {
   highlightImage: string;
   images: string[];
   setHighLightImage: (image: string) => void;
+  product?: ProductData;
 }
 
 export interface SizeProps {
@@ -202,14 +212,15 @@ export type ProductData = {
   age_group: string;
   default_url: string;
   tags: string;
-  base_price: string;
+  base_price: number;
   variants_selection_order: string[];
   variants: ProductVariant[];
   turnTableURL: string;
+  retail_price: number;
 };
 
 export type ProductVariant = {
-  default: boolean;
+  bDefault: boolean;
   variant_id: string;
   variant_sku: string;
   short_description: string;
@@ -223,8 +234,10 @@ export type ProductVariant = {
   three_dimension_model: {
     url: string;
   };
-  retail_price: string;
-  sale_price: string;
+  retail_price: number;
+  sale_price: number;
+  in_stock: boolean;
+  color_swatch_url: string | null;
 };
 
 export interface MediaPluginIntegrationItem {
@@ -251,7 +264,7 @@ export type MomentiItem = {
 
 export type ProductMedia = {
   url: string;
-  main: boolean;
+  bMain: boolean;
   thumbnail_url: string;
   media_type: string;
   mobile_version_url: string;
@@ -443,3 +456,42 @@ export type ProductItem = {
   price: number;
   quantity: number;
 };
+
+export interface ArViewerProps {
+  pId: string;
+  active: boolean;
+  close: () => void;
+}
+export interface SelectedVariantTypeState {
+  [key: number]: { index: number; type: string; value: string; name?: string };
+}
+export interface VariantItemProps {
+  active?: boolean;
+  transition: string;
+  name: string;
+  available: boolean;
+  onClick: () => void;
+}
+
+export interface CounterProps {
+  count: number;
+  available?: boolean;
+  onIncrease: () => void;
+  onDecrease: () => void;
+}
+export interface CartItemProps {
+  id: string;
+  name: string;
+  imageSrc: string;
+  price: number;
+  quantity: number;
+  brand?: string;
+  onItemRemove?: () => void;
+  updateCart?: (id: string, newQuantity: number) => void;
+  [key: string]: unknown;
+}
+
+export interface CommonProps {
+  active: boolean;
+  close: () => void;
+}

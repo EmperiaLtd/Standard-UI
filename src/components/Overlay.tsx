@@ -1,4 +1,4 @@
-import { Box, Image, Link, Text } from '@chakra-ui/react';
+import { Box, Image, Link, Text, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import MenuOption from './common/MenuOption';
 import RoomOption from './common/RoomOption';
@@ -9,6 +9,8 @@ import Emperia from '../assets/images/Emperia.png';
 import OverlayInstruction from './common/OverlayInstruction';
 import { OverlayProps, TransformedOverlayData, RoomItem, SoundItem, OverlayElement, LanguageItem } from '../interfaces';
 import React from 'react';
+import { handleCopy } from '../utils/helper';
+import CartDrawer from './common/Cart';
 
 function Overlay({
   activeScene,
@@ -19,12 +21,17 @@ function Overlay({
   setActiveSound,
   overlayData,
   active,
+  cartActive,
+  cartItems,
+  setCartItems,
+  setCartActive,
 }: OverlayProps) {
   const transition = 'all 0.2s ease-in-out';
   const [audioActive, setAudioActive] = useState(false);
   const [menuHovered, setMenuHovered] = useState(false);
   const [menuOptionHoveredOrActive, setMenuOptionHoveredOrActive] = useState('');
   const [activeMenuOption, setActiveMenuOption] = useState('');
+  const toast = useToast();
 
   const [transformedOverlayData, setTransformedOverlayData] = useState<TransformedOverlayData[]>();
 
@@ -177,6 +184,36 @@ function Overlay({
     (overlayElement: TransformedOverlayData) => overlayElement.key === activeMenuOption,
   );
 
+  const handleShare = async () => {
+    const productUrl = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Title',
+          text: 'Check out this space!',
+          url: productUrl,
+        });
+      } catch (error) {
+        console.error('Error sharing content:', error);
+      }
+    } else {
+      handleCopy(productUrl);
+      toast({
+        title: `Link Copied`,
+        position: 'top',
+        status: 'success',
+        isClosable: true,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const cart = localStorage.getItem('wm_cart');
+    if (cart !== null) {
+      setCartItems(JSON.parse(cart));
+    }
+  }, []);
+
   return (
     <>
       <Box
@@ -275,6 +312,8 @@ function Overlay({
                     setActiveMenuOption(updatedValue);
                   } else if (overlayElement.key === 'sound') {
                     setAudioActive(!audioActive);
+                  } else if (overlayElement.key === 'share') {
+                    handleShare();
                   } else {
                     setActiveMenuOption('');
                     console.log('Regular Click');
@@ -353,6 +392,8 @@ function Overlay({
           <Image src={Emperia} width={['80px', '80px', '100px']} />
         </Box>
       </Link>
+
+      <CartDrawer data={cartItems} active={cartActive} close={() => setCartActive(false)} setCartItems={setCartItems} />
     </>
   );
 }
