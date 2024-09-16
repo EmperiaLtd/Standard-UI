@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { Box, IconButton, Text } from '@chakra-ui/react';
 import HoldAndDrag from '../../assets/videos/HoldAndDrag.webm';
+import HoldAndDragSafari from '../../assets/videos/HoldAndDrag.mov';
 import TapToMove from '../../assets/videos/TapToMove.webm';
+import TapToMoveSafari from '../../assets/videos/TapToMove.mov';
 import ClickToOpen from '../../assets/videos/ClickToOpen.webm';
+import ClickToOpenSafari from '../../assets/videos/ClickToOpen.mov';
 import ReactPlayer from 'react-player';
 import Slider from 'react-slick';
 import { LeftStemArrow } from '../../Icons/LeftStemArrow';
@@ -11,7 +14,14 @@ import { OverlayInstructionsProps } from '../../interfaces';
 import React from 'react';
 
 function OverlayInstruction({ instructionsData }: OverlayInstructionsProps) {
-  const videos = [HoldAndDrag, TapToMove, ClickToOpen];
+  function isSafari() {
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  }
+  const videos = [
+    !isSafari() ? HoldAndDrag : HoldAndDragSafari,
+    !isSafari() ? TapToMove : TapToMoveSafari,
+    !isSafari() ? ClickToOpen : ClickToOpenSafari,
+  ];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [slider, setSlider] = useState<any>();

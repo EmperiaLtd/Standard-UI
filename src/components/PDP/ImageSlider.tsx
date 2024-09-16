@@ -50,7 +50,7 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
   };
 
   const sliderImages: (string | React.ReactNode)[] = [
-    ...images,
+    ...(images ?? []),
     <Box
       key={'dynamicKey'}
       className="identify"
@@ -143,7 +143,7 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         </ChakraSlider>
       </Box>
     </Box>,
-  ];
+  ].filter((image) => image !== null);
 
   function isString(value: string | React.ReactNode): value is string {
     return typeof value === 'string';
@@ -164,11 +164,9 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         position="relative"
       >
         <Slider ref={slider} {...settings}>
-          {turnTableUrl?.length > 0
-            ? sliderImages?.map((image: string | React.ReactNode, index: number) =>
-                !isString(image) ? (
-                  image
-                ) : (
+          {turnTableUrl.length > 0
+            ? sliderImages.map((image: string | React.ReactNode, index: number) =>
+                isString(image) ? (
                   <ChakraImage
                     key={index}
                     cursor="pointer"
@@ -178,10 +176,13 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
                     objectFit={['cover', 'contain', 'contain']}
                     objectPosition="top"
                     src={typeof image === 'string' ? image : ''}
+                    alt="product-image"
                   />
+                ) : (
+                  image
                 ),
               )
-            : images?.map((image: string, index: number) => (
+            : sliderImages.map((image: string | React.ReactNode, index: number) => (
                 <ChakraImage
                   key={index}
                   cursor="pointer"
@@ -190,7 +191,7 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
                   h={['400px', '450px', '470px', '470px', '550px']}
                   objectFit={['cover', 'contain', 'contain']}
                   objectPosition="top"
-                  src={image}
+                  src={image as string}
                 />
               ))}
         </Slider>

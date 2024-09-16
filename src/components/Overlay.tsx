@@ -1,4 +1,4 @@
-import { Box, Image, Link, Text } from '@chakra-ui/react';
+import { Box, Image, Link, Text, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import MenuOption from './common/MenuOption';
 import RoomOption from './common/RoomOption';
@@ -9,6 +9,9 @@ import Emperia from '../assets/images/Emperia.png';
 import OverlayInstruction from './common/OverlayInstruction';
 import { OverlayProps, TransformedOverlayData, RoomItem, SoundItem, OverlayElement, LanguageItem } from '../interfaces';
 import React from 'react';
+import { handleCopy } from '../utils/helper';
+import CartDrawer from './common/Cart';
+import { Cart } from '../Icons/Cart';
 
 function Overlay({
   activeScene,
@@ -19,12 +22,17 @@ function Overlay({
   setActiveSound,
   overlayData,
   active,
+  cartActive,
+  cartItems,
+  setCartItems,
+  setCartActive,
 }: OverlayProps) {
   const transition = 'all 0.2s ease-in-out';
   const [audioActive, setAudioActive] = useState(false);
   const [menuHovered, setMenuHovered] = useState(false);
   const [menuOptionHoveredOrActive, setMenuOptionHoveredOrActive] = useState('');
   const [activeMenuOption, setActiveMenuOption] = useState('');
+  const toast = useToast();
 
   const [transformedOverlayData, setTransformedOverlayData] = useState<TransformedOverlayData[]>();
 
@@ -177,6 +185,36 @@ function Overlay({
     (overlayElement: TransformedOverlayData) => overlayElement.key === activeMenuOption,
   );
 
+  const handleShare = async () => {
+    const productUrl = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Title',
+          text: 'Check out this space!',
+          url: productUrl,
+        });
+      } catch (error) {
+        console.error('Error sharing content:', error);
+      }
+    } else {
+      handleCopy(productUrl);
+      toast({
+        title: `Link Copied`,
+        position: 'top',
+        status: 'success',
+        isClosable: true,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const cart = localStorage.getItem('wm_cart');
+    if (cart !== null) {
+      setCartItems(JSON.parse(cart));
+    }
+  }, []);
+
   return (
     <>
       <Box
@@ -275,6 +313,8 @@ function Overlay({
                     setActiveMenuOption(updatedValue);
                   } else if (overlayElement.key === 'sound') {
                     setAudioActive(!audioActive);
+                  } else if (overlayElement.key === 'share') {
+                    handleShare();
                   } else {
                     setActiveMenuOption('');
                     console.log('Regular Click');
@@ -312,6 +352,47 @@ function Overlay({
           transition={transition}
         >
           {activeOverlayData?.content}
+        </Box>
+      </Box>
+
+      <Box
+        position="fixed"
+        top="0px"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        gap={5}
+        height={['60px', '60px', '70px', '70px', '70px']}
+        right={['20px', '20px', '40px', '60px', '100px']}
+      >
+        <Box
+          w="32px"
+          h="32px"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          zIndex="9"
+          onClick={() => {
+            setCartActive(true);
+          }}
+          cursor="pointer"
+          position="relative"
+        >
+          <Cart boxSize={[5, 5, 6]} />
+          <Text
+            color="white"
+            fontSize={['10px']}
+            fontFamily="Montserrat"
+            fontWeight="700"
+            position="absolute"
+            width="fit-content"
+            top="2px"
+            left="3px"
+            right="0px"
+            margin="auto"
+          >
+            {cartItems.length}
+          </Text>
         </Box>
       </Box>
 
@@ -353,6 +434,8 @@ function Overlay({
           <Image src={Emperia} width={['80px', '80px', '100px']} />
         </Box>
       </Link>
+
+      <CartDrawer data={cartItems} active={cartActive} close={() => setCartActive(false)} setCartItems={setCartItems} />
     </>
   );
 }
