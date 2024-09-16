@@ -382,12 +382,12 @@ function Overlay({
           <Text
             color="white"
             fontSize={['10px']}
-            fontFamily="Bogle"
+            fontFamily="Montserrat"
             fontWeight="700"
             position="absolute"
             width="fit-content"
             top="2px"
-            left="4px"
+            left="3px"
             right="0px"
             margin="auto"
           >
