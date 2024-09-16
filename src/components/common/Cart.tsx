@@ -134,14 +134,14 @@ function CartDrawer({ data, active, close, setCartItems }: CartDrawerProps) {
                 padding={['12px']}
                 borderRadius="40px"
                 border="1px solid #FFFFFF4D"
-                fontSize="18px"
+                fontSize={['18px', '18px']}
                 fontWeight="700"
-                fontFamily="Montserrat-Bold"
+                fontFamily="Montserrat"
                 bg="rgba(0, 0, 0, 0.1)"
                 _hover={{ bg: 'rgba(0, 0, 0, 0.3)' }}
                 cursor="pointer"
                 minW="240px"
-                height="50px"
+                h="44px"
                 pointerEvents="auto"
                 onClick={close}
               >
