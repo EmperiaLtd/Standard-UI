@@ -11,6 +11,7 @@ import { OverlayProps, TransformedOverlayData, RoomItem, SoundItem, OverlayEleme
 import React from 'react';
 import { handleCopy } from '../utils/helper';
 import CartDrawer from './common/Cart';
+import { Cart } from '../Icons/Cart';
 
 function Overlay({
   activeScene,
@@ -351,6 +352,47 @@ function Overlay({
           transition={transition}
         >
           {activeOverlayData?.content}
+        </Box>
+      </Box>
+
+      <Box
+        position="fixed"
+        top="0px"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        gap={5}
+        height={['60px', '60px', '70px', '70px', '70px']}
+        right={['20px', '20px', '40px', '60px', '100px']}
+      >
+        <Box
+          w="32px"
+          h="32px"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          zIndex="9"
+          onClick={() => {
+            setCartActive(true);
+          }}
+          cursor="pointer"
+          position="relative"
+        >
+          <Cart boxSize={[5, 5, 6]} />
+          <Text
+            color="white"
+            fontSize={['10px']}
+            fontFamily="Montserrat"
+            fontWeight="700"
+            position="absolute"
+            width="fit-content"
+            top="2px"
+            left="3px"
+            right="0px"
+            margin="auto"
+          >
+            {cartItems.length}
+          </Text>
         </Box>
       </Box>
 
