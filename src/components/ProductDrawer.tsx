@@ -14,7 +14,6 @@ import { Fragment, useEffect, useState } from 'react';
 import Swatch from './PDP/Swatch';
 import ImageSlider from './PDP/ImageSlider';
 import {
-  CartItemProps,
   ProductDrawerProps,
   ProductMedia,
   ProductVariant,
@@ -32,7 +31,6 @@ import { ArViewer as ArViewerIcon } from '../Icons/ArViewer';
 import { Share } from '../Icons/Share';
 import VariantItem from './PDP/VarientItem';
 import PDPFooter from './PDP/PDPFooter';
-import { onIframeCartChange } from '../utils/helper/cart';
 
 const selectedVariantTypeDefaultData: SelectedVariantTypeState = {
   0: {
@@ -49,7 +47,6 @@ function ProductDrawer({
   openProductModal,
   productIdTrail,
   openCart,
-  setCartItems,
 }: ProductDrawerProps) {
   const transition = 'all 0.2s ease-in-out';
   const { width, height } = useWindowDimensions();
@@ -58,7 +55,6 @@ function ProductDrawer({
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>();
   const [currentImages, setCurrentImages] = useState<ProductMedia[]>([]);
   const [itemAddedToCart, setItemAddedToCart] = useState<boolean>(false);
-  const [itemsCountToAdd, setItemsCountToAdd] = useState<number>(0);
   const [productVariants, setProductVariants] = useState<ProductVariant[]>([]);
   const [ARViewerActive, setARViewerActive] = useState(false);
   const [count, setCount] = useState<number>(1);
@@ -204,7 +200,6 @@ function ProductDrawer({
     });
 
   const handleShare = async () => {
-    // const defaultVariant = productVariants.find((variant: ProductVariant) => variant.default);
     const domain = `${process.env.REACT_APP_DOMAIN_NAME}/#/`;
     const productUrl = domain + `viewer/${productId}`;
 
@@ -213,13 +208,13 @@ function ProductDrawer({
         await navigator.share({
           title: productDrawerData.title,
           text: 'Check out this product I found on Walmart Realm',
-          url: productUrl,
+          url: productDrawerData.default_url || productUrl,
         });
       } catch (error) {
         console.error('Error sharing content:', error);
       }
     } else {
-      handleCopy(productUrl);
+      handleCopy(productDrawerData.default_url || productUrl);
       toast({
         title: `Link Copied`,
         position: 'top',
@@ -261,51 +256,10 @@ function ProductDrawer({
       },
     };
   };
-  const onAddToCart = (data: CartItemProps) => {
-    setItemsCountToAdd(data.quantity);
 
-    const existingCart = localStorage.getItem('ct_cart');
-    if (existingCart === null) {
-      localStorage.setItem('ct_cart', JSON.stringify([data]));
-      setCartItems([data]);
-      onIframeCartChange([data]);
-    } else {
-      const _newCart = JSON.parse(existingCart);
-      const index = _newCart.findIndex((rec: CartItemProps) => rec.id === data.id);
-      if (index !== -1) {
-        _newCart[index].quantity += data.quantity;
-      } else {
-        _newCart.push(data);
-      }
-      localStorage.setItem('ct_cart', JSON.stringify(_newCart));
-      setCartItems(_newCart);
-      onIframeCartChange(_newCart);
-    }
-
-    setItemAddedToCart(true);
+  const openLinkInNewTab = () => {
+    window.open(productDrawerData.default_url, '_blank');
   };
-
-  const onAddToCartClick = () => {
-    const cartImage = currentImages.find((currentImage: ProductMedia) => currentImage.bMain);
-
-    if (selectedVariant?.in_stock) {
-      const item: CartItemProps = {
-        id: selectedVariant?.variant_id ? selectedVariant?.variant_id : '',
-        imageSrc: cartImage?.url || '',
-        name: productDrawerData.title,
-        quantity: count,
-        price: selectedVariant?.retail_price || 0,
-        selectedVariantAttributes,
-      };
-
-      Object.keys(selectedVariantAttributes).forEach((key: string) => {
-        const formattedKey = selectedVariantAttributes[parseInt(key)].type.toLowerCase();
-        item[formattedKey] = selectedVariantAttributes[parseInt(key)].value;
-      });
-      onAddToCart(item);
-    }
-  };
-
   return (
     <Fragment key={productId}>
       <ArViewer pId={productId} active={ARViewerActive} close={() => setARViewerActive(false)} />
@@ -426,7 +380,8 @@ function ProductDrawer({
                       >
                         {`$${
                           Number(selectedVariant?.sale_price).toFixed(2) ||
-                          Number(productDrawerData?.base_price).toFixed(2)
+                          Number(productDrawerData?.base_price).toFixed(2) ||
+                          0
                         }`}
                       </Text>
                       <Button
@@ -570,10 +525,9 @@ function ProductDrawer({
             count={selectedVariant?.in_stock ? count : 0}
             selectedVariantInStock={selectedVariant?.in_stock || false}
             itemAddedToCart={itemAddedToCart}
-            itemsCountToAdd={itemsCountToAdd}
             setItemAddedToCart={(state) => setItemAddedToCart(state)}
             openCart={() => openCart()}
-            addToCart={() => onAddToCartClick()}
+            openLinkInNewTab={() => openLinkInNewTab()}
             increaseCount={() => setCount((state) => ++state)}
             decreaseCount={() => count > 0 && setCount((state) => --state)}
             close={() => close()}
