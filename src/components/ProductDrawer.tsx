@@ -365,7 +365,7 @@ function ProductDrawer({
                     {productDrawerData?.title}
                   </Text>
                 )}
-                {selectedVariant?.sale_price && (
+                {productDrawerData?.retail_price && (
                   <>
                     <Box display="flex" alignItems="center" justifyContent="space-between">
                       <Text
@@ -381,6 +381,7 @@ function ProductDrawer({
                         {`$${
                           Number(selectedVariant?.sale_price).toFixed(2) ||
                           Number(productDrawerData?.base_price).toFixed(2) ||
+                          Number(productDrawerData?.retail_price).toFixed(2) ||
                           0
                         }`}
                       </Text>
@@ -523,7 +524,7 @@ function ProductDrawer({
           </DrawerBody>
           <PDPFooter
             count={selectedVariant?.in_stock ? count : 0}
-            selectedVariantInStock={selectedVariant?.in_stock || false}
+            selectedVariantInStock={false}
             itemAddedToCart={itemAddedToCart}
             setItemAddedToCart={(state) => setItemAddedToCart(state)}
             openCart={() => openCart()}
