@@ -1,16 +1,13 @@
-import { DrawerFooter, Button, Text, Box } from '@chakra-ui/react';
+import { DrawerFooter, Button, Box } from '@chakra-ui/react';
 import React from 'react';
 import { CartPlus } from '../../Icons/CartPlus';
-import ProductCounter from './ProductCounter';
-
 interface PDPFooterProps {
   count: number;
   selectedVariantInStock: boolean;
   itemAddedToCart: boolean;
-  itemsCountToAdd: number;
   setItemAddedToCart: (state: boolean) => void;
   openCart: () => void;
-  addToCart: () => void;
+  openLinkInNewTab: () => void;
   increaseCount: () => void;
   decreaseCount: () => void;
   close: () => void;
@@ -20,12 +17,9 @@ function PDPFooter({
   count,
   selectedVariantInStock,
   itemAddedToCart,
-  itemsCountToAdd,
   setItemAddedToCart,
   openCart,
-  addToCart,
-  increaseCount,
-  decreaseCount,
+  openLinkInNewTab,
   close,
 }: PDPFooterProps) {
   return (
@@ -44,19 +38,6 @@ function PDPFooter({
           flexDir="column"
           padding="0px 24px"
         >
-          <Text
-            fontFamily="Montserrat"
-            fontWeight="700"
-            fontSize={['18px', '18px']}
-            lineHeight={['24px', '24px']}
-            letterSpacing="-0.02em"
-            color="white"
-            textAlign="left"
-            mb="8"
-          >
-            {itemsCountToAdd > 1 ? 'Items' : 'Item'} added to your cart
-          </Text>
-
           <Button
             variant="solid"
             color="white"
@@ -105,12 +86,6 @@ function PDPFooter({
         </Box>
       ) : (
         <Box width={['100%']} display="flex" gap={[4]}>
-          <ProductCounter
-            count={count}
-            available={selectedVariantInStock}
-            onDecrease={decreaseCount}
-            onIncrease={increaseCount}
-          />
           <Button
             leftIcon={<CartPlus boxSize={['24px']} />}
             variant="solid"
@@ -125,12 +100,12 @@ function PDPFooter({
             fontFamily="Montserrat"
             cursor="pointer"
             pointerEvents="auto"
-            w={['60%', '60%', '70%']}
+            w={['100%', '100%', '100%', '100%', '100%']}
             h="44px"
-            onClick={addToCart}
+            onClick={openLinkInNewTab}
             isDisabled={!selectedVariantInStock || count === 0}
           >
-            Add to cart
+            View Product
           </Button>
         </Box>
       )}
