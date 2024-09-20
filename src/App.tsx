@@ -134,7 +134,7 @@ const App = () => {
     const overlayData: OverlayElementObject =
       window.emperia?.data.ui.uiConfig['overlay'] || fallbackData.data.ui.uiConfig['overlay'];
     if (overlayData) {
-      // delete overlayData.changeRooms; // TODO: undo this later when the rooms are ready
+      delete overlayData.changeRooms; // TODO: undo this later when the rooms are ready
       delete overlayData.languages; // TODO: undo this later when the languages are ready
       delete overlayData.sounds; // TODO: undo this later when the sounds are ready
     }
