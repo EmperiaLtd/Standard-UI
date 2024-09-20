@@ -13,15 +13,7 @@ interface PDPFooterProps {
   close: () => void;
 }
 
-function PDPFooter({
-  count,
-  selectedVariantInStock,
-  itemAddedToCart,
-  setItemAddedToCart,
-  openCart,
-  openLinkInNewTab,
-  close,
-}: PDPFooterProps) {
+function PDPFooter({ itemAddedToCart, setItemAddedToCart, openCart, openLinkInNewTab, close }: PDPFooterProps) {
   return (
     <DrawerFooter
       p={['20px', '20px', '20px', '30px', '30px']}
@@ -103,7 +95,6 @@ function PDPFooter({
             w={['100%', '100%', '100%', '100%', '100%']}
             h="44px"
             onClick={openLinkInNewTab}
-            isDisabled={!selectedVariantInStock || count === 0}
           >
             View Product
           </Button>
