@@ -26,7 +26,7 @@ jobs:
           audience: 'sts.amazonaws.com'
           aws-region: ${{ secrets.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-
+      #  build the app and process the files for 1.1
       - name: Build TRS App
         run: |
           npm install && npm run build:development
@@ -37,9 +37,19 @@ jobs:
         run: |
           aws s3 sync build-copy/ s3://${{secrets.AWS_DEV_DOMAIN_NAME}}/Standard-UI/${{secrets.AWS_DEV_PATH}} --delete
 
+      #  build the app and process the files for latest
+      - name: Process files for latest
+        run: |
+          python process.py --domain https://${{secrets.AWS_DEV_DOMAIN_NAME}} --path Standard-UI/latest
+
+      - name: Deploy staging app build to S3 bucket
+        if: ${{ steps.extract_branch.outputs.branch == 'Development' }}
+        run: |
+          aws s3 sync build-copy/ s3://${{secrets.AWS_DEV_DOMAIN_NAME}}/Standard-UI/latest --delete
+
       #   add invalidation for cloudfront
       - name: invalidate Cloudfront configuration
         uses: chetan/invalidate-cloudfront-action@v2
         env:
-          DISTRIBUTION: ${{ secrets.DISTRIBUTION_STAGING }}
-          PATHS: '/Standard-UI/${{secrets.AWS_DEV_PATH}}/*'
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION_DEV }}
+          PATHS: '/Standard-UI/*'
