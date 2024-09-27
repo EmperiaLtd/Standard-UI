@@ -40,12 +40,12 @@ jobs:
       #  build the app and process the files for latest
       - name: Process files for latest
         run: |
-          python process.py --domain https://${{secrets.AWS_DEV_DOMAIN_NAME}} --path Standard-UI/latest
+          python process.py --domain https://${{secrets.AWS_DEV_DOMAIN_NAME}} --path Standard-UI/${{secrets.AWS_DEV_LATEST_PATH}}
 
       - name: Deploy staging app build to S3 bucket
         if: ${{ steps.extract_branch.outputs.branch == 'Development' }}
         run: |
-          aws s3 sync build-copy/ s3://${{secrets.AWS_DEV_DOMAIN_NAME}}/Standard-UI/latest --delete
+          aws s3 sync build-copy/ s3://${{secrets.AWS_DEV_DOMAIN_NAME}}/Standard-UI/${{secrets.AWS_DEV_LATEST_PATH}} --delete
 
       #   add invalidation for cloudfront
       - name: invalidate Cloudfront configuration
