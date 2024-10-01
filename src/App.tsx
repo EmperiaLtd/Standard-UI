@@ -240,7 +240,22 @@ const App = () => {
         activeSound={activeSound}
         setActiveScene={(scene) => {
           setActiveScene(scene);
-          window?.emperia?.experience?.krpano.call(`loadscene(${scene}, null, MERGE, BLEND(0.5));`);
+          // window?.emperia?.experience?.krpano.call(`loadscene(${scene}, null, MERGE, BLEND(0.5));`);
+
+          const iframe = document.getElementById('experience-container') as HTMLIFrameElement;
+
+          if (iframe) {
+            const iframeWindow = iframe.contentWindow;
+            if (iframeWindow) {
+              iframeWindow.postMessage(
+                {
+                  type: 'loadScene',
+                  scene,
+                },
+                '*',
+              );
+            }
+          }
         }}
         setActiveLang={(lang) => changeLanguage(lang)}
         setActiveSound={(sound) => setActiveSound(sound)}
