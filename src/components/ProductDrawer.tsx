@@ -351,7 +351,7 @@ function ProductDrawer({
                     {productDrawerData?.brand}
                   </Text>
                 )}
-                {productDrawerData?.title && (
+                {(productDrawerData?.title || selectedVariant?.short_description) && (
                   <Text
                     fontFamily="Montserrat"
                     fontWeight="700"
@@ -362,10 +362,10 @@ function ProductDrawer({
                     textAlign="left"
                     mb="4"
                   >
-                    {productDrawerData?.title}
+                    {selectedVariant?.short_description || productDrawerData?.title}
                   </Text>
                 )}
-                {productDrawerData?.retail_price && (
+                {(productDrawerData?.base_price || productDrawerData.retail_price) && (
                   <>
                     <Box display="flex" alignItems="center" justifyContent="space-between">
                       <Text
@@ -517,7 +517,10 @@ function ProductDrawer({
                       ),
                   )}
                 {productDrawerData?.long_description && (
-                  <ParagraphWithSeeMore text={productDrawerData?.long_description} maxLines={3} />
+                  <ParagraphWithSeeMore
+                    text={selectedVariant?.long_description || productDrawerData?.long_description || ''}
+                    maxLines={3}
+                  />
                 )}
               </Box>
             </Box>
