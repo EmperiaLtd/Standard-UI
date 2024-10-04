@@ -173,7 +173,7 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
                     loading="lazy"
                     width={['100%', '100%', '100%', '100%', '100%']}
                     h={['400px', '450px', '470px', '470px', '550px']}
-                    objectFit={['cover', 'contain', 'contain']}
+                    objectFit={['cover', 'cover', 'cover']}
                     objectPosition="top"
                     src={typeof image === 'string' ? image : ''}
                     alt="product-image"
@@ -189,7 +189,7 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
                   loading="lazy"
                   width={['100%', '100%', '100%', '100%', '100%']}
                   h={['400px', '450px', '470px', '470px', '550px']}
-                  objectFit={['cover', 'contain', 'contain']}
+                  objectFit={['cover', 'cover', 'cover']}
                   objectPosition="top"
                   src={image as string}
                 />
