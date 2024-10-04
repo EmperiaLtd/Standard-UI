@@ -217,6 +217,7 @@ export type ProductData = {
   variants: ProductVariant[];
   turnTableURL: string;
   retail_price: number;
+  imageURLs: string[];
 };
 
 export type ProductVariant = {
@@ -227,7 +228,7 @@ export type ProductVariant = {
   long_description: string;
   variants: ProductVariantType[];
   available_stock: number;
-  media: ProductMedia[];
+  imageURLs: string[];
   media_plugin_integration: MediaPluginIntegrationItem[];
   color_swatch: string;
   momenti_url: MomentiItem;
@@ -255,19 +256,12 @@ export type ProductVariantType = {
   price?: string;
   available_stock?: number;
   variant_sku?: string;
+  imageURLs?: string[];
 };
 
 export type MomentiItem = {
   url: string;
   sound_effect: boolean;
-};
-
-export type ProductMedia = {
-  url: string;
-  bMain: boolean;
-  thumbnail_url: string;
-  media_type: string;
-  mobile_version_url: string;
 };
 
 // SDK Interfaces

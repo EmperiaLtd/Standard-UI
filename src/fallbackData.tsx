@@ -124,6 +124,11 @@ export const fallbackData: FallBackData = {
             tags: '',
             base_price: 399,
             variants_selection_order: ['size', 'color'],
+            imageURLs: [
+              'https://picsum.photos/802/802',
+              'https://picsum.photos/902/902',
+              'https://picsum.photos/1002/1002',
+            ],
             turnTableURL:
               'https://walmart.emperia-staging.com/assets/4c769101-b9e7-475b-b5a4-47499d4619f1/public/media/images/3DDE7110_1000x1000_36_imagesheet.png',
             variants: [
@@ -140,6 +145,7 @@ export const fallbackData: FallBackData = {
                     name: 'Color 1',
                     variant_type: 'color',
                     value: '#ff0000',
+                    imageURLs: ['https://picsum.photos/800/800', 'https://picsum.photos/900/900'],
                   },
                   {
                     variant_type: 'size',
@@ -147,6 +153,7 @@ export const fallbackData: FallBackData = {
                     price: '399',
                     available_stock: 10,
                     variant_sku: '000112A',
+                    imageURLs: ['https://picsum.photos/800/800', 'https://picsum.photos/900/900'],
                   },
                   {
                     variant_type: 'size',
@@ -154,6 +161,7 @@ export const fallbackData: FallBackData = {
                     price: '399',
                     available_stock: 10,
                     variant_sku: '000112B',
+                    imageURLs: ['https://picsum.photos/800/800', 'https://picsum.photos/900/900'],
                   },
                   {
                     variant_type: 'size',
@@ -161,6 +169,7 @@ export const fallbackData: FallBackData = {
                     price: '399',
                     available_stock: 0,
                     variant_sku: '000112C',
+                    imageURLs: ['https://picsum.photos/800/800', 'https://picsum.photos/900/900'],
                   },
                   {
                     variant_type: 'size',
@@ -168,31 +177,14 @@ export const fallbackData: FallBackData = {
                     price: '399',
                     available_stock: 10,
                     variant_sku: '000112D',
+                    imageURLs: ['https://picsum.photos/800/800', 'https://picsum.photos/900/900'],
                   },
                 ],
                 available_stock: 100,
-                media: [
-                  {
-                    url: 'https://picsum.photos/800/800',
-                    bMain: true,
-                    thumbnail_url: 'https://picsum.photos/800/800',
-                    media_type: 'image',
-                    mobile_version_url: 'https://picsum.photos/800/800',
-                  },
-                  {
-                    url: 'https://picsum.photos/900/900',
-                    bMain: false,
-                    thumbnail_url: 'https://picsum.photos/900/900',
-                    media_type: 'image',
-                    mobile_version_url: 'https://picsum.photos/900/900',
-                  },
-                  {
-                    url: 'https://picsum.photos/1000/1000',
-                    bMain: false,
-                    thumbnail_url: 'https://picsum.photos/1000/1000',
-                    media_type: 'image',
-                    mobile_version_url: 'https://picsum.photos/1000/1000',
-                  },
+                imageURLs: [
+                  'https://picsum.photos/800/800',
+                  'https://picsum.photos/900/900',
+                  'https://picsum.photos/1000/1000',
                 ],
                 media_plugin_integration: [],
                 color_swatch: '#ff0000',
@@ -250,28 +242,10 @@ export const fallbackData: FallBackData = {
                   },
                 ],
                 available_stock: 100,
-                media: [
-                  {
-                    url: 'https://picsum.photos/802/802',
-                    bMain: true,
-                    thumbnail_url: 'https://picsum.photos/802/802',
-                    media_type: 'image',
-                    mobile_version_url: 'https://picsum.photos/802/802',
-                  },
-                  {
-                    url: 'https://picsum.photos/902/902',
-                    bMain: false,
-                    thumbnail_url: 'https://picsum.photos/902/902',
-                    media_type: 'image',
-                    mobile_version_url: 'https://picsum.photos/902/902',
-                  },
-                  {
-                    url: 'https://picsum.photos/1002/1002',
-                    bMain: false,
-                    thumbnail_url: 'https://picsum.photos/1002/1002',
-                    media_type: 'image',
-                    mobile_version_url: 'https://picsum.photos/1002/1002',
-                  },
+                imageURLs: [
+                  'https://picsum.photos/802/802',
+                  'https://picsum.photos/902/902',
+                  'https://picsum.photos/1002/1002',
                 ],
                 media_plugin_integration: [],
                 color_swatch: '#00ddff',
@@ -329,28 +303,10 @@ export const fallbackData: FallBackData = {
                   },
                 ],
                 available_stock: 100,
-                media: [
-                  {
-                    url: 'https://picsum.photos/801/801',
-                    bMain: true,
-                    thumbnail_url: 'https://picsum.photos/801/801',
-                    media_type: 'image',
-                    mobile_version_url: 'https://picsum.photos/801/801',
-                  },
-                  {
-                    url: 'https://picsum.photos/901/901',
-                    bMain: false,
-                    thumbnail_url: 'https://picsum.photos/901/901',
-                    media_type: 'image',
-                    mobile_version_url: 'https://picsum.photos/901/901',
-                  },
-                  {
-                    url: 'https://picsum.photos/1001/1001',
-                    bMain: false,
-                    thumbnail_url: 'https://picsum.photos/1001/1001',
-                    media_type: 'image',
-                    mobile_version_url: 'https://picsum.photos/1001/1001',
-                  },
+                imageURLs: [
+                  'https://picsum.photos/803/803',
+                  'https://picsum.photos/903/903',
+                  'https://picsum.photos/1003/1003',
                 ],
                 media_plugin_integration: [],
                 color_swatch: '#0c0c0c',

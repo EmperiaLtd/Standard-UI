@@ -56,6 +56,7 @@ const App = () => {
       variants_selection_order: [],
       variants: [],
       turnTableURL: '',
+      imageURLs: [],
     },
     active: false,
   });
