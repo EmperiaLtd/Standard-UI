@@ -77,11 +77,18 @@ function ProductDrawer({
         };
       });
 
-      // Get Images
-      setCurrentImages(productDrawerData.imageURLs);
+      if (productDrawerData.imageURLs) {
+        // Get Images
+        setCurrentImages(productDrawerData.imageURLs);
 
-      // Set Default Image
-      setSelectedImage(productDrawerData.imageURLs[0]);
+        // Set Default Image
+        setSelectedImage(productDrawerData.imageURLs[0]);
+      }
+
+      if (defaultVariant.media && defaultVariant.media.length > 0) {
+        setCurrentImages(defaultVariant.media.map((m) => m.url));
+        setSelectedImage(defaultVariant.media[0].url);
+      }
     }
   }, [productDrawerData]);
 
@@ -90,10 +97,18 @@ function ProductDrawer({
     setSelectedVariantType(variant);
     setIsVariantUpdate(true);
     setSelectedVariant(sVariant);
-    // Get Images
-    variant?.imageURLs && setCurrentImages(variant.imageURLs);
-    // Set Default Image
-    variant && variant?.imageURLs && setSelectedImage(variant?.imageURLs[0]);
+
+    if (sVariant?.imageURLs && sVariant.imageURLs.length > 0) {
+      // Get Images
+      variant?.imageURLs && setCurrentImages(variant.imageURLs);
+      // Set Default Image
+      variant && variant?.imageURLs && setSelectedImage(variant?.imageURLs[0]);
+    }
+
+    if (sVariant?.media && sVariant.media.length > 0) {
+      setCurrentImages(sVariant.media.map((m) => m.url));
+      setSelectedImage(sVariant.media[0].url);
+    }
   };
 
   const openARViewer = () => {
@@ -369,7 +384,11 @@ function ProductDrawer({
                               <Swatch
                                 key={i}
                                 colorName={variant.value}
-                                available={variant.available_stock! > 0 || false}
+                                available={
+                                  (selectedVariant?.available_stock && selectedVariant?.available_stock > 0) ||
+                                  variant.available_stock! > 0 ||
+                                  false
+                                }
                                 active={selectedVariant?.variant_sku === variant.variant_sku}
                                 transition={transition}
                                 onSwatchClick={() => {
@@ -378,7 +397,11 @@ function ProductDrawer({
                               />
                             ) : (
                               <VariantItem
-                                available={variant.available_stock! > 0 || false}
+                                available={
+                                  (selectedVariant?.available_stock && selectedVariant?.available_stock > 0) ||
+                                  variant.available_stock! > 0 ||
+                                  false
+                                }
                                 key={i}
                                 name={variant.value || ''}
                                 active={selectedVariant?.variant_sku === variant.variant_sku}
