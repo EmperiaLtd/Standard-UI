@@ -220,6 +220,14 @@ export type ProductData = {
   imageURLs: string[];
 };
 
+export type ProductVariantMedia = {
+  url: string;
+  bMain: boolean;
+  thumbnail_url: string;
+  media_type: string;
+  mobile_version_url: string;
+};
+
 export type ProductVariant = {
   bDefault: boolean;
   variant_id: string;
@@ -239,6 +247,7 @@ export type ProductVariant = {
   sale_price: number;
   in_stock: boolean;
   color_swatch_url: string | null;
+  media?: ProductVariantMedia[];
 };
 
 export interface MediaPluginIntegrationItem {
