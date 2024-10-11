@@ -37,8 +37,17 @@ jobs:
         run: |
           aws s3 sync build-copy/ s3://${{secrets.AWS_STAGING_DOMAIN_NAME}}/Standard-UI/${{secrets.AWS_STAGING_PATH}} --delete
 
+      - name: Process files for latest
+        run: |
+          python process.py --domain https://${{secrets.AWS_STAGING_DOMAIN_NAME}} --path Standard-UI/${{secrets.AWS_STAGING_LATEST_PATH}}
+
+      - name: Deploy staging app build to S3 bucket
+        if: ${{ steps.extract_branch.outputs.branch == 'Staging' }}
+        run: |
+          aws s3 sync build-copy/ s3://${{secrets.AWS_STAGING_DOMAIN_NAME}}/Standard-UI/${{secrets.AWS_STAGING_LATEST_PATH}} --delete
+
       - name: invalidate Cloudfront configuration
         uses: chetan/invalidate-cloudfront-action@v2
         env:
           DISTRIBUTION: ${{ secrets.DISTRIBUTION_STAGING }}
-          PATHS: '/Standard-UI/${{secrets.AWS_STAGING_PATH}}/*'
+          PATHS: '/Standard-UI/*'

@@ -1,4 +1,4 @@
-import { ProductMedia, ProductVariantType } from '../../interfaces';
+import { ProductVariantType } from '../../interfaces';
 
 const ORDER = [
   'one size',
@@ -141,10 +141,4 @@ export const getOpSys = () => {
   }
 
   return os;
-};
-
-export const getSorted = (images: ProductMedia[]) => {
-  return images.sort((a, b) => {
-    return a.bMain === b.bMain ? 0 : a.bMain ? -1 : 1;
-  });
 };

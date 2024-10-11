@@ -26,6 +26,7 @@ import {
   ProductState,
   OverlayElementObject,
   CartItemProps,
+  RoomItem,
 } from './interfaces';
 import React from 'react';
 
@@ -55,6 +56,7 @@ const App = () => {
       variants_selection_order: [],
       variants: [],
       turnTableURL: '',
+      imageURLs: [],
     },
     active: false,
   });
@@ -134,15 +136,14 @@ const App = () => {
     const overlayData: OverlayElementObject =
       window.emperia?.data.ui.uiConfig['overlay'] || fallbackData.data.ui.uiConfig['overlay'];
     if (overlayData) {
-      delete overlayData.changeRooms; // TODO: undo this later when the rooms are ready
       delete overlayData.languages; // TODO: undo this later when the languages are ready
       delete overlayData.sounds; // TODO: undo this later when the sounds are ready
     }
-    // const room = overlayData?.changeRooms;
-    // if (room && room?.content) {
-    //   const roomPPt = room.content[0] as RoomItem;
-    //   setActiveScene(roomPPt.scene || '');
-    // }
+    const room = overlayData?.changeRooms;
+    if (room && room?.content) {
+      const roomPPt = room.content[0] as RoomItem;
+      setActiveScene(roomPPt.scene || '');
+    }
     setWelcomeData({ data: welcomeData, active: true });
     setInstructionsData({
       data: instructionsData,
@@ -240,7 +241,19 @@ const App = () => {
         activeSound={activeSound}
         setActiveScene={(scene) => {
           setActiveScene(scene);
-          window?.emperia?.experience?.krpano.call(`loadscene(${scene}, null, MERGE, BLEND(0.5));`);
+          const iframe = document.getElementById('experience-container') as HTMLIFrameElement;
+          if (iframe) {
+            const iframeWindow = iframe.contentWindow;
+            if (iframeWindow) {
+              iframeWindow.postMessage(
+                {
+                  type: 'loadScene',
+                  scene,
+                },
+                '*',
+              );
+            }
+          }
         }}
         setActiveLang={(lang) => changeLanguage(lang)}
         setActiveSound={(sound) => setActiveSound(sound)}

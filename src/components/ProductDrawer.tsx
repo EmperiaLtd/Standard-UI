@@ -13,15 +13,8 @@ import { CrossIcon } from '../Icons/CrossIcon';
 import { Fragment, useEffect, useState } from 'react';
 import Swatch from './PDP/Swatch';
 import ImageSlider from './PDP/ImageSlider';
-import {
-  CartItemProps,
-  ProductDrawerProps,
-  ProductMedia,
-  ProductVariant,
-  ProductVariantType,
-  SelectedVariantTypeState,
-} from '../interfaces';
-import { getOpSys, getSorted, handleCopy } from '../utils/helper';
+import { ProductDrawerProps, ProductVariant, ProductVariantType, SelectedVariantTypeState } from '../interfaces';
+import { getOpSys, handleCopy } from '../utils/helper';
 import useWindowDimensions from '../utils/hooks/useWindowDimensions';
 import React from 'react';
 import ParagraphWithSeeMore from './PDP/ParagraphWithSeeMore';
@@ -32,15 +25,7 @@ import { ArViewer as ArViewerIcon } from '../Icons/ArViewer';
 import { Share } from '../Icons/Share';
 import VariantItem from './PDP/VarientItem';
 import PDPFooter from './PDP/PDPFooter';
-import { onIframeCartChange } from '../utils/helper/cart';
 
-const selectedVariantTypeDefaultData: SelectedVariantTypeState = {
-  0: {
-    index: 0,
-    type: '',
-    value: '',
-  },
-};
 function ProductDrawer({
   productId,
   productDrawerData,
@@ -49,24 +34,20 @@ function ProductDrawer({
   openProductModal,
   productIdTrail,
   openCart,
-  setCartItems,
 }: ProductDrawerProps) {
   const transition = 'all 0.2s ease-in-out';
   const { width, height } = useWindowDimensions();
 
   const [selectedImage, setSelectedImage] = useState('');
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>();
-  const [currentImages, setCurrentImages] = useState<ProductMedia[]>([]);
+  const [currentImages, setCurrentImages] = useState<string[]>([]);
   const [itemAddedToCart, setItemAddedToCart] = useState<boolean>(false);
-  const [itemsCountToAdd, setItemsCountToAdd] = useState<number>(0);
   const [productVariants, setProductVariants] = useState<ProductVariant[]>([]);
   const [ARViewerActive, setARViewerActive] = useState(false);
   const [count, setCount] = useState<number>(1);
-  const [selectedVariantAttributes, setSelectedVariantAttributes] =
-    useState<SelectedVariantTypeState>(selectedVariantTypeDefaultData);
-  const [selectedVariantType, setSelectedVariantType] =
-    useState<SelectedVariantTypeState>(selectedVariantTypeDefaultData);
   const [turnTableUrl, setTurnTableUrl] = useState('');
+  const [isVariantUpdate, setIsVariantUpdate] = useState(false);
+  const [selectedVariantType, setSelectedVariantType] = useState<ProductVariantType>();
 
   const toast = useToast();
   useEffect(() => {
@@ -96,27 +77,38 @@ function ProductDrawer({
         };
       });
 
-      setSelectedVariantType(selectedVariantTypeObj);
-      setSelectedVariantAttributes(selectedVariantTypeObj);
+      if (productDrawerData.imageURLs) {
+        // Get Images
+        setCurrentImages(productDrawerData.imageURLs);
 
-      // Get Images
-      defaultVariant?.media && setCurrentImages(defaultVariant?.media);
+        // Set Default Image
+        setSelectedImage(productDrawerData.imageURLs[0]);
+      }
 
-      // Set Default Image
-      defaultVariant?.media[0].url && setSelectedImage(defaultVariant?.media[0].url);
+      if (defaultVariant.media && defaultVariant.media.length > 0) {
+        setCurrentImages(defaultVariant.media.map((m) => m.url));
+        setSelectedImage(defaultVariant.media[0].url);
+      }
     }
   }, [productDrawerData]);
 
-  const updateVariant = (variant: ProductVariant) => {
-    if (selectedVariant === variant) return;
+  const updateVariant = (variant: ProductVariantType) => {
+    const sVariant = productVariants.find((v) => v.variants.some((v) => v.variant_sku === variant.variant_sku));
+    setSelectedVariantType(variant);
+    setIsVariantUpdate(true);
+    setSelectedVariant(sVariant);
 
-    setSelectedVariant(variant);
+    if (sVariant?.imageURLs && sVariant.imageURLs.length > 0) {
+      // Get Images
+      variant?.imageURLs && setCurrentImages(variant.imageURLs);
+      // Set Default Image
+      variant && variant?.imageURLs && setSelectedImage(variant?.imageURLs[0]);
+    }
 
-    // Get Images
-    variant?.media && setCurrentImages(variant.media);
-
-    // Set Default Image
-    variant?.media[0].url && setSelectedImage(variant.media[0].url);
+    if (sVariant?.media && sVariant.media.length > 0) {
+      setCurrentImages(sVariant.media.map((m) => m.url));
+      setSelectedImage(sVariant.media[0].url);
+    }
   };
 
   const openARViewer = () => {
@@ -165,46 +157,8 @@ function ProductDrawer({
       setARViewerActive(true);
     }
   };
-  const getUniqueVariants = (productVariants: ProductVariant[]) => {
-    const uniqueVariantMap = new Map<string, ProductVariant>();
-
-    productVariants.forEach((productVariant) => {
-      productVariant.variants.forEach((variant) => {
-        const variantKey = `${variant.variant_type}:${variant.value}`;
-        const existingVariant = uniqueVariantMap.get(variantKey);
-
-        if (!existingVariant || (!existingVariant.in_stock && productVariant.in_stock)) {
-          // Add or replace the existing out-of-stock variant with the in-stock one
-          uniqueVariantMap.set(variantKey, productVariant);
-        }
-      });
-    });
-
-    // Use a Set to further ensure uniqueness based on the first variant value
-    const uniqueProductSet = new Set<string>();
-    const uniqueProductVariants: ProductVariant[] = [];
-
-    uniqueVariantMap.forEach((productVariant) => {
-      if (!uniqueProductSet.has(productVariant.variants[0].value)) {
-        uniqueProductSet.add(productVariant.variants[0].value);
-        uniqueProductVariants.push(productVariant);
-      }
-    });
-
-    return uniqueProductVariants;
-  };
-  const filterVariantsByParentVariantType = (parentVariantTypeIndex: number) =>
-    productDrawerData.variants.filter((variant) => {
-      const cond = Object.values(selectedVariantType).map((_, z) =>
-        parentVariantTypeIndex === selectedVariantType?.[z]?.index
-          ? true
-          : variant.variants[selectedVariantType?.[z]?.index]?.value === selectedVariantType?.[z]?.value,
-      );
-      return cond.every((c) => c);
-    });
 
   const handleShare = async () => {
-    // const defaultVariant = productVariants.find((variant: ProductVariant) => variant.default);
     const domain = `${process.env.REACT_APP_DOMAIN_NAME}/#/`;
     const productUrl = domain + `viewer/${productId}`;
 
@@ -213,13 +167,13 @@ function ProductDrawer({
         await navigator.share({
           title: productDrawerData.title,
           text: 'Check out this product I found on Walmart Realm',
-          url: productUrl,
+          url: productDrawerData.default_url || productUrl,
         });
       } catch (error) {
         console.error('Error sharing content:', error);
       }
     } else {
-      handleCopy(productUrl);
+      handleCopy(productDrawerData.default_url || productUrl);
       toast({
         title: `Link Copied`,
         position: 'top',
@@ -229,82 +183,34 @@ function ProductDrawer({
     }
   };
 
-  const onHandleVariantClick = (productVariant: ProductVariant, parentVariantTypeIndex: number) => {
-    const obj = {
-      [parentVariantTypeIndex]: {
-        index: parentVariantTypeIndex,
-        type: productVariant.variants[parentVariantTypeIndex].variant_type,
-        value: productVariant.variants[parentVariantTypeIndex].value,
-        name: productVariant.variants[parentVariantTypeIndex].name,
-      },
-    };
-    setSelectedVariantType(obj);
-    setSelectedVariantAttributes(obj);
-    updateVariant(productVariant);
+  const openLinkInNewTab = () => {
+    window.open(productDrawerData.default_url, '_blank');
   };
-  const updateVariantTypeData = (prev: SelectedVariantTypeState, index: number, productVariant: ProductVariant) => {
-    const prevVal = { ...prev };
 
-    Object.keys(prevVal).forEach((key: string) => {
-      if (parseInt(key) > index) {
-        delete prevVal[parseInt(key)];
-      }
+  function groupVariants(variantsObj: ProductVariant[]) {
+    const groupedVariants = {} as Record<string, ProductVariantType[]>;
+
+    // Loop through the main variants array (variantsObj)
+    variantsObj.forEach((product) => {
+      // Access the nested variants array for each product
+      const nestedVariants = product.variants;
+
+      // Loop through each nested variant to group them by their variant_type
+      nestedVariants.forEach((variant) => {
+        const variantType = variant.variant_type;
+
+        // If the variantType is not already a key in groupedVariants, initialize it as an array
+        if (!groupedVariants[variantType]) {
+          groupedVariants[variantType] = [];
+        }
+
+        // Push the variant into the corresponding group
+        groupedVariants[variantType].push(variant);
+      });
     });
 
-    return {
-      ...prevVal,
-      [index]: {
-        index,
-        type: productVariant.variants[index].variant_type,
-        value: productVariant.variants[index].value,
-        name: productVariant.variants[index].name,
-      },
-    };
-  };
-  const onAddToCart = (data: CartItemProps) => {
-    setItemsCountToAdd(data.quantity);
-
-    const existingCart = localStorage.getItem('ct_cart');
-    if (existingCart === null) {
-      localStorage.setItem('ct_cart', JSON.stringify([data]));
-      setCartItems([data]);
-      onIframeCartChange([data]);
-    } else {
-      const _newCart = JSON.parse(existingCart);
-      const index = _newCart.findIndex((rec: CartItemProps) => rec.id === data.id);
-      if (index !== -1) {
-        _newCart[index].quantity += data.quantity;
-      } else {
-        _newCart.push(data);
-      }
-      localStorage.setItem('ct_cart', JSON.stringify(_newCart));
-      setCartItems(_newCart);
-      onIframeCartChange(_newCart);
-    }
-
-    setItemAddedToCart(true);
-  };
-
-  const onAddToCartClick = () => {
-    const cartImage = currentImages.find((currentImage: ProductMedia) => currentImage.bMain);
-
-    if (selectedVariant?.in_stock) {
-      const item: CartItemProps = {
-        id: selectedVariant?.variant_id ? selectedVariant?.variant_id : '',
-        imageSrc: cartImage?.url || '',
-        name: productDrawerData.title,
-        quantity: count,
-        price: selectedVariant?.retail_price || 0,
-        selectedVariantAttributes,
-      };
-
-      Object.keys(selectedVariantAttributes).forEach((key: string) => {
-        const formattedKey = selectedVariantAttributes[parseInt(key)].type.toLowerCase();
-        item[formattedKey] = selectedVariantAttributes[parseInt(key)].value;
-      });
-      onAddToCart(item);
-    }
-  };
+    return groupedVariants;
+  }
 
   return (
     <Fragment key={productId}>
@@ -368,7 +274,7 @@ function ProductDrawer({
               <ImageSlider
                 turnTableUrl={turnTableUrl}
                 highlightImage={selectedImage}
-                images={getSorted(currentImages).map((currentImage: ProductMedia) => currentImage.url)}
+                images={currentImages}
                 setHighLightImage={(image) => setSelectedImage(image)}
                 product={productDrawerData}
               />
@@ -397,7 +303,7 @@ function ProductDrawer({
                     {productDrawerData?.brand}
                   </Text>
                 )}
-                {productDrawerData?.title && (
+                {(productDrawerData?.title || selectedVariant?.short_description) && (
                   <Text
                     fontFamily="Montserrat"
                     fontWeight="700"
@@ -408,10 +314,10 @@ function ProductDrawer({
                     textAlign="left"
                     mb="4"
                   >
-                    {productDrawerData?.title}
+                    {isVariantUpdate ? selectedVariant?.short_description : productDrawerData?.title}
                   </Text>
                 )}
-                {selectedVariant?.sale_price && (
+                {(productDrawerData?.base_price || productDrawerData.retail_price) && (
                   <>
                     <Box display="flex" alignItems="center" justifyContent="space-between">
                       <Text
@@ -424,9 +330,16 @@ function ProductDrawer({
                         textAlign="left"
                         mb="4"
                       >
-                        {`$${
-                          Number(selectedVariant?.sale_price).toFixed(2) ||
-                          Number(productDrawerData?.base_price).toFixed(2)
+                        {`
+                        ${productDrawerData.currency || '$'}
+                        
+                        ${
+                          isVariantUpdate
+                            ? Number(selectedVariantType?.price).toFixed(2) ||
+                              Number(selectedVariant?.sale_price).toFixed(2)
+                            : Number(productDrawerData?.base_price).toFixed(2) ||
+                              Number(productDrawerData?.retail_price).toFixed(2) ||
+                              0
                         }`}
                       </Text>
                       <Button
@@ -447,133 +360,82 @@ function ProductDrawer({
                     <Divider />
                   </>
                 )}
-
-                {productDrawerData &&
-                  productDrawerData.variants_selection_order?.map(
-                    (variantType: string, index: number) =>
-                      (index === 0 ||
-                        (selectedVariantType?.[index - 1] &&
-                          filterVariantsByParentVariantType(index).length !== 0)) && (
-                        <Box
-                          key={variantType}
-                          mt={['20px', '20px', '20px', '20px', '20px']}
-                          height={['auto']}
-                          display="flex"
-                          flexDirection="column"
+                {productDrawerData?.variants_selection_order &&
+                  productDrawerData?.variants_selection_order.length > 0 &&
+                  productDrawerData?.variants_selection_order.map((variantType, index) => {
+                    const groupedVariants = groupVariants(productDrawerData.variants);
+                    return (
+                      <Box key={index} mb="4" mt={['20px', '20px', '20px', '20px', '20px']}>
+                        <Text
+                          fontFamily="Montserrat"
+                          fontWeight="700"
+                          fontSize={['14px', '14px']}
+                          lineHeight={['18px', '18px']}
+                          letterSpacing="-0.02em"
+                          color="white"
+                          textAlign="left"
+                          mb="2"
                         >
-                          <Box display="flex" justifyContent="flex-start" alignItems="center">
-                            <Text
-                              fontFamily="Montserrat"
-                              fontWeight="700"
-                              fontSize={['14px', '14px', '14px', '14px', '14px']}
-                              lineHeight={['18px', '18px', '14px', '14px', '14px']}
-                              color="white"
-                              letterSpacing="-0.02em"
-                            >
-                              {variantType}:
-                            </Text>
-                            <Text
-                              ml={['5px']}
-                              fontFamily="Montserrat"
-                              fontSize={['14px', '14px', '14px', '14px', '14px']}
-                              lineHeight={['18px', '18px', '14px', '14px', '14px']}
-                              color="white"
-                              textTransform="capitalize"
-                              letterSpacing="-0.02em"
-                            >
-                              {selectedVariantAttributes[index]?.name || selectedVariantAttributes[index]?.value}
-                            </Text>
-                          </Box>
-
-                          <Box
-                            display="flex"
-                            overflowY={['hidden', 'hidden', 'hidden', 'hidden', 'hidden']}
-                            overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
-                            height={['60px', '60px', '70px', '70px', '70px']}
-                            w={['100%']}
-                            alignItems="center"
-                            justifyContent="flex-start"
-                            mt="10px"
-                          >
-                            {index === 0
-                              ? getUniqueVariants(productVariants)?.map((productVariant: ProductVariant) =>
-                                  productVariant.variants[index].variant_type === 'Color' ? (
-                                    <Swatch
-                                      key={productVariant.variant_id}
-                                      transition={transition}
-                                      active={
-                                        selectedVariantAttributes?.[index]?.value ===
-                                        productVariant.variants[index].value
-                                      }
-                                      colorName={
-                                        productVariant.color_swatch ||
-                                        productVariant.media.find((media) => media.media_type === 'PRIMARY')
-                                          ?.thumbnail_url ||
-                                        ''
-                                      }
-                                      available={productVariant?.in_stock || false}
-                                      onSwatchClick={() => onHandleVariantClick(productVariant, index)}
-                                    />
-                                  ) : (
-                                    <VariantItem
-                                      key={productVariant.variant_id}
-                                      active={
-                                        selectedVariantAttributes?.[index]?.value ===
-                                        productVariant.variants[index].value
-                                      }
-                                      transition={transition}
-                                      name={productVariant.variants?.[index]?.value ?? ''}
-                                      available={productVariant?.in_stock || false}
-                                      onClick={() => onHandleVariantClick(productVariant, index)}
-                                    />
-                                  ),
-                                )
-                              : filterVariantsByParentVariantType(index)?.map((productVariant) => {
-                                  return (
-                                    <VariantItem
-                                      key={productVariant.variant_id}
-                                      active={
-                                        selectedVariantAttributes?.[index]?.value ===
-                                        productVariant.variants[index].value
-                                      }
-                                      transition={transition}
-                                      name={
-                                        productVariant.variants?.[selectedVariantAttributes?.[index - 1]?.index + 1]
-                                          ?.value ?? ''
-                                      }
-                                      available={productVariant?.in_stock || false}
-                                      onClick={() => {
-                                        updateVariant(productVariant);
-                                        setSelectedVariantAttributes((prev: SelectedVariantTypeState) =>
-                                          updateVariantTypeData(prev, index, productVariant),
-                                        );
-                                        if (productDrawerData.variants_selection_order?.length - 1 !== index) {
-                                          setSelectedVariantType((prev: SelectedVariantTypeState) =>
-                                            updateVariantTypeData(prev, index, productVariant),
-                                          );
-                                        }
-                                      }}
-                                    />
-                                  );
-                                })}
-                          </Box>
+                          {variantType}
+                        </Text>
+                        <Box display="flex" flexWrap="wrap">
+                          {groupedVariants[variantType].map((variant, i) =>
+                            variantType === 'Color' ? (
+                              <Swatch
+                                key={i}
+                                colorName={variant.value}
+                                available={
+                                  (selectedVariant?.available_stock && selectedVariant?.available_stock > 0) ||
+                                  variant.available_stock! > 0 ||
+                                  false
+                                }
+                                active={selectedVariant?.variant_sku === variant.variant_sku}
+                                transition={transition}
+                                onSwatchClick={() => {
+                                  updateVariant(variant);
+                                }}
+                              />
+                            ) : (
+                              <VariantItem
+                                available={
+                                  (selectedVariant?.available_stock && selectedVariant?.available_stock > 0) ||
+                                  variant.available_stock! > 0 ||
+                                  false
+                                }
+                                key={i}
+                                name={variant.value || ''}
+                                active={selectedVariant?.variant_sku === variant.variant_sku}
+                                transition={transition}
+                                onClick={() => {
+                                  updateVariant(variant);
+                                }}
+                              />
+                            ),
+                          )}
                         </Box>
-                      ),
-                  )}
-                {productDrawerData?.long_description && (
-                  <ParagraphWithSeeMore text={productDrawerData?.long_description} maxLines={3} />
+                      </Box>
+                    );
+                  })}
+                {(productDrawerData?.long_description || selectedVariant?.long_description) && (
+                  <ParagraphWithSeeMore
+                    text={
+                      isVariantUpdate
+                        ? (selectedVariant?.long_description as string)
+                        : productDrawerData?.long_description || ''
+                    }
+                    maxLines={3}
+                  />
                 )}
               </Box>
             </Box>
           </DrawerBody>
           <PDPFooter
             count={selectedVariant?.in_stock ? count : 0}
-            selectedVariantInStock={selectedVariant?.in_stock || false}
+            selectedVariantInStock={false}
             itemAddedToCart={itemAddedToCart}
-            itemsCountToAdd={itemsCountToAdd}
             setItemAddedToCart={(state) => setItemAddedToCart(state)}
             openCart={() => openCart()}
-            addToCart={() => onAddToCartClick()}
+            openLinkInNewTab={() => openLinkInNewTab()}
             increaseCount={() => setCount((state) => ++state)}
             decreaseCount={() => count > 0 && setCount((state) => --state)}
             close={() => close()}
