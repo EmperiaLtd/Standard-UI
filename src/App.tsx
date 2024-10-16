@@ -1,5 +1,5 @@
 // Components
-import { ChakraProvider, Spinner } from '@chakra-ui/react';
+import { ChakraProvider, Spinner, useToast } from '@chakra-ui/react';
 import Overlay from './components/Overlay';
 import WelcomeScreen from './components/WelcomeScreen';
 import InfoDrawer from './components/InfoDrawer';
@@ -35,6 +35,7 @@ const App = () => {
   const [activeScene, setActiveScene] = useState('');
   const [activeSound, setActiveSound] = useState('Sound 1');
   const [productDrawerLoading, setProductDrawerLoading] = useState(false);
+  const toast = useToast();
   const [productDrawerData, setProductDrawerData] = useState<ProductState>({
     data: {
       parent_id: '',
@@ -112,17 +113,7 @@ const App = () => {
     openProduct: (productVariantId: string) => openProductModal(productVariantId),
     OpenInfo: (infoModalId: string) => openInfoModal(infoModalId),
     updateLanguage: () => updateLanguage(),
-    OpenPDP: (productVariantId: string) => {
-      setProductDrawerLoading(true);
-      setTimeout(() => {
-        setProductDrawerLoading(false);
-        const productData =
-          window.emperia?.data.ui.pdpModels.find((i) => i.id == productVariantId)?.pdpModel ||
-          fallbackData.data.ui.pdpModels[0].pdpModel;
-        if (!productData) return;
-        setProductDrawerData({ data: productData, active: true });
-      }, 2000);
-    },
+    OpenPDP: (productVariantId: string) => openProductModal(productVariantId),
     OpenCustomModel: (customModelId: string) => {
       console.log(customModelId);
     },
@@ -160,14 +151,34 @@ const App = () => {
 
   const openProductModal = (productVariantId: string) => {
     setProductDrawerLoading(true);
-
     setTimeout(() => {
       setProductDrawerLoading(false);
       const productData =
-        window.emperia?.data.ui.pdpModels.find((i) => i.id === productVariantId)?.pdpModel ||
-        fallbackData.data.ui.pdpModels.find((i) => i.id === productVariantId)?.pdpModel;
+        window.emperia?.data.ui.pdpModels.find((i) => i.id == productVariantId)?.pdpModel ||
+        fallbackData.data.ui.pdpModels[0].pdpModel;
       if (!productData) return;
-      setProductDrawerData({ data: productData, active: true });
+      if (
+        productData.title ||
+        productData.turnTableURL ||
+        (productData.imageURLs.length && productData.imageURLs[0]) ||
+        productData.short_description ||
+        productData.long_description ||
+        (productData.variants &&
+          productData.variants.length &&
+          productData.variants[0].short_description &&
+          productData.variants[0].long_description)
+      ) {
+        setProductDrawerData({ data: productData, active: true });
+        return;
+      } else {
+        toast({
+          title: 'Product is currently out of stock',
+          description: 'This product is currently out of stock. Please try again later.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     }, 2000);
   };
 
