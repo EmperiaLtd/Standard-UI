@@ -51,81 +51,42 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
 
   const sliderImages: (string | React.ReactNode)[] = [
     ...(images ?? []),
-    <Box
-      key={'dynamicKey'}
-      className="identify"
-      display="flex !important"
-      position="relative"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      cursor="pointer"
-      width={['100%', '100%', '100%', '100%', '100%']}
-      h={['400px', '450px', '470px', '470px', '550px']}
-      gap={5}
-    >
+    turnTableUrl ? (
       <Box
-        display="flex"
+        key={'dynamicKey'}
+        className="identify"
+        display="flex !important"
+        position="relative"
+        flexDirection="column"
+        justifyContent="center"
         alignItems="center"
-        gap={2}
-        width="fit-content"
-        position="absolute"
-        padding="10px 20px"
-        left="0px"
-        right="0px"
-        bottom={['20px', '20px', '30px', '30px', '30px']}
-        margin="0 auto"
+        cursor="pointer"
+        width={['100%', '100%', '100%', '100%', '100%']}
+        h={['400px', '450px', '470px', '470px', '550px']}
+        gap={5}
       >
-        <ThreeDView fill="white" boxSize={[8]} />
-        <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white" zIndex="100">
-          Drag To Rotate
-        </Text>
-      </Box>
-      <ChakraSlider
-        width={['100%']}
-        min={0}
-        max={100}
-        step={2.77777777778}
-        defaultValue={imageNo}
-        onChange={(value) => {
-          if (value === 0) {
-            setImageNo(0);
-          } else {
-            const finalValue = Math.trunc(value / 2.77777777778) + 1;
-            setImageNo(finalValue);
-          }
-        }}
-      >
-        <SliderTrack
-          bg="transparent"
-          h={['400px', '450px', '470px', '470px', '550px']}
+        <Box
           display="flex"
-          justifyContent="center"
           alignItems="center"
+          gap={2}
+          width="fit-content"
+          position="absolute"
+          padding="10px 20px"
+          left="0px"
+          right="0px"
+          bottom={['20px', '20px', '30px', '30px', '30px']}
+          margin="0 auto"
         >
-          <ChakraImage
-            loading="eager"
-            objectFit="contain"
-            transform={'scale(1.3)'}
-            src={`${turnTableUrl}?frame=${imageNo}&width=400`}
-            height={['auto']}
-            maxHeight={['300px', '350px', '350px', '350px', '400px']}
-            width={['100%']}
-          />
-        </SliderTrack>
-      </ChakraSlider>
-
-      <Box
-        position="absolute"
-        bottom={['0px', '0px', '10px', '10px', '10px']}
-        width={['60%', '200px', '200px', '200px', '200px']}
-      >
+          <ThreeDView fill="white" boxSize={[8]} />
+          <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white" zIndex="100">
+            Drag To Rotate
+          </Text>
+        </Box>
         <ChakraSlider
           width={['100%']}
           min={0}
           max={100}
           step={2.77777777778}
-          value={imageNo * 2.77777777778}
           defaultValue={imageNo}
           onChange={(value) => {
             if (value === 0) {
@@ -136,13 +97,54 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
             }
           }}
         >
-          <SliderTrack bg="blackAlpha.300" height="10px" borderRadius="30px">
-            <SliderFilledTrack bg="blackAlpha.500" />
+          <SliderTrack
+            bg="transparent"
+            h={['400px', '450px', '470px', '470px', '550px']}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <ChakraImage
+              loading="eager"
+              objectFit="contain"
+              transform={'scale(1.3)'}
+              src={`${turnTableUrl}?frame=${imageNo}&width=400`}
+              height={['auto']}
+              maxHeight={['300px', '350px', '350px', '350px', '400px']}
+              width={['100%']}
+            />
           </SliderTrack>
-          <SliderThumb boxSize={4} />
         </ChakraSlider>
+
+        <Box
+          position="absolute"
+          bottom={['0px', '0px', '10px', '10px', '10px']}
+          width={['60%', '200px', '200px', '200px', '200px']}
+        >
+          <ChakraSlider
+            width={['100%']}
+            min={0}
+            max={100}
+            step={2.77777777778}
+            value={imageNo * 2.77777777778}
+            defaultValue={imageNo}
+            onChange={(value) => {
+              if (value === 0) {
+                setImageNo(0);
+              } else {
+                const finalValue = Math.trunc(value / 2.77777777778) + 1;
+                setImageNo(finalValue);
+              }
+            }}
+          >
+            <SliderTrack bg="blackAlpha.300" height="10px" borderRadius="30px">
+              <SliderFilledTrack bg="blackAlpha.500" />
+            </SliderTrack>
+            <SliderThumb boxSize={4} />
+          </ChakraSlider>
+        </Box>
       </Box>
-    </Box>,
+    ) : null,
   ].filter((image) => image !== null);
 
   function isString(value: string | React.ReactNode): value is string {
