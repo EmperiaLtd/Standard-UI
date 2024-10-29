@@ -98,11 +98,17 @@ function ProductDrawer({
     setIsVariantUpdate(true);
     setSelectedVariant(sVariant);
 
+    if (variant?.imageURLs && variant.imageURLs.length > 0) {
+      // Get Images
+      setCurrentImages(variant.imageURLs);
+      // Set Default Image
+      setSelectedImage(variant?.imageURLs[0]);
+    }
     if (sVariant?.imageURLs && sVariant.imageURLs.length > 0) {
       // Get Images
-      variant?.imageURLs && setCurrentImages(variant.imageURLs);
+      setCurrentImages(sVariant.imageURLs);
       // Set Default Image
-      variant && variant?.imageURLs && setSelectedImage(variant?.imageURLs[0]);
+      setSelectedImage(sVariant?.imageURLs[0]);
     }
 
     if (sVariant?.media && sVariant.media.length > 0) {
@@ -212,6 +218,10 @@ function ProductDrawer({
     return groupedVariants;
   }
 
+  const variants_selection_order =
+    productDrawerData?.variants_selection_order?.length > 0
+      ? productDrawerData?.variants_selection_order
+      : Object.keys(groupVariants(productDrawerData?.variants || []));
   return (
     <Fragment key={productId}>
       <ArViewer pId={productId} active={ARViewerActive} close={() => setARViewerActive(false)} />
@@ -360,62 +370,60 @@ function ProductDrawer({
                     <Divider />
                   </>
                 )}
-                {productDrawerData?.variants_selection_order &&
-                  productDrawerData?.variants_selection_order.length > 0 &&
-                  productDrawerData?.variants_selection_order.map((variantType, index) => {
-                    const groupedVariants = groupVariants(productDrawerData.variants);
-                    return (
-                      <Box key={index} mb="4" mt={['20px', '20px', '20px', '20px', '20px']}>
-                        <Text
-                          fontFamily="Montserrat"
-                          fontWeight="700"
-                          fontSize={['14px', '14px']}
-                          lineHeight={['18px', '18px']}
-                          letterSpacing="-0.02em"
-                          color="white"
-                          textAlign="left"
-                          mb="2"
-                        >
-                          {variantType}
-                        </Text>
-                        <Box display="flex" flexWrap="wrap">
-                          {groupedVariants[variantType].map((variant, i) =>
-                            variantType === 'Color' ? (
-                              <Swatch
-                                key={i}
-                                colorName={variant.value}
-                                available={
-                                  (selectedVariant?.available_stock && selectedVariant?.available_stock > 0) ||
-                                  variant.available_stock! > 0 ||
-                                  false
-                                }
-                                active={selectedVariant?.variant_sku === variant.variant_sku}
-                                transition={transition}
-                                onSwatchClick={() => {
-                                  updateVariant(variant);
-                                }}
-                              />
-                            ) : (
-                              <VariantItem
-                                available={
-                                  (selectedVariant?.available_stock && selectedVariant?.available_stock > 0) ||
-                                  variant.available_stock! > 0 ||
-                                  false
-                                }
-                                key={i}
-                                name={variant.value || ''}
-                                active={selectedVariant?.variant_sku === variant.variant_sku}
-                                transition={transition}
-                                onClick={() => {
-                                  updateVariant(variant);
-                                }}
-                              />
-                            ),
-                          )}
-                        </Box>
+                {variants_selection_order.map((variantType, index) => {
+                  const groupedVariants = groupVariants(productDrawerData.variants);
+                  return (
+                    <Box key={index} mb="4" mt={['20px', '20px', '20px', '20px', '20px']}>
+                      <Text
+                        fontFamily="Montserrat"
+                        fontWeight="700"
+                        fontSize={['14px', '14px']}
+                        lineHeight={['18px', '18px']}
+                        letterSpacing="-0.02em"
+                        color="white"
+                        textAlign="left"
+                        mb="2"
+                      >
+                        {variantType}
+                      </Text>
+                      <Box display="flex" flexWrap="wrap">
+                        {groupedVariants[variantType].map((variant, i) =>
+                          variantType === 'Color' ? (
+                            <Swatch
+                              key={i}
+                              colorName={variant.value}
+                              available={
+                                (selectedVariant?.available_stock && selectedVariant?.available_stock > 0) ||
+                                variant.available_stock! > 0 ||
+                                false
+                              }
+                              active={selectedVariant?.variant_sku === variant.variant_sku}
+                              transition={transition}
+                              onSwatchClick={() => {
+                                updateVariant(variant);
+                              }}
+                            />
+                          ) : (
+                            <VariantItem
+                              available={
+                                (selectedVariant?.available_stock && selectedVariant?.available_stock > 0) ||
+                                variant.available_stock! > 0 ||
+                                false
+                              }
+                              key={i}
+                              name={variant.value || ''}
+                              active={selectedVariant?.variant_sku === variant.variant_sku}
+                              transition={transition}
+                              onClick={() => {
+                                updateVariant(variant);
+                              }}
+                            />
+                          ),
+                        )}
                       </Box>
-                    );
-                  })}
+                    </Box>
+                  );
+                })}
                 {(productDrawerData?.long_description || selectedVariant?.long_description) && (
                   <ParagraphWithSeeMore
                     text={
