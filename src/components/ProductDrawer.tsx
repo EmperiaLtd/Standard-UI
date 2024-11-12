@@ -222,6 +222,33 @@ function ProductDrawer({
     productDrawerData?.variants_selection_order?.length > 0
       ? productDrawerData?.variants_selection_order
       : Object.keys(groupVariants(productDrawerData?.variants || []));
+
+  function isValidColor(color: string) {
+    // Allow hex codes without `#` by prepending it if missing
+    if (!color.startsWith('#') && /^[A-Fa-f0-9]{3,8}$/.test(color)) {
+      color = '#' + color;
+    }
+
+    // Regular expression for 3-, 6-, and 8-character hex codes
+    const hexRegex = /^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/;
+    // Regular expression for RGB color
+    const rgbRegex = /^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/;
+
+    if (hexRegex.test(color) || rgbRegex.test(color)) {
+      return true;
+    }
+
+    // Try setting the color to see if the browser recognizes it as a valid color name
+    const testDiv = document.createElement('div');
+    testDiv.style.color = color;
+    return testDiv.style.color !== ''; // Returns true if it's a valid color
+  }
+  function applyColor(colour: string) {
+    if (!colour.startsWith('#') && /^[A-Fa-f0-9]{3,8}$/.test(colour)) {
+      colour = '#' + colour;
+    }
+    return colour;
+  }
   return (
     <Fragment key={productId}>
       <ArViewer pId={productId} active={ARViewerActive} close={() => setARViewerActive(false)} />
@@ -313,7 +340,7 @@ function ProductDrawer({
                     {productDrawerData?.brand}
                   </Text>
                 )}
-                {(productDrawerData?.title || selectedVariant?.short_description) && (
+                {productDrawerData?.title && (
                   <Text
                     fontFamily="Montserrat"
                     fontWeight="700"
@@ -324,7 +351,7 @@ function ProductDrawer({
                     textAlign="left"
                     mb="4"
                   >
-                    {isVariantUpdate ? selectedVariant?.short_description : productDrawerData?.title}
+                    {productDrawerData?.title}
                   </Text>
                 )}
                 {(productDrawerData?.base_price || productDrawerData.retail_price) && (
@@ -386,17 +413,13 @@ function ProductDrawer({
                       >
                         {variantType}
                       </Text>
-                      <Box display="flex" flexWrap="wrap">
+                      <Box display="flex" flexWrap="wrap" alignItems="center">
                         {groupedVariants[variantType].map((variant, i) =>
-                          variantType === 'Color' ? (
+                          variantType === 'Color' && isValidColor(variant.value) ? (
                             <Swatch
                               key={i}
-                              colorName={variant.value}
-                              available={
-                                (selectedVariant?.available_stock && selectedVariant?.available_stock > 0) ||
-                                variant.available_stock! > 0 ||
-                                false
-                              }
+                              colorName={applyColor(variant.value)}
+                              available={true}
                               active={selectedVariant?.variant_sku === variant.variant_sku}
                               transition={transition}
                               onSwatchClick={() => {
@@ -405,11 +428,7 @@ function ProductDrawer({
                             />
                           ) : (
                             <VariantItem
-                              available={
-                                (selectedVariant?.available_stock && selectedVariant?.available_stock > 0) ||
-                                variant.available_stock! > 0 ||
-                                false
-                              }
+                              available={true}
                               key={i}
                               name={variant.value || ''}
                               active={selectedVariant?.variant_sku === variant.variant_sku}
@@ -424,6 +443,22 @@ function ProductDrawer({
                     </Box>
                   );
                 })}
+                {(productDrawerData?.short_description || selectedVariant?.short_description) && (
+                  <Text
+                    fontFamily="Montserrat"
+                    fontWeight="700"
+                    fontSize={['17px', '17px']}
+                    lineHeight={['24px', '24px']}
+                    letterSpacing="-0.02em"
+                    color="white"
+                    textAlign="left"
+                    mb="4"
+                  >
+                    {isVariantUpdate
+                      ? (selectedVariant?.short_description as string)
+                      : productDrawerData?.short_description || ''}
+                  </Text>
+                )}
                 {(productDrawerData?.long_description || selectedVariant?.long_description) && (
                   <ParagraphWithSeeMore
                     text={
