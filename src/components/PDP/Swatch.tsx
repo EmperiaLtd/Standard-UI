@@ -16,6 +16,7 @@ function Swatch({ active = false, transition, colorName, available, onSwatchClic
           : '1px solid rgba(255, 255, 255, 0.5)'
       }
       borderRadius="4px"
+      padding={['5px', '5px', '5px', '5px', '5px']}
       boxShadow={active ? '0px 2px 4px 0px rgba(0, 0, 0, 0.25)' : 'unset'}
       _hover={{
         boxShadow: available ? '0px 2px 4px 0px rgba(0, 0, 0, 0.25)' : 'unset',
