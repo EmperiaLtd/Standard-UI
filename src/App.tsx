@@ -120,12 +120,45 @@ const App = () => {
   };
 
   const onUIReady = () => {
-    const welcomeData: WelcomeData =
-      window.emperia?.data.ui.uiConfig['welcome'] || fallbackData.data.ui.uiConfig['welcome'];
-    const instructionsData: InstructionsData =
-      window.emperia?.data.ui.uiConfig['instructions'] || fallbackData.data.ui.uiConfig['instructions'];
+    const welcomeData: WelcomeData = fallbackData.data.ui.uiConfig['welcome'];
+    const instructionsData: InstructionsData = fallbackData.data.ui.uiConfig['instructions'];
     const overlayData: OverlayElementObject =
       window.emperia?.data.ui.uiConfig['overlay'] || fallbackData.data.ui.uiConfig['overlay'];
+    const newWelcome: WelcomeData = window.emperia?.data.ui.uiConfig['welcome'];
+    const newInstructions: InstructionsData = window.emperia?.data.ui.uiConfig['instructions'];
+
+    // Checking each value that was passed, and making sure it's not empty.
+    // Can be prettier, but want to keep it explicit for the moment.
+
+    //Welcome fields validation.
+    if (newWelcome !== undefined) {
+      if (newWelcome.collectionImage == '') {
+        console.warn('Collection Image appears to be empty. Using default value.');
+      } else welcomeData.collectionImage = newWelcome.collectionImage;
+      if (newWelcome.collectionTitle == '') {
+        console.warn('Collection Title appears to be empty. Using default value.');
+      } else welcomeData.collectionTitle = newWelcome.collectionTitle;
+      if (newWelcome.enterCTA == '') {
+        console.warn('Enter CTA appears to be empty. Using default value.');
+      } else welcomeData.enterCTA = newWelcome.enterCTA;
+      if (newWelcome.jumboTitle == '') {
+        console.warn('Jumbo appears to be empty. Using default value.');
+      } else welcomeData.jumboTitle = newWelcome.jumboTitle;
+      if (newWelcome.tagline == '') {
+        console.warn('Tagline to be empty. Using default value.');
+      } else welcomeData.tagline = newWelcome.tagline;
+    }
+
+    //Instruction fields validation.
+    if (newInstructions != undefined) {
+      if (newInstructions.skip == '') {
+        console.warn('Skip field appears to be empty. Using default value.');
+      } else instructionsData.skip = newInstructions.skip;
+      if (newInstructions.content.some((str) => str === '')) {
+        console.warn('The instructions field contains empty lines. Using default values as fallback.');
+      }
+    }
+
     if (overlayData) {
       delete overlayData.languages; // TODO: undo this later when the languages are ready
       delete overlayData.sounds; // TODO: undo this later when the sounds are ready
