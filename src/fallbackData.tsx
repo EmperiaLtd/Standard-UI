@@ -8,13 +8,13 @@ export const fallbackData: FallBackData = {
           changeRooms: {
             content: [
               {
-                roomName: 'Room 1 SDK',
-                description: 'Desc Room 1',
+                roomName: 'Room 1',
+                description: 'The first room.',
                 scene: 'room_1',
               },
               {
                 roomName: 'Room 2',
-                description: 'Desc Room 2',
+                description: 'The second room.',
                 scene: 'room_2',
               },
             ],
@@ -24,7 +24,7 @@ export const fallbackData: FallBackData = {
             textAlternate: '',
           },
           instructionsOverlay: {
-            content: ['First', 'Second', 'Third One'],
+            content: ['First', 'Second', 'Third'],
             key: 'instructions',
             text: 'Instructions',
             textAlternate: '',
@@ -67,9 +67,9 @@ export const fallbackData: FallBackData = {
         },
         welcome: {
           collectionImage: 'https://picsum.photos/600/600',
-          collectionTitle: 'Title Goes Here SDK',
+          collectionTitle: 'Experience Title',
           jumboTitle: 'Experience Name',
-          tagline: 'Tagline Here',
+          tagline: 'Short Experience description',
           enterCTA: 'Enter',
         },
         instructions: {
@@ -77,7 +77,7 @@ export const fallbackData: FallBackData = {
           content: [
             'Hold and Drag to look around',
             'Click on floor to move',
-            'Hover or Click on objects to learn more',
+            'Hover or click on objects to learn more',
           ],
         },
       },
@@ -86,9 +86,9 @@ export const fallbackData: FallBackData = {
           id: '000100',
           infoModel: {
             image: 'https://picsum.photos/500/500',
-            title: 'Title One',
-            subtitle: 'Subtitle One',
-            description: 'Description One',
+            title: 'Title',
+            subtitle: 'Subtitle',
+            description: 'Description',
             moreCTA: 'Learn More',
           },
         },
@@ -96,9 +96,9 @@ export const fallbackData: FallBackData = {
           id: '000101',
           infoModel: {
             image: 'https://picsum.photos/600/600',
-            title: 'Title Two',
-            subtitle: 'Subtitle Two',
-            description: 'Description Two',
+            title: 'Title',
+            subtitle: 'Subtitle',
+            description: 'Description',
             moreCTA: 'Learn More',
           },
         },
