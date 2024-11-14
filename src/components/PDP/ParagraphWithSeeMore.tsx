@@ -34,23 +34,6 @@ const ParagraphWithSeeMore: React.FC<ParagraphWithSeeMoreProps> = ({ shortText, 
       >
         {shortText}
       </Text>
-      {isExpanded && (
-        <Collapse startingHeight={collapseHeight} in={isExpanded}>
-          <Text
-            fontWeight="400"
-            fontSize="16px"
-            color="white"
-            mt="10px"
-            overflow="auto"
-            letterSpacing="-0.02em"
-            textAlign="left"
-            lineHeight={lineHeight}
-          >
-            {longText}
-          </Text>
-        </Collapse>
-      )}
-
       {longText.length > 0 && (
         <Button
           leftIcon={
@@ -67,6 +50,22 @@ const ParagraphWithSeeMore: React.FC<ParagraphWithSeeMoreProps> = ({ shortText, 
         >
           {isExpanded ? 'See less' : 'See more'}
         </Button>
+      )}
+      {isExpanded && (
+        <Collapse startingHeight={collapseHeight} in={isExpanded}>
+          <Text
+            fontWeight="400"
+            fontSize="16px"
+            color="white"
+            mt="10px"
+            overflow="auto"
+            letterSpacing="-0.02em"
+            textAlign="left"
+            lineHeight={lineHeight}
+          >
+            {longText}
+          </Text>
+        </Collapse>
       )}
     </Box>
   );
