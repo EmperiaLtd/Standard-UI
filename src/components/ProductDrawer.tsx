@@ -415,7 +415,7 @@ function ProductDrawer({
                       </Text>
                       <Box display="flex" flexWrap="wrap" alignItems="center">
                         {groupedVariants[variantType].map((variant, i) =>
-                          variantType === 'Color' && isValidColor(variant.value) ? (
+                          variantType.toLowerCase() === 'color' && isValidColor(variant.value) ? (
                             <Swatch
                               key={i}
                               colorName={applyColor(variant.value)}
