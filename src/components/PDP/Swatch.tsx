@@ -22,8 +22,8 @@ function Swatch({ active = false, transition, colorName, available, onSwatchClic
         boxShadow: available ? '0px 2px 4px 0px rgba(0, 0, 0, 0.25)' : 'unset',
         border: available ? '1px solid rgba(255, 255, 255, 0.80)' : '1px solid rgba(255, 255, 255, 0.5)',
       }}
-      width={['30px', '30px', '40px', '40px', '40px']}
-      height={['30px', '30px', '40px', '40px', '40px']}
+      width={['40px', '40px', '50px', '50px', '50px']}
+      height={['50px', '50px', '50px', '50px', '50px']}
       position="relative"
       overflow="hidden"
       onClick={onSwatchClick}

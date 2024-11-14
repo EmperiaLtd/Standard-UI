@@ -443,7 +443,7 @@ function ProductDrawer({
                     </Box>
                   );
                 })}
-                {(productDrawerData?.short_description || selectedVariant?.short_description) && (
+                {/* {(productDrawerData?.short_description || selectedVariant?.short_description) && (
                   <Text
                     fontFamily="Montserrat"
                     fontWeight="700"
@@ -458,15 +458,20 @@ function ProductDrawer({
                       ? (selectedVariant?.short_description as string)
                       : productDrawerData?.short_description || ''}
                   </Text>
-                )}
-                {(productDrawerData?.long_description || selectedVariant?.long_description) && (
+                )} */}
+                {(productDrawerData?.short_description || selectedVariant?.short_description) && (
                   <ParagraphWithSeeMore
-                    text={
+                    longText={
                       isVariantUpdate
                         ? (selectedVariant?.long_description as string)
                         : productDrawerData?.long_description || ''
                     }
-                    maxLines={3}
+                    shortText={
+                      isVariantUpdate
+                        ? (selectedVariant?.short_description as string)
+                        : productDrawerData?.short_description || ''
+                    }
+                    maxLines={1}
                   />
                 )}
               </Box>
