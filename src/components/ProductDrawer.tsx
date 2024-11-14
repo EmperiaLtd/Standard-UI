@@ -444,29 +444,18 @@ function ProductDrawer({
                   );
                 })}
                 {(productDrawerData?.short_description || selectedVariant?.short_description) && (
-                  <Text
-                    fontFamily="Montserrat"
-                    fontWeight="700"
-                    fontSize={['17px', '17px']}
-                    lineHeight={['24px', '24px']}
-                    letterSpacing="-0.02em"
-                    color="white"
-                    textAlign="left"
-                    mb="4"
-                  >
-                    {isVariantUpdate
-                      ? (selectedVariant?.short_description as string)
-                      : productDrawerData?.short_description || ''}
-                  </Text>
-                )}
-                {(productDrawerData?.long_description || selectedVariant?.long_description) && (
                   <ParagraphWithSeeMore
-                    text={
+                    longText={
                       isVariantUpdate
                         ? (selectedVariant?.long_description as string)
                         : productDrawerData?.long_description || ''
                     }
-                    maxLines={3}
+                    shortText={
+                      isVariantUpdate
+                        ? (selectedVariant?.short_description as string)
+                        : productDrawerData?.short_description || ''
+                    }
+                    maxLines={1}
                   />
                 )}
               </Box>

@@ -4,11 +4,12 @@ import { Box, Button, Collapse, Text } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
 interface ParagraphWithSeeMoreProps {
-  text: string;
+  shortText: string;
   maxLines?: number;
+  longText: string;
 }
 
-const ParagraphWithSeeMore: React.FC<ParagraphWithSeeMoreProps> = ({ text, maxLines = 3 }) => {
+const ParagraphWithSeeMore: React.FC<ParagraphWithSeeMoreProps> = ({ shortText, longText, maxLines = 3 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpansion = () => {
@@ -32,10 +33,10 @@ const ParagraphWithSeeMore: React.FC<ParagraphWithSeeMoreProps> = ({ text, maxLi
           textAlign="left"
           lineHeight={lineHeight}
         >
-          {text}
+          {isExpanded ? longText : shortText}
         </Text>
       </Collapse>
-      {text.length > 150 && (
+      {longText.length > 0 && (
         <Button
           leftIcon={
             <ChevronDownIcon boxSize={6} transform={isExpanded ? 'rotate(180deg)' : 'unset'} transition="0.2s all" />
