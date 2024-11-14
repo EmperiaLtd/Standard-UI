@@ -443,22 +443,6 @@ function ProductDrawer({
                     </Box>
                   );
                 })}
-                {/* {(productDrawerData?.short_description || selectedVariant?.short_description) && (
-                  <Text
-                    fontFamily="Montserrat"
-                    fontWeight="700"
-                    fontSize={['17px', '17px']}
-                    lineHeight={['24px', '24px']}
-                    letterSpacing="-0.02em"
-                    color="white"
-                    textAlign="left"
-                    mb="4"
-                  >
-                    {isVariantUpdate
-                      ? (selectedVariant?.short_description as string)
-                      : productDrawerData?.short_description || ''}
-                  </Text>
-                )} */}
                 {(productDrawerData?.short_description || selectedVariant?.short_description) && (
                   <ParagraphWithSeeMore
                     longText={
