@@ -182,10 +182,15 @@ const App = () => {
     });
   };
 
+  let isModalOpening = false;
   const openProductModal = (productVariantId: string) => {
+    if (isModalOpening) return;
     setProductDrawerLoading(true);
+    isModalOpening = true;
+
     setTimeout(() => {
       setProductDrawerLoading(false);
+      isModalOpening = false;
       const productData =
         window.emperia?.data.ui.pdpModels.find((i) => i.id == productVariantId)?.pdpModel ||
         fallbackData.data.ui.pdpModels[0].pdpModel;
@@ -268,15 +273,13 @@ const App = () => {
         eventMap[eventType](eventData);
       }
     };
-
-    window.emperia?.events?.addEventListener('fromExperience', eventListener);
-    window.addEventListener('fromExperience', eventListener);
-
+    const target = window.emperia?.events || window;
+    target.addEventListener('fromExperience', eventListener);
     return () => {
-      window.emperia?.events?.removeEventListener('fromExperience', eventListener);
-      window.removeEventListener('fromExperience', eventListener);
+      target.removeEventListener('fromExperience', eventListener);
     };
   }, []);
+
   return (
     <ChakraProvider theme={CustomTheme} cssVarsRoot="#ui-root">
       <Overlay
