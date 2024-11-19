@@ -110,7 +110,6 @@ const App = () => {
     uiReady: () => onUIReady(),
     openWelcome: () => openWelcomeModal(),
     openInstructions: () => openInstructionsModal(),
-    openProduct: (productVariantId: string) => openProductModal(productVariantId),
     OpenInfo: (infoModalId: string) => openInfoModal(infoModalId),
     updateLanguage: () => updateLanguage(),
     OpenPDP: (productVariantId: string) => openProductModal(productVariantId),
@@ -154,7 +153,6 @@ const App = () => {
     if (isModalOpening) return;
     setProductDrawerLoading(true);
     isModalOpening = true;
-
     setTimeout(() => {
       setProductDrawerLoading(false);
       isModalOpening = false;
@@ -234,13 +232,18 @@ const App = () => {
   useEffect(() => {
     const eventListener = (event: Event) => {
       const interceptedEvent = event as CustomEvent;
+      if (interceptedEvent.detail.name === 'OpenPDP') {
+        event.stopImmediatePropagation();
+      }
       const eventType = interceptedEvent.detail.name as keyof typeof eventMap;
       const eventData = interceptedEvent.detail.data;
+
       if (eventMap[eventType]) {
         eventMap[eventType](eventData);
       }
     };
-    const target = window.emperia?.events || window;
+    const target = window.emperia.events || window;
+    target.removeEventListener('fromExperience', eventListener);
     target.addEventListener('fromExperience', eventListener);
     return () => {
       target.removeEventListener('fromExperience', eventListener);
