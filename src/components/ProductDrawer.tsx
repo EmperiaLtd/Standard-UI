@@ -172,7 +172,7 @@ function ProductDrawer({
       try {
         await navigator.share({
           title: productDrawerData.title,
-          text: 'Check out this product I found on Walmart Realm',
+          text: 'Check out this product',
           url: productDrawerData.default_url || productUrl,
         });
       } catch (error) {

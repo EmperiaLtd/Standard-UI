@@ -161,6 +161,16 @@ const App = () => {
     if (overlayData) {
       delete overlayData.languages; // TODO: undo this later when the languages are ready
       delete overlayData.sounds; // TODO: undo this later when the sounds are ready
+
+      // get the domain from the iframe
+      const iframe = document.getElementById('experience-container') as HTMLIFrameElement;
+      if (iframe && iframe.src) {
+        const url = iframe.src;
+        const regex = /\/private\//;
+        if (regex.test(url)) {
+          delete overlayData.share;
+        }
+      }
     }
     const room = overlayData?.changeRooms;
     if (room && room?.content) {
