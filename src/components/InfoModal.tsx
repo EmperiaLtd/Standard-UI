@@ -74,7 +74,7 @@ function InfoModal({ infoData, active, close }: InfoModalProps) {
             backdropFilter="blur(12px)"
             color="white"
           >
-            {infoData?.moreCTA}
+            {infoData?.buttonTitle}
           </Button>
         </Box>
       )}

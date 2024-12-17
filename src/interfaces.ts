@@ -154,7 +154,9 @@ export interface InfoData {
   title: string;
   subtitle: string;
   description: string;
-  moreCTA: string;
+  buttonTitle: string;
+  linkToOpen: string;
+  mediaURLs?: string[];
 }
 
 export interface ProductDrawerProps {
@@ -298,6 +300,9 @@ export interface FallBackData {
       };
       infoModels: InfoModels[];
       pdpModels: PDPModels[];
+      iframeModels: IframeModel[];
+      mediaModels: MediaModel[];
+      arModels: ARModel[];
     };
   };
 }
@@ -307,6 +312,30 @@ export type EventData = {
     uiConfig: UiConfig;
     pdpModels: PDPModels[];
     infoModels: InfoModels[];
+    iframeModels: IframeModel[];
+    mediaModels: MediaModel[];
+    arModels: ARModel[];
+  };
+};
+
+export type IframeModel = {
+  id: string;
+  iFrameModel: {
+    uRL: string;
+  };
+};
+
+export type MediaModel = {
+  id: string;
+  mediaModel: {
+    mediaURLs: string[];
+  };
+};
+
+export type ARModel = {
+  id: string;
+  aRModel: {
+    meshURL: string;
   };
 };
 
@@ -497,4 +526,32 @@ export interface CartItemProps {
 export interface CommonProps {
   active: boolean;
   close: () => void;
+}
+
+export interface IframeData {
+  data: {
+    id: string;
+    url: string;
+  };
+  active: boolean;
+}
+
+export interface MediaData {
+  data: {
+    id: string;
+    mediaModel: {
+      mediaURLs: string[];
+    };
+  };
+  active: boolean;
+}
+
+export interface aRModels {
+  data: {
+    id: string;
+    aRModel: {
+      meshURL: string;
+    };
+  };
+  active: boolean;
 }

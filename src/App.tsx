@@ -27,15 +27,51 @@ import {
   OverlayElementObject,
   CartItemProps,
   RoomItem,
+  MediaData,
+  IframeData,
+  aRModels,
 } from './interfaces';
 import React from 'react';
+import IframeDrawer from './components/Modals/IframeDrawer';
+import MediaDrawer from './components/Modals/MediaDrawer';
+import ArDrawer from './components/Modals/ArDrawer';
 
 const App = () => {
   const [activeLang, setActiveLang] = useState('en');
   const [activeScene, setActiveScene] = useState('');
   const [activeSound, setActiveSound] = useState('Sound 1');
   const [productDrawerLoading, setProductDrawerLoading] = useState(false);
+  const [highlightImage, setHighLightImage] = useState('');
+
   const toast = useToast();
+
+  const [iframeDrawerData, setIframeDrawerData] = useState<IframeData>({
+    data: {
+      id: '',
+      url: '',
+    },
+    active: false,
+  });
+  const [mediaDrawerData, setMediaDrawerData] = useState<MediaData>({
+    data: {
+      id: '',
+      mediaModel: {
+        mediaURLs: [],
+      },
+    },
+    active: false,
+  });
+
+  const [arData, setArData] = useState<aRModels>({
+    active: false,
+    data: {
+      id: '',
+      aRModel: {
+        meshURL: '',
+      },
+    },
+  });
+
   const [productDrawerData, setProductDrawerData] = useState<ProductState>({
     data: {
       parent_id: '',
@@ -84,7 +120,9 @@ const App = () => {
       title: '',
       subtitle: '',
       description: '',
-      moreCTA: '',
+      mediaURLs: [],
+      buttonTitle: '',
+      linkToOpen: '',
     },
     active: false,
   });
@@ -94,7 +132,9 @@ const App = () => {
       title: '',
       subtitle: '',
       description: '',
-      moreCTA: '',
+      mediaURLs: [],
+      buttonTitle: '',
+      linkToOpen: '',
     },
     active: false,
   });
@@ -116,6 +156,9 @@ const App = () => {
     OpenCustomModel: (customModelId: string) => {
       console.log(customModelId);
     },
+    OpenIframe: (iframeId: string) => openIframeModal(iframeId),
+    OpenMedia: (mediaId: string) => openMediaModal(mediaId),
+    OpenAR: (arId: string) => openARId(arId),
   };
 
   const onUIReady = () => {
@@ -232,7 +275,10 @@ const App = () => {
     const infoData: InfoData =
       window.emperia?.data.ui.infoModels.find((i) => i.id == infoModalId)?.infoModel ||
       fallbackData.data.ui.infoModels[0].infoModel;
-    setInfoFloatingData({ data: infoData, active: true });
+    setInfoData({
+      data: infoData,
+      active: true,
+    });
   };
 
   const openWelcomeModal = () => {
@@ -272,6 +318,49 @@ const App = () => {
     window.dispatchEvent(new CustomEvent('fromUserInterface', { detail: { name: 'changeLanguage', locale: lang } }));
   };
 
+  const openIframeModal = (iframeId: string) => {
+    const iframeData = window.emperia?.data.ui.iframeModels.find((i) => i.id == iframeId)?.iFrameModel || {
+      uRL: 'https://emperiavr.com/emperia-creator-tools',
+    };
+    if (!iframeData) return;
+    setIframeDrawerData({
+      data: {
+        id: iframeId,
+        url: iframeData.uRL,
+      },
+      active: true,
+    });
+  };
+
+  const openMediaModal = (mediaId: string) => {
+    const mediaData =
+      window.emperia?.data.ui.mediaModels.find((i) => i.id == mediaId)?.mediaModel ||
+      fallbackData.data.ui.mediaModels[0].mediaModel;
+    if (!mediaData) return;
+
+    setMediaDrawerData({
+      data: {
+        id: mediaId,
+        mediaModel: mediaData,
+      },
+      active: true,
+    });
+  };
+
+  const openARId = (arId: string) => {
+    const arData =
+      window.emperia?.data.ui.arModels.find((i) => i.id == arId)?.aRModel || fallbackData.data.ui.arModels[0].aRModel;
+    if (!arData) return;
+    setArData({
+      active: true,
+      data: {
+        id: arId,
+        aRModel: {
+          meshURL: arData.meshURL,
+        },
+      },
+    });
+  };
   useEffect(() => {
     const eventListener = (event: Event) => {
       const interceptedEvent = event as CustomEvent;
@@ -285,7 +374,7 @@ const App = () => {
         eventMap[eventType](eventData);
       }
     };
-    const target = window.emperia.events || window;
+    const target = window?.emperia?.events || window;
     target.removeEventListener('fromExperience', eventListener);
     target.addEventListener('fromExperience', eventListener);
     return () => {
@@ -388,6 +477,50 @@ const App = () => {
           setInfoFloatingData({ ...infoData, active: false });
         }}
       />
+      <IframeDrawer
+        iframeId={iframeDrawerData?.data.id}
+        active={iframeDrawerData?.active}
+        url={iframeDrawerData?.data.url}
+        onClose={() => {
+          setIframeDrawerData({ ...iframeDrawerData, active: false });
+        }}
+      />
+      <MediaDrawer
+        mediaId={mediaDrawerData?.data.id}
+        active={mediaDrawerData?.active}
+        mediaURLs={mediaDrawerData?.data.mediaModel.mediaURLs}
+        highlightImage={highlightImage || mediaDrawerData?.data.mediaModel.mediaURLs[0]}
+        setHighLightImage={setHighLightImage}
+        onClose={() =>
+          setMediaDrawerData({
+            data: {
+              id: '',
+              mediaModel: {
+                mediaURLs: [],
+              },
+            },
+            active: false,
+          })
+        }
+      />
+      {arData.active && (
+        <ArDrawer
+          onClose={() =>
+            setArData({
+              data: {
+                id: '',
+                aRModel: {
+                  meshURL: '',
+                },
+              },
+              active: false,
+            })
+          }
+          arId={arData.data.id}
+          url={arData.data.aRModel.meshURL}
+          active={arData.active}
+        />
+      )}
     </ChakraProvider>
   );
 };
