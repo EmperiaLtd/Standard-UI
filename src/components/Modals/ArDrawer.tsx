@@ -11,7 +11,6 @@ interface ARProps {
 }
 
 const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
-  const [arViewerActive, setArViewerActive] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const handleIframeLoad = () => {
@@ -59,7 +58,6 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
       anchor.click();
     } else {
       console.log('now here now here');
-      setArViewerActive(true);
     }
   };
 
