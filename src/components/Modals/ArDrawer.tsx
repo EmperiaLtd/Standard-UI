@@ -68,7 +68,6 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
       activateARViewer();
     }
   }, [active]);
-  console.log({ arViewerActive });
   return (
     <Fragment key={arId}>
       <Modal isOpen={active} onClose={onClose} size={['full', 'full', 'full', 'full', 'full']} autoFocus={false}>
