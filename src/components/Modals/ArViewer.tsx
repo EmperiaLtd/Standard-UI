@@ -68,7 +68,7 @@ const ArViewer = ({ arId, active, url, onClose }: ARProps) => {
             </Box>
             <Box
               margin={'auto'}
-              width={['90%', '90%', '90%', '90%', '100%']}
+              width={['90%', '90%', '90%', '90%', '95%']}
               h={['100vh']}
               textAlign="center"
               position="relative"

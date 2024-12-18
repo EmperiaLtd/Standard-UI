@@ -83,12 +83,14 @@ const MediaDrawer = ({
         <ModalOverlay
           onClick={onClose}
           background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
+          backdropFilter="blur(12px)"
         />
         <ModalContent
           margin={0}
           padding={0}
           overflow={'hidden'}
           background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
+          backdropFilter="blur(12px)"
         >
           <Box
             width={['100%', '100%', '100%', '100%', '100%']}
@@ -98,6 +100,7 @@ const MediaDrawer = ({
             flexDirection="column"
             justifyContent="space-between"
             position="relative"
+            height={['100vh']}
           >
             <Box
               height="50px"
@@ -118,7 +121,7 @@ const MediaDrawer = ({
             </Box>
             <Box
               margin={'auto'}
-              width={['90%', '90%', '90%', '90%', '100%']}
+              width={['90%', '90%', '90%', '90%', '90%']}
               textAlign="center"
               position="relative"
               borderRadius={'16px'}
@@ -133,7 +136,7 @@ const MediaDrawer = ({
                       position="relative"
                       flex="0 0 auto"
                       margin={'30px auto'}
-                      height={['70vh']}
+                      height={['70vh', '80vh', '80vh', '80vh', '90vh']}
                       onClick={() => {
                         setHighLightImage(typeof media === 'string' ? media : '');
                         slider?.current?.slickGoTo(index);
@@ -145,7 +148,6 @@ const MediaDrawer = ({
                       _notLast={{ marginRight: '10px' }}
                       borderRadius={'16px'}
                       overflow="hidden"
-                      bg={'blackAlpha.300'}
                       transition={transition}
                       width={['100%', '85%', '85%', '50%', '50%']}
                     >
@@ -155,9 +157,11 @@ const MediaDrawer = ({
                           objectFit={['cover', 'cover', 'cover', 'cover', 'contain']}
                           position="absolute"
                           height="100%"
+                          max-height="100%"
                           margin={'0 auto'}
                           borderRadius={'16px !important'}
                           width={['100%']}
+                          overflow={'visible'}
                         />
                       )}
                       {mediaType === 'Video' && (
