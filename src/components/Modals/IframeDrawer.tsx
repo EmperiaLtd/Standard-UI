@@ -55,7 +55,7 @@ const IframeDrawer = ({ iframeId, active, url, onClose }: IframeProps) => {
             </Box>
             <Box
               margin={'auto'}
-              width={['90%', '90%', '90%', '90%', '100%']}
+              width={['90%', '90%', '90%', '90%', '95%']}
               h={['100vh']}
               textAlign="center"
               position="relative"
@@ -64,6 +64,7 @@ const IframeDrawer = ({ iframeId, active, url, onClose }: IframeProps) => {
               justifyContent={'center'}
               alignItems={'center'}
               onClick={onClose}
+              zIndex={100}
             >
               <iframe
                 role="iframe"
@@ -79,7 +80,7 @@ const IframeDrawer = ({ iframeId, active, url, onClose }: IframeProps) => {
                 onLoad={handleFrameLoad}
               />
               {!loaded && (
-                <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" zIndex={1}>
+                <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" zIndex={-2}>
                   <Spinner size="xl" color="white" />
                 </Box>
               )}

@@ -6,6 +6,7 @@ import {
   Text,
   SliderFilledTrack,
   SliderThumb,
+  Skeleton,
 } from '@chakra-ui/react';
 import Slider from 'react-slick';
 import { useEffect, useRef, useState } from 'react';
@@ -181,84 +182,92 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         width={['100%', '100%', '100%', '100%', '100%']}
         h={['400px', '450px', '470px', '470px', '550px']}
       >
-        <Slider ref={slider} {...settings}>
-          {sliderImages.map((image, index) => {
-            if (typeof image === 'string') {
-              const mediaType = mediaTypes[image];
-              if (mediaType === 'Picture') {
-                return (
-                  <ChakraImage
-                    key={index}
-                    src={image}
-                    cursor="pointer"
-                    loading="lazy"
-                    width={['100%', '100%', '100%', '100%', '100%']}
-                    h={['400px', '450px', '470px', '470px', '550px']}
-                    objectFit={['cover', 'cover', 'cover']}
-                    objectPosition="top"
-                    alt="info-image"
-                  />
-                );
-              }
-              if (mediaType === 'Video') {
+        {Object.keys(mediaTypes).length == 0 && (
+          <Skeleton width="inherit" startColor="#29303C" endColor="transparent" borderRadius="16px">
+            <Box width={['100%', '100%', '100%', '100%', '100%']} h={['400px', '450px', '470px', '470px', '550px']} />
+          </Skeleton>
+        )}
+
+        {Object.keys(mediaTypes).length > 0 && (
+          <Slider ref={slider} {...settings}>
+            {sliderImages.map((image, index) => {
+              if (typeof image === 'string') {
+                const mediaType = mediaTypes[image];
+                if (mediaType === 'Picture') {
+                  return (
+                    <ChakraImage
+                      key={index}
+                      src={image}
+                      cursor="pointer"
+                      loading="lazy"
+                      width={['100%', '100%', '100%', '100%', '100%']}
+                      h={['400px', '450px', '470px', '470px', '550px']}
+                      objectFit={['cover', 'cover', 'cover']}
+                      objectPosition="top"
+                      alt="info-image"
+                    />
+                  );
+                }
+                if (mediaType === 'Video') {
+                  return (
+                    <Box
+                      as="video"
+                      key={index}
+                      src={image}
+                      controls
+                      autoPlay
+                      loop
+                      muted
+                      cursor="pointer"
+                      width={['100%', '100%', '100%', '100%', '100%']}
+                      height={['400px', '450px', '470px', '470px', '550px']}
+                      background={['black']}
+                      objectFit="cover"
+                      objectPosition="top"
+                    />
+                  );
+                }
+                if (mediaType === 'YouTube') {
+                  return (
+                    <Box
+                      as="iframe"
+                      key={index}
+                      src={image}
+                      allowFullScreen
+                      cursor="pointer"
+                      width={['100%', '100%', '100%', '100%', '100%']}
+                      height={['400px', '450px', '470px', '470px', '550px']}
+                      objectFit="cover"
+                      objectPosition="top"
+                      title="youtube-video"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    />
+                  );
+                }
                 return (
                   <Box
-                    as="video"
                     key={index}
-                    src={image}
-                    controls
-                    autoPlay
-                    loop
-                    muted
-                    cursor="pointer"
-                    width={['100%', '100%', '100%', '100%', '100%']}
-                    height={['400px', '450px', '470px', '470px', '550px']}
-                    background={['black']}
-                    objectFit="cover"
-                    objectPosition="top"
-                  />
-                );
-              }
-              if (mediaType === 'YouTube') {
-                return (
-                  <Box
                     as="iframe"
-                    key={index}
-                    src={image}
-                    allowFullScreen
+                    className="unknown-media"
                     cursor="pointer"
-                    width={['100%', '100%', '100%', '100%', '100%']}
+                    width="100%"
                     height={['400px', '450px', '470px', '470px', '550px']}
-                    objectFit="cover"
-                    objectPosition="top"
-                    title="youtube-video"
-                    frameBorder="0"
+                    objectFit="contain"
+                    objectPosition="center"
+                    src={image}
+                    title="unknown-media"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    draggable="false"
+                    overflow={'hidden'}
                   />
                 );
               }
-              return (
-                <Box
-                  key={index}
-                  as="iframe"
-                  className="unknown-media"
-                  cursor="pointer"
-                  width="100%"
-                  height={['400px', '450px', '470px', '470px', '550px']}
-                  objectFit="contain"
-                  objectPosition="center"
-                  src={image}
-                  title="unknown-media"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  draggable="false"
-                  overflow={'hidden'}
-                />
-              );
-            }
-            return image;
-          })}
-        </Slider>
+              return image;
+            })}
+          </Slider>
+        )}
       </Box>
 
       <Box
@@ -273,40 +282,53 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         gap={[1, 1, 1]}
         overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
       >
-        <Box display="flex" alignItems="center" gap={2} overflowX="auto">
-          {images?.map((image, index) => (
-            <Box
-              key={index}
-              border={activeImageIndex.newIndex === index ? '2px solid white' : '2px solid transparent'}
-              onClick={() => {
-                setHighLightImage(image);
-                slider.current?.slickGoTo(index);
-              }}
-              transition={transition}
-              position="relative"
-              flex="0 0 auto"
-              height={['50px', '60px', '60px', '60px', '70px']}
-              width={['50px', '60px', '60px', '60px', '70px']}
-              cursor="pointer"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              _notLast={{ marginRight: '10px' }}
-              borderRadius="4px"
-              _hover={{
-                border: '2px solid white',
-              }}
-              overflow="hidden"
-            >
-              {mediaTypes[image] === 'Picture' && (
-                <ChakraImage src={image} objectFit="cover" position="absolute" height="100%" width="100%" />
-              )}
-              {mediaTypes[image] === 'Video' && <YouTubeIcon fill="white" width="100%" height="100%" />}
-              {mediaTypes[image] === 'YouTube' && <YouTubeIcon fill="white" width="100%" height="100%" />}
-              {mediaTypes[image] === 'Unknown' && <UnknownMediaIcon fill="white" width="100%" height="100%" />}
+        {Object.keys(mediaTypes).length == 0 && (
+          <Skeleton width="inherit" startColor="#29303C" endColor="transparent" borderRadius="16px">
+            <Box display="flex" alignItems="center" gap={2} overflowX="auto">
+              <Box height={['50px', '60px', '60px', '60px', '70px']} width={['50px', '60px', '60px', '60px', '70px']} />
+              <Box height={['50px', '60px', '60px', '60px', '70px']} width={['50px', '60px', '60px', '60px', '70px']} />
+              <Box height={['50px', '60px', '60px', '60px', '70px']} width={['50px', '60px', '60px', '60px', '70px']} />
+              <Box height={['50px', '60px', '60px', '60px', '70px']} width={['50px', '60px', '60px', '60px', '70px']} />
             </Box>
-          ))}
-        </Box>
+          </Skeleton>
+        )}
+        {Object.keys(mediaTypes).length > 0 && (
+          <Box display="flex" alignItems="center" gap={2} overflowX="auto" overflowY={'hidden'}>
+            {images?.map((image, index) => (
+              <Box
+                key={index}
+                border={activeImageIndex.newIndex === index ? '2px solid white' : '2px solid transparent'}
+                onClick={() => {
+                  setHighLightImage(image);
+                  slider.current?.slickGoTo(index);
+                }}
+                transition={transition}
+                position="relative"
+                flex="0 0 auto"
+                height={['50px', '60px', '60px', '60px', '70px']}
+                width={['50px', '60px', '60px', '60px', '70px']}
+                cursor="pointer"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                _notLast={{ marginRight: '10px' }}
+                borderRadius="4px"
+                _hover={{
+                  border: '2px solid white',
+                }}
+                overflow="hidden"
+                overflowY={'hidden'}
+              >
+                {mediaTypes[image] === 'Picture' && (
+                  <ChakraImage src={image} objectFit="cover" position="absolute" height="100%" width="100%" />
+                )}
+                {mediaTypes[image] === 'Video' && <YouTubeIcon fill="white" width="100%" height="100%" />}
+                {mediaTypes[image] === 'YouTube' && <YouTubeIcon fill="white" width="100%" height="100%" />}
+                {mediaTypes[image] === 'Unknown' && <UnknownMediaIcon fill="white" width="100%" height="100%" />}
+              </Box>
+            ))}
+          </Box>
+        )}
       </Box>
     </Box>
   );
