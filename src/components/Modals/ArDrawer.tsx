@@ -132,7 +132,7 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
             >
               <Box flex={1} width="100%" height="100%">
                 <iframe
-                  src={url}
+                  src={`https://ui.emperiavr.com/ar/index.html?url=${url}`}
                   frameBorder="0"
                   id="ar-iframe"
                   width="100%"
