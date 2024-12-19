@@ -349,16 +349,11 @@ const App = () => {
 
   const openARId = (arId: string) => {
     const arModels = window.emperia?.data?.ui?.arModels;
-
     // Ensure arModels is a valid array; otherwise, fallback
     const isValidArray = Array.isArray(arModels) && arModels.length > 0;
-
-    const arData = isValidArray
-      ? arModels.find((i) => i.id == arId)?.aRModel
-      : fallbackData.data.ui.arModels[0]?.aRModel;
-
+    const arDataValid = isValidArray ? arModels.find((i) => i.id == arId)?.aRModel : undefined;
+    const arData = arDataValid || fallbackData.data.ui.arModels[0]?.aRModel;
     if (!arData) return;
-
     setArData({
       active: true,
       data: {
