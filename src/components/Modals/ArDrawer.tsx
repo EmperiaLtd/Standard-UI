@@ -68,10 +68,20 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
   }, [active]);
   return (
     <Fragment key={arId}>
-      <Modal isOpen={active} onClose={onClose} size={['full', 'full', 'full', 'full', 'full']} autoFocus={false}>
-        <ModalOverlay background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)" />
+      <Modal
+        onOverlayClick={onClose}
+        isOpen={active}
+        onClose={onClose}
+        size={['full', 'full', 'full', 'full', 'full']}
+        autoFocus={false}
+      >
+        <ModalOverlay
+          onClick={onClose}
+          background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
+        />
 
         <ModalContent
+          onClick={onClose}
           margin={0}
           padding={0}
           overflow={'hidden'}
@@ -81,6 +91,7 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
           <Box
             width={['100%', '100%', '100%', '100%', '100%']}
             margin={0}
+            onClick={onClose}
             padding={0}
             display="flex"
             flexDirection="column"
@@ -113,8 +124,9 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
               flexDirection="column"
               justifyContent="center"
               alignItems="center"
+              margin={'0 auto'}
               cursor="pointer"
-              width={['100%', '100%', '100%', '100%', '100%']}
+              width={['70%', '70%', '70%', '70%', '70%']}
               h={['90vh']}
               gap={5}
             >
