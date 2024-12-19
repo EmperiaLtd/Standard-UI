@@ -146,7 +146,7 @@ export const fallbackData: FallBackData = {
         {
           id: '71666',
           aRModel: {
-            meshURL: 'https://walmart.emperia-staging.com/AR/index.html?name=WalkerEdisonSideboard',
+            meshURL: 'https://walmart.emperia-staging.com/AR/WalkerEdisonSideboard_Android.glb',
           },
         },
       ],
