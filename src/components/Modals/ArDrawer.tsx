@@ -106,6 +106,8 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
               justifyContent="flex-end"
               alignItems="center"
               padding={['0px 20px']}
+              top="20px"
+              right="10px"
             >
               <CrossIcon
                 cursor="pointer"
@@ -114,6 +116,7 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
                 stroke="white"
                 filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
                 zIndex={10000}
+                aria-label="Close"
               />
             </Box>
             <Box
