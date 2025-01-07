@@ -93,6 +93,7 @@ export const fallbackData: FallBackData = {
             buttonTitle: 'Learn More',
             linkToOpen: 'https://emperiavr.com/emperia-creator-tools',
             mediaURLs: [
+              'https://www.youtube.com/watch?v=wrz7WabVP5A',
               'https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
               'https://www.youtube.com/embed/zXfzzxH1q8o?si=V662_OI_MLg-Q9T5',
               'https://placehold.co/600x400.jpg',

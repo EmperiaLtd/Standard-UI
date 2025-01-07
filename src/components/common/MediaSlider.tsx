@@ -256,7 +256,7 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
                     height={['400px', '450px', '470px', '470px', '550px']}
                     objectFit="contain"
                     objectPosition="center"
-                    src={image}
+                    src={parseYouTubeEmbed(image)}
                     title="unknown-media"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
