@@ -25,7 +25,6 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
 
     const detectedOs = getOpSys();
     if (detectedOs === 'IOS') {
-      console.log('here IOS');
       const fileDirectory = url;
       anchor.setAttribute('rel', 'ar');
       anchor.appendChild(document.createElement('img'));
@@ -57,7 +56,7 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
       document.body.appendChild(anchor);
       anchor.click();
     } else {
-      console.log('now here now here');
+      
     }
   };
 
@@ -117,6 +116,8 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
                 filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
                 zIndex={10000}
                 aria-label="Close"
+                top="20px" 
+                right="10px"
               />
             </Box>
             <Box
@@ -135,7 +136,7 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
             >
               <Box flex={1} width="100%" height="100%">
                 <iframe
-                  src={`https://ui.emperiavr.com/ar/index.html?url=${url}`}
+                  src={url}
                   frameBorder="0"
                   id="ar-iframe"
                   width="100%"

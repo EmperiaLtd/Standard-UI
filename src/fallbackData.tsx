@@ -125,9 +125,9 @@ export const fallbackData: FallBackData = {
           id: '71654',
           mediaModel: {
             mediaURLs: [
+              'https://youtu.be/sgyveSnlnR4?si=bsD_N-wqkJjxrbOh',
               'https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
               'https://picsum.photos/800.jpg',
-              'https://fastly.picsum.photos/id/0/5000/3333.jpg?hmac=_j6ghY5fCfSD6tvtcV74zXivkJSPIfR9B8w34XeQmvU',
               'https://www.youtube.com/embed/zXfzzxH1q8o?si=V662_OI_MLg-Q9T5',
               'https://www.w3schools.com/html/movie.mp4',
             ],
@@ -146,7 +146,7 @@ export const fallbackData: FallBackData = {
         {
           id: '71666',
           aRModel: {
-            meshURL: 'https://walmart.emperia-staging.com/AR/WalkerEdisonSideboard_Android.glb',
+            meshURL: 'https://walmart.emperia-staging.com/AR/index.html?name=WalkerEdisonSideboard',
           },
         },
       ],
