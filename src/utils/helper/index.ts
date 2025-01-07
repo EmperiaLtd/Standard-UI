@@ -142,3 +142,15 @@ export const getOpSys = () => {
 
   return os;
 };
+
+export const youtubeRegex =
+  /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)([\w\-]{11})([?&].*)?$/;
+
+export function parseYouTubeEmbed(link: string) {
+  const match = link.match(youtubeRegex);
+  if (match) {
+    const videoId = match[5];
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+  return link;
+}

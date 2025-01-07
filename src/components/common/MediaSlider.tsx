@@ -15,6 +15,7 @@ import { YouTubeIcon } from '../../Icons/YoutubeIcon';
 import { UnknownMediaIcon } from '../../Icons/UnknownMediaIcon';
 import { ImageSliderProps } from '../../interfaces';
 import React from 'react';
+import { parseYouTubeEmbed } from '../../utils/helper';
 
 const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }: ImageSliderProps) => {
   const transition = 'all 0.2s ease-in-out';
@@ -232,7 +233,7 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
                     <Box
                       as="iframe"
                       key={index}
-                      src={image}
+                      src={parseYouTubeEmbed(image)}
                       allowFullScreen
                       cursor="pointer"
                       width={['100%', '100%', '100%', '100%', '100%']}

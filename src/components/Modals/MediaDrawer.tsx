@@ -5,6 +5,7 @@ import { ThreeDView } from '../../Icons/ThreeDView';
 import { YouTubeIcon } from '../../Icons/YoutubeIcon';
 import { UnknownMediaIcon } from '../../Icons/UnknownMediaIcon';
 import { CrossIcon } from '../../Icons/CrossIcon';
+import { parseYouTubeEmbed } from '../../utils/helper';
 
 interface IframeProps {
   mediaId: string;
@@ -120,6 +121,9 @@ const MediaDrawer = ({
                 filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
                 zIndex={10000}
                 aria-label="Close"
+                position="absolute"
+                top="30px"
+                right="40px"
               />
             </Box>
             <Box
@@ -201,7 +205,7 @@ const MediaDrawer = ({
                           objectFit="cover"
                           width={'100%'}
                           objectPosition="top"
-                          src={media}
+                          src={parseYouTubeEmbed(media)}
                           title="youtube-video"
                           frameBorder="0"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
