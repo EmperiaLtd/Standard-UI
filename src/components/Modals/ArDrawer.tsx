@@ -56,7 +56,6 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
       document.body.appendChild(anchor);
       anchor.click();
     } else {
-      
     }
   };
 
@@ -116,7 +115,7 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
                 filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
                 zIndex={10000}
                 aria-label="Close"
-                top="20px" 
+                top="20px"
                 right="10px"
               />
             </Box>
