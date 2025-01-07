@@ -129,6 +129,7 @@ const MediaDrawer = ({
               position="relative"
               borderRadius={'16px'}
               onClick={onClose}
+              maxH={['70vh', '80vh', '80vh', '80vh', '90vh']}
             >
               <Slider ref={slider} {...settings}>
                 {mediaURLs.map((media, index) => {
@@ -139,7 +140,7 @@ const MediaDrawer = ({
                       position="relative"
                       flex="0 0 auto"
                       margin={'30px auto'}
-                      height={['70vh', '80vh', '80vh', '80vh', '90vh']}
+                      height={['70vh', '80vh', '80vh', '80vh', '85vh']}
                       onClick={() => {
                         setHighLightImage(typeof media === 'string' ? media : '');
                         slider?.current?.slickGoTo(index);
