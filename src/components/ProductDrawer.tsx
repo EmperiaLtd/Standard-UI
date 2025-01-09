@@ -172,7 +172,7 @@ function ProductDrawer({
       try {
         await navigator.share({
           title: productDrawerData.title,
-          text: 'Check out this product I found on Walmart Realm',
+          text: 'Check out this product',
           url: productDrawerData.default_url || productUrl,
         });
       } catch (error) {
@@ -397,7 +397,7 @@ function ProductDrawer({
                     <Divider />
                   </>
                 )}
-                {variants_selection_order.map((variantType, index) => {
+                {variants_selection_order?.map((variantType, index) => {
                   const groupedVariants = groupVariants(productDrawerData.variants);
                   return (
                     <Box key={index} mb="4" mt={['20px', '20px', '20px', '20px', '20px']}>
@@ -414,7 +414,7 @@ function ProductDrawer({
                         {variantType}
                       </Text>
                       <Box display="flex" flexWrap="wrap" alignItems="center">
-                        {groupedVariants[variantType].map((variant, i) =>
+                        {groupedVariants[variantType]?.map((variant, i) =>
                           variantType.toLowerCase() === 'color' && isValidColor(variant.value) ? (
                             <Swatch
                               key={i}

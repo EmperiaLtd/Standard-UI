@@ -86,20 +86,68 @@ export const fallbackData: FallBackData = {
           id: '000100',
           infoModel: {
             image: 'https://picsum.photos/500/500',
-            title: 'Title',
+            title: 'Title now',
             subtitle: 'Subtitle',
-            description: 'Description',
-            moreCTA: 'Learn More',
+            description:
+              'Description Iconic medium shoulder bag with monogram motif and silver chain. Versatile design with detachable handle and shoulder strap. Crafted metalware details.',
+            buttonTitle: 'Learn More',
+            linkToOpen: 'https://emperiavr.com/emperia-creator-tools',
+            mediaURLs: [
+              'https://www.youtube.com/watch?v=wrz7WabVP5A',
+              'https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              'https://www.youtube.com/embed/zXfzzxH1q8o?si=V662_OI_MLg-Q9T5',
+              'https://placehold.co/600x400.jpg',
+              'https://picsum.photos/800.jpg',
+              'https://www.w3schools.com/html/movie.mp4',
+            ],
           },
         },
         {
           id: '000101',
           infoModel: {
             image: 'https://picsum.photos/600/600',
-            title: 'Title',
+            title: 'Title ok',
             subtitle: 'Subtitle',
             description: 'Description',
-            moreCTA: 'Learn More',
+            buttonTitle: 'Learn More',
+            linkToOpen: 'https://emperiavr.com/emperia-creator-tools',
+            mediaURLs: [
+              'https://fastly.picsum.photos/id/0/5000/3333.jpg?hmac=_j6ghY5fCfSD6tvtcV74zXivkJSPIfR9B8w34XeQmvU',
+              'https://fastly.picsum.photos/id/1/5000/3333.jpg?hmac=Asv2DU3rA_5D1xSe22xZK47WEAN0wjWeFOhzd13ujW4',
+              'https://fastly.picsum.photos/id/2/5000/3333.jpg?hmac=_KDkqQVttXw_nM-RyJfLImIbafFrqLsuGO5YuHqD-qQ',
+              'https://fastly.picsum.photos/id/4/5000/3333.jpg?hmac=ghf06FdmgiD0-G4c9DdNM8RnBIN7BO0-ZGEw47khHP4',
+              'https://fastly.picsum.photos/id/7/4728/3168.jpg?hmac=c5B5tfYFM9blHHMhuu4UKmhnbZoJqrzNOP9xjkV4w3o',
+            ],
+          },
+        },
+      ],
+      mediaModels: [
+        {
+          id: '71654',
+          mediaModel: {
+            mediaURLs: [
+              'https://youtu.be/sgyveSnlnR4?si=bsD_N-wqkJjxrbOh',
+              'https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              'https://picsum.photos/800.jpg',
+              'https://www.youtube.com/embed/zXfzzxH1q8o?si=V662_OI_MLg-Q9T5',
+              'https://www.w3schools.com/html/movie.mp4',
+            ],
+          },
+        },
+      ],
+      iframeModels: [
+        {
+          id: '71660',
+          iFrameModel: {
+            uRL: 'https://emperiavr.com/emperia-creator-tools/',
+          },
+        },
+      ],
+      arModels: [
+        {
+          id: '71666',
+          aRModel: {
+            meshURL: 'https://walmart.emperia-staging.com/AR/index.html?name=WalkerEdisonSideboard',
           },
         },
       ],

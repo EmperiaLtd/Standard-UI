@@ -27,15 +27,51 @@ import {
   OverlayElementObject,
   CartItemProps,
   RoomItem,
+  MediaData,
+  IframeData,
+  aRModels,
 } from './interfaces';
 import React from 'react';
+import IframeDrawer from './components/Modals/IframeDrawer';
+import MediaDrawer from './components/Modals/MediaDrawer';
+import ArDrawer from './components/Modals/ArDrawer';
 
 const App = () => {
   const [activeLang, setActiveLang] = useState('en');
   const [activeScene, setActiveScene] = useState('');
   const [activeSound, setActiveSound] = useState('Sound 1');
   const [productDrawerLoading, setProductDrawerLoading] = useState(false);
+  const [highlightImage, setHighLightImage] = useState('');
+
   const toast = useToast();
+
+  const [iframeDrawerData, setIframeDrawerData] = useState<IframeData>({
+    data: {
+      id: '',
+      url: '',
+    },
+    active: false,
+  });
+  const [mediaDrawerData, setMediaDrawerData] = useState<MediaData>({
+    data: {
+      id: '',
+      mediaModel: {
+        mediaURLs: [],
+      },
+    },
+    active: false,
+  });
+
+  const [arData, setArData] = useState<aRModels>({
+    active: false,
+    data: {
+      id: '',
+      aRModel: {
+        meshURL: '',
+      },
+    },
+  });
+
   const [productDrawerData, setProductDrawerData] = useState<ProductState>({
     data: {
       parent_id: '',
@@ -84,7 +120,9 @@ const App = () => {
       title: '',
       subtitle: '',
       description: '',
-      moreCTA: '',
+      mediaURLs: [],
+      buttonTitle: '',
+      linkToOpen: '',
     },
     active: false,
   });
@@ -94,7 +132,9 @@ const App = () => {
       title: '',
       subtitle: '',
       description: '',
-      moreCTA: '',
+      mediaURLs: [],
+      buttonTitle: '',
+      linkToOpen: '',
     },
     active: false,
   });
@@ -110,13 +150,15 @@ const App = () => {
     uiReady: () => onUIReady(),
     openWelcome: () => openWelcomeModal(),
     openInstructions: () => openInstructionsModal(),
-    openProduct: (productVariantId: string) => openProductModal(productVariantId),
     OpenInfo: (infoModalId: string) => openInfoModal(infoModalId),
     updateLanguage: () => updateLanguage(),
     OpenPDP: (productVariantId: string) => openProductModal(productVariantId),
     OpenCustomModel: (customModelId: string) => {
       console.log(customModelId);
     },
+    OpenIframe: (iframeId: string) => openIframeModal(iframeId),
+    OpenMedia: (mediaId: string) => openMediaModal(mediaId),
+    OpenAR: (arId: string) => openARId(arId),
   };
 
   const onUIReady = () => {
@@ -162,6 +204,16 @@ const App = () => {
     if (overlayData) {
       delete overlayData.languages; // TODO: undo this later when the languages are ready
       delete overlayData.sounds; // TODO: undo this later when the sounds are ready
+
+      // get the domain from the iframe
+      const iframe = document.getElementById('experience-container') as HTMLIFrameElement;
+      if (iframe && iframe.src) {
+        const url = iframe.src;
+        const regex = /\/private\//;
+        if (regex.test(url)) {
+          delete overlayData.share;
+        }
+      }
     }
     const room = overlayData?.changeRooms;
     if (room && room?.content) {
@@ -182,10 +234,14 @@ const App = () => {
     });
   };
 
+  let isModalOpening = false;
   const openProductModal = (productVariantId: string) => {
+    if (isModalOpening) return;
     setProductDrawerLoading(true);
+    isModalOpening = true;
     setTimeout(() => {
       setProductDrawerLoading(false);
+      isModalOpening = false;
       const productData =
         window.emperia?.data.ui.pdpModels.find((i) => i.id == productVariantId)?.pdpModel ||
         fallbackData.data.ui.pdpModels[0].pdpModel;
@@ -219,7 +275,10 @@ const App = () => {
     const infoData: InfoData =
       window.emperia?.data.ui.infoModels.find((i) => i.id == infoModalId)?.infoModel ||
       fallbackData.data.ui.infoModels[0].infoModel;
-    setInfoFloatingData({ data: infoData, active: true });
+    setInfoData({
+      data: infoData,
+      active: true,
+    });
   };
 
   const openWelcomeModal = () => {
@@ -259,24 +318,73 @@ const App = () => {
     window.dispatchEvent(new CustomEvent('fromUserInterface', { detail: { name: 'changeLanguage', locale: lang } }));
   };
 
+  const openIframeModal = (iframeId: string) => {
+    const iframeData = window.emperia?.data.ui.iframeModels.find((i) => i.id == iframeId)?.iFrameModel || {
+      uRL: 'https://emperiavr.com/emperia-creator-tools',
+    };
+    if (!iframeData) return;
+    setIframeDrawerData({
+      data: {
+        id: iframeId,
+        url: iframeData.uRL,
+      },
+      active: true,
+    });
+  };
+
+  const openMediaModal = (mediaId: string) => {
+    const mediaData =
+      window.emperia?.data.ui.mediaModels.find((i) => i.id == mediaId)?.mediaModel ||
+      fallbackData.data.ui.mediaModels[0].mediaModel;
+    if (!mediaData) return;
+
+    setMediaDrawerData({
+      data: {
+        id: mediaId,
+        mediaModel: mediaData,
+      },
+      active: true,
+    });
+  };
+
+  const openARId = (arId: string) => {
+    const arModels = window.emperia?.data?.ui?.arModels;
+    // Ensure arModels is a valid array; otherwise, fallback
+    const isValidArray = Array.isArray(arModels) && arModels.length > 0;
+    const arDataValid = isValidArray ? arModels.find((i) => i.id == arId)?.aRModel : undefined;
+    const arData = arDataValid || fallbackData.data.ui.arModels[0]?.aRModel;
+    if (!arData) return;
+    setArData({
+      active: true,
+      data: {
+        id: arId,
+        aRModel: {
+          meshURL: arData.meshURL,
+        },
+      },
+    });
+  };
   useEffect(() => {
     const eventListener = (event: Event) => {
       const interceptedEvent = event as CustomEvent;
+      if (interceptedEvent.detail.name === 'OpenPDP') {
+        event.stopImmediatePropagation();
+      }
       const eventType = interceptedEvent.detail.name as keyof typeof eventMap;
       const eventData = interceptedEvent.detail.data;
+
       if (eventMap[eventType]) {
         eventMap[eventType](eventData);
       }
     };
-
-    window.emperia?.events?.addEventListener('fromExperience', eventListener);
-    window.addEventListener('fromExperience', eventListener);
-
+    const target = window?.emperia?.events || window;
+    target.removeEventListener('fromExperience', eventListener);
+    target.addEventListener('fromExperience', eventListener);
     return () => {
-      window.emperia?.events?.removeEventListener('fromExperience', eventListener);
-      window.removeEventListener('fromExperience', eventListener);
+      target.removeEventListener('fromExperience', eventListener);
     };
   }, []);
+
   return (
     <ChakraProvider theme={CustomTheme} cssVarsRoot="#ui-root">
       <Overlay
@@ -372,6 +480,50 @@ const App = () => {
           setInfoFloatingData({ ...infoData, active: false });
         }}
       />
+      <IframeDrawer
+        iframeId={iframeDrawerData?.data.id}
+        active={iframeDrawerData?.active}
+        url={iframeDrawerData?.data.url}
+        onClose={() => {
+          setIframeDrawerData({ ...iframeDrawerData, active: false });
+        }}
+      />
+      <MediaDrawer
+        mediaId={mediaDrawerData?.data.id}
+        active={mediaDrawerData?.active}
+        mediaURLs={mediaDrawerData?.data.mediaModel.mediaURLs}
+        highlightImage={highlightImage || mediaDrawerData?.data.mediaModel.mediaURLs[0]}
+        setHighLightImage={setHighLightImage}
+        onClose={() =>
+          setMediaDrawerData({
+            data: {
+              id: '',
+              mediaModel: {
+                mediaURLs: [],
+              },
+            },
+            active: false,
+          })
+        }
+      />
+      {arData.active && (
+        <ArDrawer
+          onClose={() =>
+            setArData({
+              data: {
+                id: '',
+                aRModel: {
+                  meshURL: '',
+                },
+              },
+              active: false,
+            })
+          }
+          arId={arData.data.id}
+          url={arData.data.aRModel.meshURL}
+          active={arData.active}
+        />
+      )}
     </ChakraProvider>
   );
 };
