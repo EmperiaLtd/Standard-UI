@@ -5,7 +5,7 @@ import { ThreeDView } from '../../Icons/ThreeDView';
 import { YouTubeIcon } from '../../Icons/YoutubeIcon';
 import { UnknownMediaIcon } from '../../Icons/UnknownMediaIcon';
 import { CrossIcon } from '../../Icons/CrossIcon';
-import { parseYouTubeEmbed } from '../../utils/helper';
+import { determineMediaType, parseYouTubeEmbed } from '../../utils/helper';
 
 interface IframeProps {
   mediaId: string;
@@ -51,7 +51,11 @@ const MediaDrawer = ({
     const fetchMediaTypes = async () => {
       const types: Record<string, string> = {};
       for (const media of mediaURLs) {
-        const mediaType = await getMediaType(media);
+        let mediaType: string | null = '';
+        mediaType = determineMediaType(media);
+        if (mediaType === 'Unknown') {
+          mediaType = await getMediaType(media);
+        }
         types[media] = mediaType || 'Unknown';
       }
       setMediaTypes(types);
