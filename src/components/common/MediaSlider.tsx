@@ -12,10 +12,9 @@ import Slider from 'react-slick';
 import { useEffect, useRef, useState } from 'react';
 import { ThreeDView } from '../../Icons/ThreeDView';
 import { YouTubeIcon } from '../../Icons/YoutubeIcon';
-import { UnknownMediaIcon } from '../../Icons/UnknownMediaIcon';
 import { ImageSliderProps } from '../../interfaces';
 import React from 'react';
-import { parseYouTubeEmbed } from '../../utils/helper';
+import { determineMediaType, parseYouTubeEmbed } from '../../utils/helper';
 
 const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }: ImageSliderProps) => {
   const transition = 'all 0.2s ease-in-out';
@@ -35,7 +34,12 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
     const fetchMediaTypes = async () => {
       const types: Record<string, string> = {};
       for (const image of images) {
-        const mediaType = await getMediaType(image);
+        // first check if it has extension
+        let mediaType: string | null = '';
+        mediaType = determineMediaType(image);
+        if (mediaType === 'Unknown') {
+          mediaType = await getMediaTypeAsync(image);
+        }
         types[image] = mediaType || 'Unknown';
       }
       setMediaTypes(types);
@@ -54,7 +58,7 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
     }
   }
 
-  const getMediaType = async (url: string): Promise<string | null> => {
+  const getMediaTypeAsync = async (url: string): Promise<string | null> => {
     try {
       const response = await fetch(url);
       const contentType = response.headers.get('Content-Type');
@@ -324,8 +328,9 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
                   <ChakraImage src={image} objectFit="cover" position="absolute" height="100%" width="100%" />
                 )}
                 {mediaTypes[image] === 'Video' && <YouTubeIcon fill="white" width="100%" height="100%" />}
-                {mediaTypes[image] === 'YouTube' && <YouTubeIcon fill="white" width="100%" height="100%" />}
-                {mediaTypes[image] === 'Unknown' && <UnknownMediaIcon fill="white" width="100%" height="100%" />}
+                {['YouTube', 'Unknown'].includes(mediaTypes[image]) && (
+                  <YouTubeIcon fill="white" width="100%" height="100%" />
+                )}
               </Box>
             ))}
           </Box>

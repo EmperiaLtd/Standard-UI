@@ -154,3 +154,13 @@ export function parseYouTubeEmbed(link: string) {
   }
   return link;
 }
+
+export const determineMediaType = (mediaString: string) => {
+  if (mediaString) {
+    if (/https?:\/\/(www\.)?youtube\.com\/watch\?v=[\w-]+/i.test(mediaString)) return 'YouTube';
+    if (/\.(jpeg|png|webp|jpg|gif|bmp|svg|tiff|tif)$/i.test(mediaString)) return 'Picture';
+    if (/\.(mp4|mkv|webm|mov|avi|flv|wmv|m4v|mpeg|mpg)$/i.test(mediaString)) return 'Video';
+    return 'Unknown';
+  }
+  return null;
+};
