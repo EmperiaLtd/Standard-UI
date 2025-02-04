@@ -33,27 +33,85 @@ export interface OverlayElementObject {
 }
 
 export interface OverlayElement {
-  key: string;
-  text: string;
-  hotspot?: string;
-  textAlternate?: string;
+  key: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  text: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  hotspot?: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  textAlternate?: {
+    name: string;
+    type: string;
+    value: string;
+  };
   content?: OverlayElementContent;
 }
 
-export type OverlayElementContent = string[] | LanguageItem[] | RoomItem[] | SoundItem[];
+export type InstructionOverlay = {
+  name: string;
+  type: string;
+  value: string[];
+};
 
+export type SoundOverlay = {
+  name: string;
+  type: string;
+  value: SoundItemValue[];
+};
+
+export type shareItem = {
+  name: string;
+  type: string;
+  value: string;
+};
+export type OverlayElementContent =
+  | LanguageItem[]
+  | RoomItem
+  | InstructionOverlay
+  | SoundOverlay
+  | shareItem
+  | string[];
 export interface RoomItem {
+  name: string;
+  type: 'ObjectArray';
+  value: RoomItemValue[];
+}
+
+export interface RoomItemValue {
   roomName: string;
   description: string;
   scene: string;
 }
 
 export interface LanguageItem {
-  key: string;
-  locale: string;
+  key: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  locale: {
+    name: string;
+    type: string;
+    value: string;
+  };
 }
 
 export interface SoundItem {
+  name: string;
+  type: 'ObjectArray';
+  value: SoundItemValue[];
+}
+
+export interface SoundItemValue {
   name: string;
   fileURL: string;
 }
@@ -115,11 +173,31 @@ export interface WelcomeState {
   active: boolean;
 }
 export interface WelcomeData {
-  collectionImage: string;
-  collectionTitle: string;
-  jumboTitle: string;
-  tagline: string;
-  enterCTA: string;
+  collectionImage: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  collectionTitle: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  jumboTitle: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  tagline: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  enterCTA: {
+    name: string;
+    type: string;
+    value: string;
+  };
 }
 
 export interface InstructionsProps {
@@ -132,8 +210,16 @@ export interface InstructionsState {
   active: boolean;
 }
 export interface InstructionsData {
-  skip: string;
-  content: string[];
+  skip: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  content: {
+    name: string;
+    type: string;
+    value: string[];
+  };
 }
 export interface InfoModalProps {
   infoData: InfoData;
@@ -144,19 +230,47 @@ export interface InfoDrawerProps {
   infoData: InfoData;
   active: boolean;
   close: () => void;
+  openEdit: boolean;
+  setOpenEdit: (state: boolean) => void;
+  editable: boolean;
 }
 export interface InfoState {
-  data: InfoData;
+  id: number | string;
+  data: InfoData | null;
   active: boolean;
 }
 export interface InfoData {
-  image: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  buttonTitle: string;
-  linkToOpen: string;
-  mediaURLs?: string[];
+  image: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  title: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  subtitle: { name: string; type: string; value: string };
+  description: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  buttonTitle: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  linkToOpen: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  mediaURLs?: {
+    name: string;
+    type: string;
+    value: string[];
+  };
 }
 
 export interface ProductDrawerProps {
@@ -168,9 +282,13 @@ export interface ProductDrawerProps {
   productIdTrail: string[];
   setCartItems: (data: CartItemProps[]) => void;
   openCart: () => void;
+  openEdit: boolean;
+  setOpenEdit: (state: boolean) => void;
+  editable: boolean;
 }
 
 export interface ProductState {
+  id: number | string;
   data: ProductData;
   active: boolean;
 }
@@ -200,26 +318,102 @@ export interface SwatchProps {
 }
 
 export type ProductData = {
-  parent_id: string;
-  parent_sku: string;
-  market: string;
-  title: string;
-  short_description: string;
-  long_description: string;
-  category: string;
-  brand: string;
-  collection: string;
-  currency: string;
-  gender: string;
-  age_group: string;
-  default_url: string;
-  tags: string;
-  base_price: number;
-  variants_selection_order: string[];
-  variants: ProductVariant[];
-  turnTableURL: string;
-  retail_price: number;
-  imageURLs: string[];
+  parent_id: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  parent_sku: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  market: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  title: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  short_description?: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  long_description?: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  category?: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  brand: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  collection?: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  currency: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  gender: { name: string; type: string; value: string };
+  age_group: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  default_url: {
+    name: string;
+    type: 'url';
+    value: string;
+  };
+  tags: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  base_price: {
+    name: string;
+    type: string;
+    value: number;
+  };
+  variants_selection_order?: {
+    name: string;
+    type: string;
+    value: string[];
+  };
+  variants?: {
+    name: string;
+    type: string;
+    value: ProductVariant[];
+  };
+  turnTableURL?: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  retail_price?: {
+    name: string;
+    type: string;
+    value: number;
+  };
+  imageURLs: {
+    name: string;
+    type: string;
+    value: string[];
+  };
 };
 
 export type ProductVariantMedia = {
@@ -231,25 +425,57 @@ export type ProductVariantMedia = {
 };
 
 export type ProductVariant = {
-  bDefault: boolean;
-  variant_id: string;
-  variant_sku: string;
-  short_description: string;
-  long_description: string;
-  variants: ProductVariantType[];
-  available_stock: number;
-  imageURLs: string[];
-  media_plugin_integration: MediaPluginIntegrationItem[];
-  color_swatch: string;
-  momenti_url: MomentiItem;
-  three_dimension_model: {
-    url: string;
+  bDefault: {
+    name: string;
+    type: string;
+    value: boolean;
   };
-  retail_price: number;
-  sale_price: number;
-  in_stock: boolean;
-  color_swatch_url: string | null;
-  media?: ProductVariantMedia[];
+  variant_id: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  variant_sku: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  short_description: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  long_description: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  variants: ProductVariantType[];
+  available_stock: {
+    name: string;
+    type: string;
+    value: number;
+  };
+  imageURLs: {
+    name: string;
+    type: string;
+    value: string[];
+  };
+  retail_price: {
+    name: string;
+    type: string;
+    value: number;
+  };
+  sale_price: {
+    name: string;
+    type: string;
+    value: number;
+  };
+  in_stock: {
+    name: string;
+    type: string;
+    value: boolean;
+  };
 };
 
 export interface MediaPluginIntegrationItem {
@@ -261,13 +487,41 @@ export interface MediaPluginIntegrationItem {
 }
 
 export type ProductVariantType = {
-  name?: string;
-  variant_type: string;
-  value: string;
-  price?: string;
-  available_stock?: number;
-  variant_sku?: string;
-  imageURLs?: string[];
+  name?: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  variant_type: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  value: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  price?: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  available_stock?: {
+    name: string;
+    type: string;
+    value: number;
+  };
+  variant_sku?: {
+    name: string;
+    type: string;
+    value: string;
+  };
+  imageURLs?: {
+    name: string;
+    type: string;
+    value: string[];
+  };
 };
 
 export type MomentiItem = {
@@ -315,27 +569,38 @@ export type EventData = {
     iframeModels: IframeModel[];
     mediaModels: MediaModel[];
     arModels: ARModel[];
+    experience_url?: string;
   };
 };
 
 export type IframeModel = {
   id: string;
   iFrameModel: {
-    uRL: string;
+    url: {
+      name: string;
+      type: 'url';
+      value: string;
+    };
   };
 };
 
 export type MediaModel = {
   id: string;
   mediaModel: {
-    mediaURLs: string[];
+    mediaURLs: {
+      name: string;
+      type: string;
+      value: string[];
+    };
   };
 };
 
 export type ARModel = {
   id: string;
-  aRModel: {
-    meshURL: string;
+  arModel: {
+    name: string;
+    type: string;
+    value: string;
   };
 };
 
@@ -347,7 +612,7 @@ type UiConfig = {
 
 export type InfoModels = {
   id: string;
-  infoModel: InfoData;
+  infoModel: any;
 };
 
 export type PDPModels = {
@@ -529,9 +794,13 @@ export interface CommonProps {
 }
 
 export interface IframeData {
-  data: {
-    id: string;
-    url: string;
+  id: string;
+  iFrameModel: {
+    url: {
+      name: string;
+      type: 'url';
+      value: string;
+    };
   };
   active: boolean;
 }
@@ -540,18 +809,51 @@ export interface MediaData {
   data: {
     id: string;
     mediaModel: {
-      mediaURLs: string[];
+      mediaURLs: {
+        name: string;
+        type: string;
+        value: string[];
+      };
     };
   };
   active: boolean;
 }
 
 export interface aRModels {
-  data: {
-    id: string;
-    aRModel: {
-      meshURL: string;
-    };
+  id: string;
+  arModel: {
+    name: string;
+    type: 'url';
+    value: string;
   };
   active: boolean;
+}
+
+export interface EditDrawerProps {
+  openEditDrawer: boolean;
+  setOpenEditDrawer: (state: boolean) => void;
+  setActiveTab: (tab: string) => void;
+  activeTab: string;
+  tabs: string[];
+  activeTabData: any;
+  setActiveTabData: (data: any) => void;
+  handleSave: (data: any) => void;
+  onClose: () => void;
+  activeId: string | number;
+  setActiveId: (id: string | number) => void;
+}
+
+export interface EditInfoProps {
+  handleSave: (data: any) => void;
+  setActiveTabData: (data: any) => void;
+  activeTabData: any;
+  activeId: string | number;
+  setActiveId: (id: string | number) => void;
+}
+
+export interface JSONUpdatePayload {
+  id: string | number;
+  data: any;
+  fileName: string;
+  modelName: string;
 }

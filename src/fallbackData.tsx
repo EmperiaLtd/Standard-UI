@@ -4,134 +4,180 @@ export const fallbackData: FallBackData = {
   data: {
     ui: {
       uiConfig: {
-        overlay: {
-          changeRooms: {
-            content: [
-              {
-                roomName: 'Room 1',
-                description: 'The first room.',
-                scene: 'room_1',
-              },
-              {
-                roomName: 'Room 2',
-                description: 'The second room.',
-                scene: 'room_2',
-              },
-            ],
-            hotspot: 'None',
-            key: 'changeRooms',
-            text: 'Change Rooms',
-            textAlternate: '',
-          },
-          instructionsOverlay: {
-            content: ['First', 'Second', 'Third'],
-            key: 'instructions',
-            text: 'Instructions',
-            textAlternate: '',
-          },
-          languages: {
-            content: [
-              {
-                key: 'English',
-                locale: 'en',
-              },
-              {
-                key: 'French',
-                locale: 'fr',
-              },
-            ],
-            key: 'languages',
-            text: 'Languages',
-            textAlternate: '',
-          },
-          sounds: {
-            content: [
-              {
-                name: 'Sound 1',
-                fileURL: '',
-              },
-              {
-                name: 'Sound 2',
-                fileURL: '',
-              },
-            ],
-            key: 'sound',
-            text: 'Sound : ON',
-            textAlternate: 'Sound : OFF',
-          },
-          share: {
-            key: 'share',
-            text: 'Share',
-            textAlternate: '',
-          },
-        },
         welcome: {
-          collectionImage: 'https://picsum.photos/600/600',
-          collectionTitle: 'Experience Title',
-          jumboTitle: 'Experience Name',
-          tagline: 'Short Experience description',
-          enterCTA: 'Enter',
+          collectionImage: {
+            name: 'Collection Image',
+            type: 'image',
+            value: 'https://picsum.photos/500/500',
+          },
+          collectionTitle: {
+            name: 'Collection Title',
+            type: 'string',
+            value: 'EmperiaVR Unreal Test',
+          },
+          jumboTitle: {
+            name: 'Jumbo Title',
+            type: 'string',
+            value: 'EmperiaVR Unreal Test',
+          },
+          tagline: {
+            name: 'Tagline',
+            type: 'string',
+            value: 'The experience showcasing the demo functionality',
+          },
+          enterCTA: { name: 'Enter CTA', type: 'string', value: 'Enter' },
         },
         instructions: {
-          skip: 'Skip',
-          content: [
-            'Hold and Drag to look around',
-            'Click on floor to move',
-            'Hover or click on objects to learn more',
-          ],
+          skip: { name: 'Skip Button', type: 'string', value: 'Skip' },
+          content: {
+            name: 'Instructions Content',
+            type: 'stringArray',
+            value: [
+              'Hold and Drag to look around',
+              'Click on floor to move',
+              'Hover or Click on objects to learn more',
+            ],
+          },
+        },
+        overlay: {
+          changeRooms: {
+            content: {
+              name: 'Change rooms Content',
+              type: 'ObjectArray',
+              value: [
+                {
+                  roomName: 'Room 1',
+                  description: 'Desc Room 1',
+                  scene: 'room_1',
+                },
+              ],
+            },
+            key: { name: 'Key', type: 'string', value: 'changeRooms' },
+            text: { name: 'Text', type: 'string', value: 'Change Rooms' },
+            textAlternate: {
+              name: 'Text Alternate',
+              type: 'string',
+              value: '',
+            },
+          },
+          instructionsOverlay: {
+            content: {
+              name: 'Instructionsoverlay Content',
+              type: 'stringArray',
+              value: ['First', 'Second', 'Third'],
+            },
+            key: { name: 'Key', type: 'string', value: 'instructions' },
+            text: { name: 'Text', type: 'string', value: 'Instructions' },
+            textAlternate: {
+              name: 'Text Alternate',
+              type: 'string',
+              value: '',
+            },
+          },
+          languages: {
+            content: {
+              name: 'Languages Content',
+              type: 'stringArray',
+              value: ['Langugage 1', 'Langugage 2', 'Langugage 3'],
+            },
+            key: { name: 'Key', type: 'string', value: 'languages' },
+            text: { name: 'Text', type: 'string', value: 'Languages' },
+            textAlternate: {
+              name: 'Text Alternate',
+              type: 'string',
+              value: '',
+            },
+          },
+          sounds: {
+            content: {
+              name: 'Sounds Content',
+              type: 'stringArray',
+              value: [{ name: 'Sound 1', fileURL: '' }],
+            },
+            key: { name: 'Key', type: 'string', value: 'sound' },
+            text: { name: 'Text', type: 'string', value: 'Sound : ON' },
+            textAlternate: {
+              name: 'Text Alternate',
+              type: 'string',
+              value: 'Sound : OFF',
+            },
+          },
+          share: {
+            content: {
+              name: 'Share Content',
+              type: 'string',
+              value: 'Share',
+            },
+            key: { name: 'Key', type: 'string', value: 'share' },
+            text: { name: 'Text', type: 'string', value: 'Share' },
+            textAlternate: {
+              name: 'Text Alternate',
+              type: 'string',
+              value: '',
+            },
+          },
         },
       },
       infoModels: [
         {
-          id: '000100',
+          id: '105137',
           infoModel: {
-            image: 'https://picsum.photos/500/500',
-            title: 'Title now',
-            subtitle: 'Subtitle',
-            description:
-              'Description Iconic medium shoulder bag with monogram motif and silver chain. Versatile design with detachable handle and shoulder strap. Crafted metalware details.',
-            buttonTitle: 'Learn More',
-            linkToOpen: 'https://emperiavr.com/emperia-creator-tools',
-            mediaURLs: [
-              'https://www.youtube.com/watch?v=wrz7WabVP5A',
-              'https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-              'https://www.youtube.com/embed/zXfzzxH1q8o?si=V662_OI_MLg-Q9T5',
-              'https://placehold.co/600x400.jpg',
-              'https://picsum.photos/800.jpg',
-              'https://www.w3schools.com/html/movie.mp4',
-            ],
-          },
-        },
-        {
-          id: '000101',
-          infoModel: {
-            image: 'https://picsum.photos/600/600',
-            title: 'Title ok',
-            subtitle: 'Subtitle',
-            description: 'Description',
-            buttonTitle: 'Learn More',
-            linkToOpen: 'https://emperiavr.com/emperia-creator-tools',
-            mediaURLs: [
-              'https://fastly.picsum.photos/id/0/5000/3333.jpg?hmac=_j6ghY5fCfSD6tvtcV74zXivkJSPIfR9B8w34XeQmvU',
-              'https://fastly.picsum.photos/id/1/5000/3333.jpg?hmac=Asv2DU3rA_5D1xSe22xZK47WEAN0wjWeFOhzd13ujW4',
-              'https://fastly.picsum.photos/id/2/5000/3333.jpg?hmac=_KDkqQVttXw_nM-RyJfLImIbafFrqLsuGO5YuHqD-qQ',
-              'https://fastly.picsum.photos/id/4/5000/3333.jpg?hmac=ghf06FdmgiD0-G4c9DdNM8RnBIN7BO0-ZGEw47khHP4',
-              'https://fastly.picsum.photos/id/7/4728/3168.jpg?hmac=c5B5tfYFM9blHHMhuu4UKmhnbZoJqrzNOP9xjkV4w3o',
-            ],
+            mediaURLs: {
+              name: 'Media URLs',
+              type: 'urlArray',
+              value: [
+                'https://www.youtube.com/watch?v=wrz7WabVP5A',
+                'https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+                'https://www.youtube.com/embed/zXfzzxH1q8o?si=V662_OI_MLg-Q9T5',
+                'https://placehold.co/600x400.jpg',
+                'https://picsum.photos/800.jpg',
+                'https://www.w3schools.com/html/movie.mp4',
+              ],
+            },
+            title: {
+              name: 'Title',
+              type: 'string',
+              value: 'Title now',
+            },
+            subTitle: {
+              name: 'Sub Title',
+              type: 'string',
+              value: 'Subtitle',
+            },
+            description: {
+              name: 'Description',
+              type: 'string',
+              value:
+                'Description Iconic medium shoulder bag with monogram motif and silver chain. Versatile design with detachable handle and shoulder strap. Crafted metalware details.',
+            },
+            buttonTitle: {
+              name: 'Button Title',
+              type: 'string',
+              value: 'Learn More',
+            },
+            linkToOpen: {
+              name: 'Link To Open',
+              type: 'url',
+              value: 'https://emperiavr.com/emperia-creator-tools',
+            },
           },
         },
       ],
       mediaModels: [
         {
-          id: '71654',
+          id: '100442',
           mediaModel: {
-            mediaURLs: [
-              'https://youtu.be/sgyveSnlnR4?si=bsD_N-wqkJjxrbOh',
-              'https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-              'https://picsum.photos/800.jpg',
-              'https://www.youtube.com/embed/zXfzzxH1q8o?si=V662_OI_MLg-Q9T5',
-              'https://www.w3schools.com/html/movie.mp4',
-            ],
+            mediaURLs: {
+              name: 'Media Model',
+              type: 'urlArray',
+              value: [
+                'https://youtu.be/sgyveSnlnR4?si=bsD_N-wqkJjxrbOh',
+                'https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+                'https://picsum.photos/800.jpg',
+                'https://www.youtube.com/embed/zXfzzxH1q8o?si=V662_OI_MLg-Q9T5',
+                'https://www.w3schools.com/html/movie.mp4',
+              ],
+            },
           },
         },
       ],
@@ -139,15 +185,21 @@ export const fallbackData: FallBackData = {
         {
           id: '71660',
           iFrameModel: {
-            uRL: 'https://emperiavr.com/emperia-creator-tools/',
+            url: {
+              name: 'iFrame Model',
+              type: 'url',
+              value: 'https://emperiavr.com/emperia-creator-tools/',
+            },
           },
         },
       ],
       arModels: [
         {
           id: '71666',
-          aRModel: {
-            meshURL: 'https://walmart.emperia-staging.com/AR/index.html?name=WalkerEdisonSideboard',
+          arModel: {
+            name: 'AR Model',
+            type: 'url',
+            value: 'https://walmart.emperia-staging.com/AR/index.html?name=WalkerEdisonSideboard',
           },
         },
       ],
@@ -155,220 +207,102 @@ export const fallbackData: FallBackData = {
         {
           id: '000112',
           pdpModel: {
-            parent_id: '000100',
-            parent_sku: '000100',
-            market: 'Test',
-            retail_price: 499,
-            title: 'Product Name',
-            short_description: 'Short Description',
-            long_description: 'Long Description',
-            category: 'Category',
-            brand: 'Brand',
-            collection: 'Collection Name',
-            currency: '$',
-            gender: '',
-            age_group: '',
-            default_url: '',
-            tags: '',
-            base_price: 399,
-            variants_selection_order: ['size', 'color'],
-            imageURLs: [
-              'https://picsum.photos/802/802',
-              'https://picsum.photos/902/902',
-              'https://picsum.photos/1002/1002',
-            ],
-            turnTableURL:
-              'https://walmart.emperia-staging.com/assets/4c769101-b9e7-475b-b5a4-47499d4619f1/public/media/images/3DDE7110_1000x1000_36_imagesheet.png',
-            variants: [
-              {
-                bDefault: true,
-                variant_id: '000112',
-                variant_sku: '000112',
-                short_description: 'Variant Short Description',
-                long_description: 'Variant Long Description',
-                in_stock: true,
-                color_swatch_url: 'https://picsum.photos/200/200',
-                variants: [
-                  {
-                    name: 'Color 1',
-                    variant_type: 'color',
-                    value: '#ff0000',
-                    imageURLs: ['https://picsum.photos/800/800', 'https://picsum.photos/900/900'],
-                  },
-                  {
-                    variant_type: 'size',
-                    value: 'S',
-                    price: '399',
-                    available_stock: 10,
-                    variant_sku: '000112A',
-                    imageURLs: ['https://picsum.photos/800/800', 'https://picsum.photos/900/900'],
-                  },
-                  {
-                    variant_type: 'size',
-                    value: 'M',
-                    price: '399',
-                    available_stock: 10,
-                    variant_sku: '000112B',
-                    imageURLs: ['https://picsum.photos/800/800', 'https://picsum.photos/900/900'],
-                  },
-                  {
-                    variant_type: 'size',
-                    value: 'L',
-                    price: '399',
-                    available_stock: 0,
-                    variant_sku: '000112C',
-                    imageURLs: ['https://picsum.photos/800/800', 'https://picsum.photos/900/900'],
-                  },
-                  {
-                    variant_type: 'size',
-                    value: 'XL',
-                    price: '399',
-                    available_stock: 10,
-                    variant_sku: '000112D',
-                    imageURLs: ['https://picsum.photos/800/800', 'https://picsum.photos/900/900'],
-                  },
-                ],
-                available_stock: 100,
-                imageURLs: [
-                  'https://picsum.photos/800/800',
-                  'https://picsum.photos/900/900',
-                  'https://picsum.photos/1000/1000',
-                ],
-                media_plugin_integration: [],
-                color_swatch: '#ff0000',
-                momenti_url: {
-                  url: '',
-                  sound_effect: false,
-                },
-                three_dimension_model: {
-                  url: '',
-                },
-                retail_price: 499,
-                sale_price: 359,
-              },
-              {
-                bDefault: false,
-                variant_id: '000113',
-                variant_sku: '000113',
-                short_description: 'Variant Short Description',
-                long_description: 'Variant Long Description',
-                in_stock: true,
-                color_swatch_url: 'https://picsum.photos/200/200',
-                variants: [
-                  {
-                    name: 'Color 2',
-                    variant_type: 'color',
-                    value: '#00ddff',
-                  },
-                  {
-                    variant_type: 'size',
-                    value: 'S',
-                    price: '399',
-                    available_stock: 10,
-                    variant_sku: '000113A',
-                  },
-                  {
-                    variant_type: 'size',
-                    value: 'M',
-                    price: '399',
-                    available_stock: 0,
-                    variant_sku: '000113B',
-                  },
-                  {
-                    variant_type: 'size',
-                    value: 'L',
-                    price: '399',
-                    available_stock: 10,
-                    variant_sku: '000113C',
-                  },
-                  {
-                    variant_type: 'size',
-                    value: 'XL',
-                    price: '399',
-                    available_stock: 0,
-                    variant_sku: '000113D',
-                  },
-                ],
-                available_stock: 100,
-                imageURLs: [
-                  'https://picsum.photos/802/802',
-                  'https://picsum.photos/902/902',
-                  'https://picsum.photos/1002/1002',
-                ],
-                media_plugin_integration: [],
-                color_swatch: '#00ddff',
-                momenti_url: {
-                  url: '',
-                  sound_effect: false,
-                },
-                three_dimension_model: {
-                  url: '',
-                },
-                retail_price: 499,
-                sale_price: 359,
-              },
-              {
-                bDefault: false,
-                variant_id: '000114',
-                variant_sku: '000114',
-                in_stock: true,
-                color_swatch_url: 'https://picsum.photos/200/200',
-                short_description: 'Variant Short Description',
-                long_description: 'Variant Long Description',
-                variants: [
-                  {
-                    name: 'Color 3',
-                    variant_type: 'color',
-                    value: '#0c0c0c',
-                  },
-                  {
-                    variant_type: 'size',
-                    value: 'S',
-                    price: '399',
-                    available_stock: 0,
-                    variant_sku: '000114A',
-                  },
-                  {
-                    variant_type: 'size',
-                    value: 'M',
-                    price: '399',
-                    available_stock: 0,
-                    variant_sku: '000114B',
-                  },
-                  {
-                    variant_type: 'size',
-                    value: 'L',
-                    price: '399',
-                    available_stock: 0,
-                    variant_sku: '000114C',
-                  },
-                  {
-                    variant_type: 'size',
-                    value: 'XL',
-                    price: '399',
-                    available_stock: 0,
-                    variant_sku: '000114D',
-                  },
-                ],
-                available_stock: 100,
-                imageURLs: [
-                  'https://picsum.photos/803/803',
-                  'https://picsum.photos/903/903',
-                  'https://picsum.photos/1003/1003',
-                ],
-                media_plugin_integration: [],
-                color_swatch: '#0c0c0c',
-                momenti_url: {
-                  url: '',
-                  sound_effect: false,
-                },
-                three_dimension_model: {
-                  url: '',
-                },
-                retail_price: 499,
-                sale_price: 359,
-              },
-            ],
+            imageURLs: {
+              name: 'Image URLs',
+              type: 'urlArray',
+              value: [
+                'https://picsum.photos/802/802',
+                'https://picsum.photos/902/902',
+                'https://picsum.photos/1002/1002',
+              ],
+            },
+            brand: {
+              name: 'Brand',
+              type: 'string',
+              value: 'Brand',
+            },
+            title: {
+              name: 'Product Title',
+              type: 'string',
+              value: 'A product by Emperia',
+            },
+            parent_id: {
+              name: 'Product Parent ID',
+              type: 'string',
+              value: '000100',
+            },
+            parent_sku: {
+              name: 'Product Parent SKU',
+              type: 'string',
+              value: '000100',
+            },
+            market: {
+              name: 'Market',
+              type: 'string',
+              value: 'Test',
+            },
+            base_price: {
+              name: 'Base Price',
+              type: 'string',
+              value: 399,
+            },
+            retail_price: {
+              name: 'Retail Price',
+              type: 'string',
+              value: 399,
+            },
+
+            short_description: {
+              name: 'Short Description',
+              type: 'string',
+              value: 'Short Description',
+            },
+            long_description: {
+              name: 'Long Description',
+              type: 'string',
+              value: 'Long Description',
+            },
+            category: {
+              name: 'Category',
+              type: 'string',
+              value: 'Category',
+            },
+            currency: {
+              name: 'Currency',
+              type: 'string',
+              value: '$',
+            },
+            gender: {
+              name: 'Gender',
+              type: 'string',
+              value: '',
+            },
+            age_group: {
+              name: 'Age Group',
+              type: 'string',
+              value: '',
+            },
+            default_url: {
+              name: 'Default URL',
+              type: 'url',
+              value: '',
+            },
+            tags: {
+              name: 'Tags',
+              type: 'stringArray',
+              value: '',
+            },
+            variants_selection_order: {
+              name: 'Variants Selection Order',
+              type: 'stringArray',
+              value: ['size', 'color'],
+            },
+            turnTableURL: {
+              name: 'Turn Table URL',
+              type: 'url',
+              value:
+                'https://walmart.emperia-staging.com/assets/4c769101-b9e7-475b-b5a4-47499d4619f1/public/media/images/3DDE7110_1000x1000_36_imagesheet.png',
+            },
           },
         },
       ],
