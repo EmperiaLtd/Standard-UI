@@ -44,6 +44,7 @@ const App = () => {
   const [highlightImage, setHighLightImage] = useState('');
   const [openEdit, setOpenEdit] = useState(false);
   const [editable, setEditable] = useState(false);
+  const [activeId, setActiveId] = useState<number | string>('');
 
   const [iframeDrawerData, setIframeDrawerData] = useState<IframeData>({
     id: '',
@@ -243,6 +244,7 @@ const App = () => {
 
   let isModalOpening = false;
   const openProductModal = (productVariantId: string) => {
+    setActiveId(productVariantId);
     if (isModalOpening) return;
     setProductDrawerLoading(true);
     isModalOpening = true;
@@ -262,6 +264,7 @@ const App = () => {
   };
 
   const openInfoModal = (infoModalId: string) => {
+    setActiveId(infoModalId);
     const infoData: InfoData =
       window.emperia?.data.ui.infoModels.find((i) => i.id == infoModalId)?.infoModel ||
       fallbackData.data.ui.infoModels[0].infoModel;
@@ -395,6 +398,103 @@ const App = () => {
     }
   }, [editable]);
 
+  useEffect(() => {
+    const eventListener = (event: Event) => {
+      const interceptedEvent = event as CustomEvent;
+      if (interceptedEvent.detail.name === 'updateUI') {
+        if (interceptedEvent.detail.type === 'info') {
+          const activeTabData = interceptedEvent.detail.data;
+          setInfoData({ active: true, id: interceptedEvent.detail.id, data: activeTabData });
+          if (window.emperia) {
+            window.emperia.data.ui.infoModels = window.emperia.data.ui.infoModels.map((info) => {
+              if (info.id === interceptedEvent.detail.id) {
+                return { id: interceptedEvent.detail.id, infoModel: activeTabData };
+              }
+              return info;
+            });
+          }
+        }
+        if (interceptedEvent.detail.type === 'media') {
+          const activeTabData = interceptedEvent.detail.data;
+          setMediaDrawerData({
+            active: true,
+            data: {
+              id: interceptedEvent.detail.id,
+              mediaModel: activeTabData,
+            },
+          });
+          if (window.emperia) {
+            window.emperia.data.ui.mediaModels = window.emperia.data.ui.mediaModels.map((media) => {
+              if (media.id === interceptedEvent.detail.id) {
+                return { id: interceptedEvent.detail.id, mediaModel: activeTabData };
+              }
+              return media;
+            });
+          }
+        }
+
+        if (interceptedEvent.detail.type === 'iframe') {
+          const activeTabData = interceptedEvent.detail.data;
+          setIframeDrawerData({
+            active: true,
+            id: interceptedEvent.detail.id,
+            iFrameModel: activeTabData,
+          });
+          if (window.emperia) {
+            window.emperia.data.ui.iframeModels = window.emperia.data.ui.iframeModels.map((iframe) => {
+              if (iframe.id === interceptedEvent.detail.id) {
+                return { id: interceptedEvent.detail.id, iFrameModel: activeTabData };
+              }
+              return iframe;
+            });
+          }
+        }
+        if (interceptedEvent.detail.type === 'ar') {
+          const activeTabData = interceptedEvent.detail.data;
+          setArData({
+            active: true,
+            id: interceptedEvent.detail.id,
+            arModel: activeTabData,
+          });
+          if (window.emperia) {
+            window.emperia.data.ui.arModels = window.emperia.data.ui.arModels.map((ar) => {
+              if (ar.id === interceptedEvent.detail.id) {
+                return { id: interceptedEvent.detail.id, arModel: activeTabData };
+              }
+              return ar;
+            });
+          }
+        }
+        if (interceptedEvent.detail.type === 'product') {
+          const product = interceptedEvent.detail.data;
+          setProductDrawerData({
+            active: true,
+            id: interceptedEvent.detail.id,
+            data: product,
+          });
+          if (window.emperia) {
+            window.emperia.data.ui.pdpModels = window.emperia.data.ui.pdpModels.map((pdp) => {
+              if (pdp.id === interceptedEvent.detail.id) {
+                return { id: interceptedEvent.detail.id, pdpModel: product };
+              }
+              return pdp;
+            });
+          }
+        }
+        if (interceptedEvent.detail.type === 'ui') {
+          window.emperia.data.ui.uiConfig = interceptedEvent.detail.data;
+          onUIReady();
+        }
+      }
+    };
+    const target = window?.emperia?.events || window;
+    target.removeEventListener('fromDashboard', eventListener);
+    target.addEventListener('fromDashboard', eventListener);
+    return () => {
+      target.removeEventListener('fromDashboard', eventListener);
+    };
+  }, []);
+
   return (
     <ChakraProvider theme={CustomTheme} cssVarsRoot="#ui-root">
       <Overlay
@@ -476,6 +576,7 @@ const App = () => {
           openEdit={openEdit}
           setOpenEdit={setOpenEdit}
           editable={editable}
+          activeId={activeId}
         />
       )}
 
@@ -488,6 +589,7 @@ const App = () => {
         openEdit={openEdit}
         setOpenEdit={setOpenEdit}
         editable={editable}
+        activeId={activeId}
       />
       <IframeDrawer
         iframeId={iframeDrawerData?.id}

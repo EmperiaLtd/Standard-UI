@@ -233,6 +233,7 @@ export interface InfoDrawerProps {
   openEdit: boolean;
   setOpenEdit: (state: boolean) => void;
   editable: boolean;
+  activeId: string | number;
 }
 export interface InfoState {
   id: number | string;
@@ -285,6 +286,7 @@ export interface ProductDrawerProps {
   openEdit: boolean;
   setOpenEdit: (state: boolean) => void;
   editable: boolean;
+  activeId: string | number;
 }
 
 export interface ProductState {

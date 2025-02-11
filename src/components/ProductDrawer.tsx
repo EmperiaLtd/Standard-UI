@@ -22,8 +22,17 @@ import { Share } from '../Icons/Share';
 import PDPFooter from './PDP/PDPFooter';
 import Swatch from './PDP/Swatch';
 import VariantItem from './PDP/VarientItem';
+import { EditIcon } from '../Icons/EditIcon';
 
-function ProductDrawer({ productId, productDrawerData, active, close, editable, openCart }: ProductDrawerProps) {
+function ProductDrawer({
+  productId,
+  productDrawerData,
+  active,
+  close,
+  editable,
+  openCart,
+  activeId,
+}: ProductDrawerProps) {
   const transition = 'all 0.2s ease-in-out';
   const { width, height } = useWindowDimensions();
 
@@ -292,6 +301,19 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
         }
     }
   };
+  const handleOpenEditPDP = () => {
+    window.emperia &&
+      window.emperia.events.dispatchEvent(
+        new CustomEvent('fromUserInterface', {
+          detail: { name: 'openEdit', type: 'product', id: activeId, title: productDrawerData?.title?.value },
+        }),
+      );
+    window.dispatchEvent(
+      new CustomEvent('fromUserInterface', {
+        detail: { name: 'openEdit', type: 'product', id: activeId, title: productDrawerData?.title?.value },
+      }),
+    );
+  };
   return (
     <Fragment key={productId}>
       <ArViewer pId={productId} active={ARViewerActive} close={() => setARViewerActive(false)} />
@@ -301,6 +323,7 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
         onClose={close}
         size={['full', 'full', 'sm', 'sm', 'md']}
         autoFocus={false}
+        trapFocus={false}
       >
         <DrawerOverlay />
         <DrawerContent
@@ -325,6 +348,8 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
               background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
               backdropFilter="blur(12px)"
             >
+              {editable && <EditIcon boxSize={4} stroke="white" onClick={handleOpenEditPDP} />}
+
               <CrossIcon
                 cursor="pointer"
                 onClick={close}
