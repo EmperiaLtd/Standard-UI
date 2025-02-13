@@ -143,7 +143,7 @@ function MenuOption({
         }}
         transition={transition}
       >
-        {content}
+        {content.value}
       </Box>
     </Box>
   );

@@ -90,7 +90,7 @@ function Instructions({ instructionsData, active, close }: InstructionsProps) {
         boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
       >
         <Text fontSize={['12px', '12px', '13px', '13px', '14px']} fontFamily="Montserrat-Bold">
-          {activeImageIndex.newIndex === videos.length - 1 ? 'Close' : instructionsData?.skip}
+          {activeImageIndex.newIndex === videos.length - 1 ? 'Close' : instructionsData?.skip.value}
         </Text>
       </Button>
 
@@ -170,7 +170,7 @@ function Instructions({ instructionsData, active, close }: InstructionsProps) {
             height={['auto', 'auto', 'auto', 'auto', 'auto']}
             textAlign="center"
           >
-            {instructionsData?.content[activeImageIndex.newIndex]}
+            {instructionsData?.content.value[activeImageIndex.newIndex]}
           </Text>
         </Box>
 

@@ -14,7 +14,11 @@ global.window.emperia = {
         {
           id: 'testIframe',
           iFrameModel: {
-            uRL: 'https://example.com',
+            url: {
+              type: 'url',
+              name: 'Test Iframe',
+              value: 'https://example.com',
+            },
           },
         },
       ],

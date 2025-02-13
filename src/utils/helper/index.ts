@@ -72,8 +72,8 @@ const ORDER = [
 
 export const sortSizes = (sizes: ProductVariantType[]) => {
   sizes.sort((a: ProductVariantType, b: ProductVariantType) => {
-    const first = a.value.toLowerCase();
-    const second = b.value.toLowerCase();
+    const first = a.value.value.toLowerCase();
+    const second = b.value.value.toLowerCase();
 
     let nra = parseInt(first);
     let nrb = parseInt(second);
@@ -163,4 +163,8 @@ export const determineMediaType = (mediaString: string) => {
     return 'Unknown';
   }
   return null;
+};
+
+export const capitalizeFirstLetter = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 };
