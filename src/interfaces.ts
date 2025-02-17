@@ -68,18 +68,24 @@ export type SoundOverlay = {
   value: SoundItemValue[];
 };
 
-export type shareItem = {
+export type ShareItem = {
   name: string;
   type: string;
-  value: string;
+  value: ShareItemValue[];
 };
+
+export type ShareItemValue = {
+  name: string;
+};
+
 export type OverlayElementContent =
   | LanguageItem[]
   | RoomItem
   | InstructionOverlay
   | SoundOverlay
-  | shareItem
-  | string[];
+  | ShareItem
+  | string[]
+  | null;
 export interface RoomItem {
   name: string;
   type: 'ObjectArray';
@@ -150,6 +156,12 @@ export interface MenuOptionProps {
 
 export interface SoundOptionProps {
   active: boolean;
+  name: string;
+  transition: string;
+  onClick: () => void;
+}
+
+export interface ShareOptionProps {
   name: string;
   transition: string;
   onClick: () => void;

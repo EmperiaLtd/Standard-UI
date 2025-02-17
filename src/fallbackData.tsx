@@ -62,7 +62,7 @@ export const fallbackData: FallBackData = {
           },
           instructionsOverlay: {
             content: {
-              name: 'Instructionsoverlay Content',
+              name: 'Instructions overlay Content',
               type: 'stringArray',
               value: ['First', 'Second', 'Third'],
             },
@@ -78,7 +78,7 @@ export const fallbackData: FallBackData = {
             content: {
               name: 'Languages Content',
               type: 'stringArray',
-              value: ['Langugage 1', 'Langugage 2', 'Langugage 3'],
+              value: ['Language 1', 'Language 2', 'Language 3'],
             },
             key: { name: 'Key', type: 'string', value: 'languages' },
             text: { name: 'Text', type: 'string', value: 'Languages' },
@@ -103,11 +103,7 @@ export const fallbackData: FallBackData = {
             },
           },
           share: {
-            content: {
-              name: 'Share Content',
-              type: 'string',
-              value: 'Share',
-            },
+            content: null,
             key: { name: 'Key', type: 'string', value: 'share' },
             text: { name: 'Text', type: 'string', value: 'Share' },
             textAlternate: {
