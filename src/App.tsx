@@ -196,6 +196,8 @@ const App = () => {
       } else welcomeData.tagline = newWelcome.tagline;
     }
 
+    console.log('newInstructions', newInstructions);
+
     //Instruction fields validation.
     if (newInstructions != undefined) {
       if (newInstructions.skip.value == '') {
