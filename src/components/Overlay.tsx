@@ -103,7 +103,6 @@ function Overlay({
               originalContent = renderLanguageItems(languageItem);
               break;
             case 'share':
-              console.log('overlayElement', overlayElement);
               const shareItem = overlayElement.content as ShareItem;
               originalContent = renderShareItems(shareItem.value);
               break;
@@ -129,8 +128,6 @@ function Overlay({
           content: content,
         };
       });
-
-    console.log(':transformedOverlayData', transformedOverlayData);
 
     setTransformedOverlayData(transformedOverlayData);
   }, [overlayData, activeScene, activeLang, activeSound]);
@@ -160,7 +157,6 @@ function Overlay({
   };
 
   const renderShareItems = (shares: ShareItemValue[]) => {
-    console.log('shares', shares);
     return shares?.map((share: ShareItemValue) => (
       <ShareOption key={share.name} name={share.name} transition={transition} onClick={() => console.log(share)} />
     ));
@@ -186,8 +182,6 @@ function Overlay({
   const activeOverlayData = transformedOverlayData?.find(
     (overlayElement: TransformedOverlayData) => overlayElement.key === activeMenuOption,
   );
-
-  console.log('activeOverlayData', activeOverlayData);
 
   const handleShare = async () => {
     const productUrl = window.location.href;

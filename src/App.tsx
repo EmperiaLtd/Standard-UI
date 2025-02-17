@@ -174,8 +174,6 @@ const App = () => {
     const newWelcome: WelcomeData = window.emperia?.data.ui.uiConfig['welcome'];
     const newInstructions: InstructionsData = window.emperia?.data.ui.uiConfig['instructions'];
 
-    console.log('newInstructions', newInstructions);
-
     // Checking each value that was passed, and making sure it's not empty.
     // Can be prettier, but want to keep it explicit for the moment.
 
