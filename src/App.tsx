@@ -196,9 +196,6 @@ const App = () => {
       } else welcomeData.tagline = newWelcome.tagline;
     }
 
-    console.log('newInstructions', newInstructions);
-    console.log('window.emperia?.data.ui.uiConfig', window.emperia?.data.ui.uiConfig);
-
     //Instruction fields validation.
     if (newInstructions != undefined) {
       if (newInstructions.skip.value == '') {
@@ -206,7 +203,7 @@ const App = () => {
       } else instructionsData.skip = newInstructions.skip;
       if (newInstructions.content.value.some((str) => str === '')) {
         console.warn('The instructions field contains empty lines. Using default values as fallback.');
-      }
+      } else instructionsData.content = newInstructions.content;
     }
 
     if (overlayData) {
