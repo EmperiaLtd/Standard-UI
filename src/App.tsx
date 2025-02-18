@@ -197,6 +197,7 @@ const App = () => {
     }
 
     console.log('newInstructions', newInstructions);
+    console.log('window.emperia?.data.ui.uiConfig', window.emperia?.data.ui.uiConfig);
 
     //Instruction fields validation.
     if (newInstructions != undefined) {
