@@ -201,7 +201,11 @@ const App = () => {
       if (newInstructions?.skip?.value == '') {
         console.warn('Skip field appears to be empty. Using default value.');
       } else instructionsData.skip = newInstructions.skip;
-      if (newInstructions?.content?.value?.some((str) => str === '')) {
+      if (
+        newInstructions?.content &&
+        newInstructions?.content?.value &&
+        newInstructions?.content?.value?.some((str) => str === '')
+      ) {
         console.warn('The instructions field contains empty lines. Using default values as fallback.');
       }
     }
@@ -598,16 +602,15 @@ const App = () => {
       <IframeDrawer
         iframeId={iframeDrawerData?.id}
         active={iframeDrawerData?.active}
-        url={iframeDrawerData?.iFrameModel.url.value}
+        url={iframeDrawerData?.iFrameModel?.url?.value}
         onClose={() => {
           setIframeDrawerData({ ...iframeDrawerData, active: false });
         }}
       />
-
       <MediaDrawer
         mediaId={mediaDrawerData?.data.id}
         active={mediaDrawerData?.active}
-        mediaURLs={mediaDrawerData?.data.mediaModel.mediaURLs.value}
+        mediaURLs={mediaDrawerData?.data?.mediaModel?.mediaURLs?.value}
         highlightImage={highlightImage || mediaDrawerData?.data.mediaModel.mediaURLs.value[0]}
         setHighLightImage={setHighLightImage}
         onClose={() =>
