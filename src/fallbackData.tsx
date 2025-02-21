@@ -109,7 +109,7 @@ export const fallbackData: FallBackData = {
             textAlternate: {
               name: 'Text Alternate',
               type: 'string',
-              value: '',
+              value: 'Share',
             },
           },
         },
