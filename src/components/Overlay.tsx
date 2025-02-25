@@ -7,7 +7,16 @@ import SoundOption from './common/SoundOption';
 import { BurgerDots } from '../Icons/BurgerDots';
 import Emperia from '../assets/images/Emperia.png';
 import OverlayInstruction from './common/OverlayInstruction';
-import { OverlayProps, TransformedOverlayData, RoomItem, SoundItem, OverlayElement, LanguageItem } from '../interfaces';
+import {
+  OverlayProps,
+  TransformedOverlayData,
+  RoomItem,
+  OverlayElement,
+  LanguageItem,
+  RoomItemValue,
+  SoundOverlay,
+  SoundItemValue,
+} from '../interfaces';
 import React from 'react';
 import { handleCopy } from '../utils/helper';
 import CartDrawer from './common/Cart';
@@ -58,13 +67,6 @@ function Overlay({
     },
   };
 
-  // const renderMap = {
-  //   instructions: (data: string[]) => renderInstructions(data),
-  //   changeRooms: (data: RoomItem[]) => renderRoomItems(data),
-  //   sound: (data: SoundItem[]) => renderSoundItems(data),
-  //   languages: (data: LanguageItem[]) => renderLanguageItems(data),
-  // };
-
   useEffect(() => {
     const transformedOverlayData =
       overlayData &&
@@ -72,18 +74,25 @@ function Overlay({
         let originalContent;
 
         if (overlayElement?.content) {
-          switch (overlayElement.key) {
+          switch (overlayElement.key.value) {
             case 'instructions':
               originalContent = renderInstructions(overlayElement.content as string[]);
               break;
             case 'changeRooms':
-              originalContent = renderRoomItems(overlayElement.content as RoomItem[]);
+              const roomItem = overlayElement.content as RoomItem;
+              originalContent = renderRoomItems(roomItem.value);
               break;
             case 'sound':
-              originalContent = renderSoundItems(overlayElement.content as SoundItem[]);
+              const soundItem = overlayElement.content as SoundOverlay;
+              originalContent = renderSoundItems(soundItem.value);
               break;
             case 'languages':
-              originalContent = renderLanguageItems(overlayElement.content as LanguageItem[]);
+              const languageItem = overlayElement.content as LanguageItem[];
+              originalContent = renderLanguageItems(languageItem);
+              break;
+
+            case 'share':
+              originalContent = overlayElement.text.value;
               break;
             default:
               console.log('No Configuration For This Key', overlayElement.key);
@@ -91,68 +100,39 @@ function Overlay({
           }
         }
 
-        const fallbackContent = menuOptionsDimensions[overlayElement.key as keyof typeof menuOptionsDimensions];
+        const fallbackContent = menuOptionsDimensions[overlayElement.key.value as keyof typeof menuOptionsDimensions];
 
         const content = originalContent || overlayElement.content;
-        const text = overlayElement.text;
-        const textAlternate = overlayElement.textAlternate ?? ''; // Ensure textAlternate is always a string
-        const key = overlayElement.key;
+        const text = overlayElement.text.value;
+        const textAlternate = overlayElement.textAlternate?.value;
+        const key = overlayElement.key.value;
 
         return {
           height: fallbackContent?.height,
           width: fallbackContent?.width,
           key: key,
           text: text,
-          textAlternate: textAlternate, // This is now guaranteed to be a string
+          textAlternate: textAlternate || '', // This is now guaranteed to be a string
           content: content,
         };
       });
-
     setTransformedOverlayData(transformedOverlayData);
   }, [overlayData, activeScene, activeLang, activeSound]);
-
-  // useEffect(() => {
-  //   const transformedOverlayData = overlayData?.map((overlayElement: OverlayElement) => {
-  //     let originalContent;
-
-  //     if (overlayElement?.content) {
-  //       originalContent = renderMap[overlayElement.key as keyof typeof renderMap](overlayElement?.content);
-  //     }
-
-  //     const fallbackContent = menuOptionsDimensions[overlayElement.key as keyof typeof menuOptionsDimensions];
-
-  //     const content = originalContent;
-  //     const text = overlayElement?.text;
-  //     const textAlternate = overlayElement?.textAlternate;
-  //     const key = overlayElement?.key;
-
-  //     return {
-  //       height: fallbackContent?.height,
-  //       width: fallbackContent?.width,
-  //       key: key,
-  //       text: text,
-  //       textAlternate: textAlternate,
-  //       content: content,
-  //     };
-  //   });
-
-  //   setTransformedOverlayData(transformedOverlayData);
-  // }, [overlayData, activeScene, activeLang, activeSound]);
 
   const renderLanguageItems = (languages: LanguageItem[]) => {
     return languages?.map((language: LanguageItem) => (
       <LanguageOption
-        active={language.locale === activeLang}
-        key={language.key}
-        name={language.key}
+        active={language.locale.value === activeLang}
+        key={language.key.value}
+        name={language.key.value}
         transition={transition}
-        onClick={() => setActiveLang(language.locale)}
+        onClick={() => setActiveLang(language.locale.value)}
       />
     ));
   };
 
-  const renderSoundItems = (sounds: SoundItem[]) => {
-    return sounds?.map((sound: SoundItem) => (
+  const renderSoundItems = (sounds: SoundItemValue[]) => {
+    return sounds?.map((sound: SoundItemValue) => (
       <SoundOption
         active={sound.name === activeSound}
         key={sound.name}
@@ -167,8 +147,8 @@ function Overlay({
     return <OverlayInstruction instructionsData={instructions} />;
   };
 
-  const renderRoomItems = (rooms: RoomItem[]) => {
-    return rooms?.map((room: RoomItem) => (
+  const renderRoomItems = (rooms: RoomItemValue[]) => {
+    return rooms?.map((room: RoomItemValue) => (
       <RoomOption
         key={room.roomName}
         active={activeScene === room.scene}
@@ -214,6 +194,12 @@ function Overlay({
     }
   }, []);
 
+  function transformText(text: string): string {
+    // Convert camelCase or PascalCase to space-separated words
+    text = text.replace(/(?<!^)(?=[A-Z])/g, ' ');
+    // Capitalize the first letter of each word
+    return text.replace(/\b\w/g, (char) => char.toUpperCase());
+  }
   return (
     <>
       <Box
@@ -287,7 +273,6 @@ function Overlay({
           {transformedOverlayData?.map((overlayElement: TransformedOverlayData) => {
             const key = overlayElement?.key;
             const content = overlayElement?.content;
-
             return (
               <MenuOption
                 key={overlayElement.key}
@@ -301,7 +286,7 @@ function Overlay({
                     ? audioActive
                       ? overlayElement.text
                       : overlayElement.textAlternate
-                    : overlayElement.text
+                    : transformText(overlayElement.key)
                 }
                 activateMenuOptions={menuHovered}
                 menuOptionHovered={menuOptionHoveredOrActive === key}
@@ -310,12 +295,17 @@ function Overlay({
                   if (content) {
                     const updatedValue = activeMenuOption === key ? '' : key;
                     setActiveMenuOption(updatedValue);
+                    if (updatedValue === 'share') {
+                      handleShare();
+                    }
                   } else if (overlayElement.key === 'sound') {
                     setAudioActive(!audioActive);
-                  } else if (overlayElement.key === 'share') {
-                    handleShare();
                   } else {
                     setActiveMenuOption('');
+
+                    if (key === 'share') {
+                      handleShare();
+                    }
                     console.log('Regular Click');
                   }
                 }}
@@ -350,7 +340,13 @@ function Overlay({
           }}
           transition={transition}
         >
-          {activeOverlayData?.content}
+          {activeOverlayData?.key === 'share' ? (
+            'Share'
+          ) : React.isValidElement(activeOverlayData?.content) ? (
+            activeOverlayData?.content
+          ) : (
+            <>{activeOverlayData?.content}</>
+          )}
         </Box>
       </Box>
       <Link
