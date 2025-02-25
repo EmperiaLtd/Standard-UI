@@ -504,7 +504,7 @@ const App = () => {
   }, []);
 
   return (
-    <ChakraProvider theme={CustomTheme} cssVarsRoot="#ui-root">
+    <ChakraProvider theme={CustomTheme}>
       <Overlay
         activeScene={activeScene}
         activeLang={activeLang}
