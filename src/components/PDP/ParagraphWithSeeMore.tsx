@@ -4,11 +4,12 @@ import { Box, Button, Collapse, Text } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
 interface ParagraphWithSeeMoreProps {
-  text: string;
+  shortText: string;
   maxLines?: number;
+  longText: string;
 }
 
-const ParagraphWithSeeMore: React.FC<ParagraphWithSeeMoreProps> = ({ text, maxLines = 3 }) => {
+const ParagraphWithSeeMore: React.FC<ParagraphWithSeeMoreProps> = ({ shortText, longText, maxLines = 3 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpansion = () => {
@@ -21,21 +22,19 @@ const ParagraphWithSeeMore: React.FC<ParagraphWithSeeMoreProps> = ({ text, maxLi
 
   return (
     <Box>
-      <Collapse startingHeight={collapseHeight} in={isExpanded}>
-        <Text
-          fontWeight="400"
-          fontSize="16px"
-          color="white"
-          mt="10px"
-          overflow="auto"
-          letterSpacing="-0.02em"
-          textAlign="left"
-          lineHeight={lineHeight}
-        >
-          {text}
-        </Text>
-      </Collapse>
-      {text.length > 150 && (
+      <Text
+        fontWeight="400"
+        fontSize="16px"
+        color="white"
+        mt="10px"
+        overflow="auto"
+        letterSpacing="-0.02em"
+        textAlign="left"
+        lineHeight={lineHeight}
+      >
+        {shortText}
+      </Text>
+      {longText.length > 0 && (
         <Button
           leftIcon={
             <ChevronDownIcon boxSize={6} transform={isExpanded ? 'rotate(180deg)' : 'unset'} transition="0.2s all" />
@@ -51,6 +50,22 @@ const ParagraphWithSeeMore: React.FC<ParagraphWithSeeMoreProps> = ({ text, maxLi
         >
           {isExpanded ? 'See less' : 'See more'}
         </Button>
+      )}
+      {isExpanded && (
+        <Collapse startingHeight={collapseHeight} in={isExpanded}>
+          <Text
+            fontWeight="400"
+            fontSize="16px"
+            color="white"
+            mt="10px"
+            overflow="auto"
+            letterSpacing="-0.02em"
+            textAlign="left"
+            lineHeight={lineHeight}
+          >
+            {longText}
+          </Text>
+        </Collapse>
       )}
     </Box>
   );

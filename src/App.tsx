@@ -2,8 +2,7 @@
 import { ChakraProvider, Spinner } from '@chakra-ui/react';
 import Overlay from './components/Overlay';
 import WelcomeScreen from './components/WelcomeScreen';
-import InfoDrawer from './components/InfoDrawer';
-import InfoModal from './components/InfoModal';
+import InfoDrawer from './components/Info/InfoDrawer';
 import Instructions from './components/Instructions';
 import ProductDrawer from './components/ProductDrawer';
 import { CustomTheme } from './theme';
@@ -26,73 +25,122 @@ import {
   ProductState,
   OverlayElementObject,
   CartItemProps,
+  RoomItem,
+  MediaData,
+  IframeData,
+  aRModels,
+  ProductData,
 } from './interfaces';
 import React from 'react';
+import IframeDrawer from './components/Modals/IframeDrawer';
+import MediaDrawer from './components/Modals/MediaDrawer';
+import ArDrawer from './components/Modals/ArDrawer';
 
 const App = () => {
   const [activeLang, setActiveLang] = useState('en');
   const [activeScene, setActiveScene] = useState('');
   const [activeSound, setActiveSound] = useState('Sound 1');
   const [productDrawerLoading, setProductDrawerLoading] = useState(false);
-  const [productDrawerData, setProductDrawerData] = useState<ProductState>({
-    data: {
-      parent_id: '',
-      parent_sku: '',
-      market: '',
-      title: '',
-      short_description: '',
-      long_description: '',
-      category: '',
-      brand: '',
-      collection: '',
-      currency: '',
-      gender: '',
-      age_group: '',
-      default_url: '',
-      tags: '',
-      base_price: 0,
-      retail_price: 0,
-      variants_selection_order: [],
-      variants: [],
-      turnTableURL: '',
+  const [highlightImage, setHighLightImage] = useState('');
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editable, setEditable] = useState(false);
+  const [activeId, setActiveId] = useState<number | string>('');
+
+  const [iframeDrawerData, setIframeDrawerData] = useState<IframeData>({
+    id: '',
+    iFrameModel: {
+      url: {
+        name: '',
+        value: '',
+        type: 'url',
+      },
     },
+    active: false,
+  });
+  const [mediaDrawerData, setMediaDrawerData] = useState<MediaData>({
+    data: {
+      id: '',
+      mediaModel: {
+        mediaURLs: {
+          name: '',
+          value: [],
+          type: '',
+        },
+      },
+    },
+    active: false,
+  });
+
+  const [arData, setArData] = useState<aRModels>({
+    active: false,
+    id: '',
+    arModel: {
+      name: '',
+      type: 'url',
+      value: '',
+    },
+  });
+
+  const [productDrawerData, setProductDrawerData] = useState<
+    | ProductState
+    | {
+        id: string;
+        data: ProductData | null;
+        active: boolean;
+      }
+  >({
+    id: '',
+    data: null,
     active: false,
   });
   const [instructionsData, setInstructionsData] = useState<InstructionsState>({
     data: {
-      skip: '',
-      content: [],
+      skip: {
+        name: 'skip',
+        type: 'string',
+        value: 'Skip',
+      },
+      content: {
+        name: 'content',
+        type: 'stringArray',
+        value: [],
+      },
     },
     active: false,
   });
   const [welcomeData, setWelcomeData] = useState<WelcomeState>({
     data: {
-      collectionImage: '',
-      collectionTitle: '',
-      jumboTitle: '',
-      tagline: '',
-      enterCTA: '',
-    },
-    active: false,
-  });
-  const [infoFloatingData, setInfoFloatingData] = useState<InfoState>({
-    data: {
-      image: '',
-      title: '',
-      subtitle: '',
-      description: '',
-      moreCTA: '',
+      collectionImage: {
+        name: 'collectionImage',
+        type: 'url',
+        value: '',
+      },
+      collectionTitle: {
+        name: 'collectionTitle',
+        type: 'string',
+        value: '',
+      },
+      jumboTitle: {
+        name: 'jumboTitle',
+        type: 'string',
+        value: '',
+      },
+      tagline: {
+        name: 'tagline',
+        type: 'string',
+        value: '',
+      },
+      enterCTA: {
+        name: 'enterCTA',
+        type: 'string',
+        value: '',
+      },
     },
     active: false,
   });
   const [infoData, setInfoData] = useState<InfoState>({
-    data: {
-      image: '',
-      title: '',
-      subtitle: '',
-      description: '',
-      moreCTA: '',
-    },
+    id: '',
+    data: null,
     active: false,
   });
   const [overlayData, setOverlayData] = useState<OverlayState>({
@@ -107,42 +155,80 @@ const App = () => {
     uiReady: () => onUIReady(),
     openWelcome: () => openWelcomeModal(),
     openInstructions: () => openInstructionsModal(),
-    openProduct: (productVariantId: string) => openProductModal(productVariantId),
     OpenInfo: (infoModalId: string) => openInfoModal(infoModalId),
     updateLanguage: () => updateLanguage(),
-    OpenPDP: (productVariantId: string) => {
-      setProductDrawerLoading(true);
-      setTimeout(() => {
-        setProductDrawerLoading(false);
-        const productData =
-          window.emperia?.data.ui.pdpModels.find((i) => i.id == productVariantId)?.pdpModel ||
-          fallbackData.data.ui.pdpModels[0].pdpModel;
-        if (!productData) return;
-        setProductDrawerData({ data: productData, active: true });
-      }, 2000);
-    },
+    OpenPDP: (productVariantId: string) => openProductModal(productVariantId),
     OpenCustomModel: (customModelId: string) => {
       console.log(customModelId);
     },
+    OpenIframe: (iframeId: string) => openIframeModal(iframeId),
+    OpenMedia: (mediaId: string) => openMediaModal(mediaId),
+    OpenAR: (arId: string) => openARId(arId),
   };
 
   const onUIReady = () => {
-    const welcomeData: WelcomeData =
-      window.emperia?.data.ui.uiConfig['welcome'] || fallbackData.data.ui.uiConfig['welcome'];
-    const instructionsData: InstructionsData =
-      window.emperia?.data.ui.uiConfig['instructions'] || fallbackData.data.ui.uiConfig['instructions'];
+    const welcomeData: WelcomeData = fallbackData.data.ui.uiConfig['welcome'];
+    const instructionsData: InstructionsData = fallbackData.data.ui.uiConfig['instructions'];
     const overlayData: OverlayElementObject =
       window.emperia?.data.ui.uiConfig['overlay'] || fallbackData.data.ui.uiConfig['overlay'];
+    const newWelcome: WelcomeData = window.emperia?.data.ui.uiConfig['welcome'];
+    const newInstructions: InstructionsData = window.emperia?.data.ui.uiConfig['instructions'];
+
+    // Checking each value that was passed, and making sure it's not empty.
+    // Can be prettier, but want to keep it explicit for the moment.
+
+    //Welcome fields validation.
+    if (newWelcome !== undefined) {
+      if (newWelcome.collectionImage.value == '') {
+        console.warn('Collection Image appears to be empty. Using default value.');
+      } else welcomeData.collectionImage = newWelcome.collectionImage;
+      if (newWelcome.collectionTitle.value == '') {
+        console.warn('Collection Title appears to be empty. Using default value.');
+      } else welcomeData.collectionTitle = newWelcome.collectionTitle;
+      if (newWelcome.enterCTA.value == '') {
+        console.warn('Enter CTA appears to be empty. Using default value.');
+      } else welcomeData.enterCTA = newWelcome.enterCTA;
+      if (newWelcome.jumboTitle.value == '') {
+        console.warn('Jumbo appears to be empty. Using default value.');
+      } else welcomeData.jumboTitle = newWelcome.jumboTitle;
+      if (newWelcome.tagline.value == '') {
+        console.warn('Tagline to be empty. Using default value.');
+      } else welcomeData.tagline = newWelcome.tagline;
+    }
+
+    //Instruction fields validation.
+    if (newInstructions != undefined) {
+      if (newInstructions?.skip?.value == '') {
+        console.warn('Skip field appears to be empty. Using default value.');
+      } else instructionsData.skip = newInstructions.skip;
+      if (
+        newInstructions?.content &&
+        newInstructions?.content?.value &&
+        newInstructions?.content?.value?.some((str) => str === '')
+      ) {
+        console.warn('The instructions field contains empty lines. Using default values as fallback.');
+      } else instructionsData.content = newInstructions.content;
+    }
+
     if (overlayData) {
-      delete overlayData.changeRooms; // TODO: undo this later when the rooms are ready
       delete overlayData.languages; // TODO: undo this later when the languages are ready
       delete overlayData.sounds; // TODO: undo this later when the sounds are ready
+
+      // get the domain from the iframe
+      const iframe = document.getElementById('experience-container') as HTMLIFrameElement;
+      if (iframe && iframe.src) {
+        const url = iframe.src;
+        const regex = /\/private\//;
+        if (regex.test(url)) {
+          delete overlayData.share;
+        }
+      }
     }
-    // const room = overlayData?.changeRooms;
-    // if (room && room?.content) {
-    //   const roomPPt = room.content[0] as RoomItem;
-    //   setActiveScene(roomPPt.scene || '');
-    // }
+    const room = overlayData?.changeRooms;
+    if (room && room?.content) {
+      const roomPPt = room.content as RoomItem;
+      setActiveScene(roomPPt.value[0].scene || '');
+    }
     setWelcomeData({ data: welcomeData, active: true });
     setInstructionsData({
       data: instructionsData,
@@ -151,30 +237,47 @@ const App = () => {
     setOverlayData({
       data: {
         ...overlayData,
-        instructionsOverlay: { ...overlayData.instructionsOverlay, content: instructionsData.content },
+        instructionsOverlay: {
+          ...overlayData.instructionsOverlay,
+          content: instructionsData.content.value,
+        },
       },
       active: false,
     });
   };
 
+  let isModalOpening = false;
   const openProductModal = (productVariantId: string) => {
+    setActiveId(productVariantId);
+    if (isModalOpening) return;
     setProductDrawerLoading(true);
-
+    isModalOpening = true;
     setTimeout(() => {
       setProductDrawerLoading(false);
-      const productData =
-        window.emperia?.data.ui.pdpModels.find((i) => i.id === productVariantId)?.pdpModel ||
-        fallbackData.data.ui.pdpModels.find((i) => i.id === productVariantId)?.pdpModel;
+      isModalOpening = false;
+      const product = window.emperia?.data.ui.pdpModels.find((i) => i.id == productVariantId);
+      const productData = product?.pdpModel || fallbackData.data.ui.pdpModels[0].pdpModel;
       if (!productData) return;
-      setProductDrawerData({ data: productData, active: true });
+      setProductDrawerData({
+        data: productData,
+        active: true,
+        id: product?.id || fallbackData.data.ui.pdpModels[0].id,
+      });
+      return;
     }, 2000);
   };
 
   const openInfoModal = (infoModalId: string) => {
+    setActiveId(infoModalId);
     const infoData: InfoData =
       window.emperia?.data.ui.infoModels.find((i) => i.id == infoModalId)?.infoModel ||
       fallbackData.data.ui.infoModels[0].infoModel;
-    setInfoFloatingData({ data: infoData, active: true });
+
+    setInfoData({
+      id: infoModalId,
+      data: { ...infoData },
+      active: true,
+    });
   };
 
   const openWelcomeModal = () => {
@@ -214,33 +317,213 @@ const App = () => {
     window.dispatchEvent(new CustomEvent('fromUserInterface', { detail: { name: 'changeLanguage', locale: lang } }));
   };
 
+  const openIframeModal = (iframeId: string) => {
+    const iframeData =
+      window.emperia?.data.ui.iframeModels.find((i) => i.id == iframeId)?.iFrameModel ||
+      fallbackData.data.ui.iframeModels[0].iFrameModel;
+
+    if (!iframeData) return;
+
+    setIframeDrawerData({
+      id: iframeId,
+      iFrameModel: iframeData,
+      active: true,
+    });
+  };
+
+  const openMediaModal = (mediaId: string) => {
+    const mediaData =
+      window.emperia?.data.ui.mediaModels.find((i) => i.id == mediaId)?.mediaModel ||
+      fallbackData.data.ui.mediaModels[0].mediaModel;
+    if (!mediaData) return;
+
+    setMediaDrawerData({
+      data: {
+        id: mediaId,
+        mediaModel: {
+          mediaURLs: mediaData.mediaURLs,
+        },
+      },
+      active: true,
+    });
+  };
+
+  const openARId = (arId: string) => {
+    const arModels = window.emperia?.data?.ui?.arModels;
+    // Ensure arModels is a valid array; otherwise, fallback
+    const isValidArray = Array.isArray(arModels) && arModels.length > 0;
+    const arDataValid = isValidArray ? arModels.find((i) => i.id == arId)?.arModel : undefined;
+    const arData = arDataValid || fallbackData.data.ui.arModels[0]?.arModel;
+    if (!arData) return;
+    setArData({
+      active: true,
+      id: arId,
+      arModel: {
+        value: arData.value,
+        type: 'url',
+        name: arData.name,
+      },
+    });
+  };
+
   useEffect(() => {
     const eventListener = (event: Event) => {
       const interceptedEvent = event as CustomEvent;
+      if (['OpenPDP', 'OpenInfo'].includes(interceptedEvent.detail.name)) {
+        event.stopImmediatePropagation();
+      }
       const eventType = interceptedEvent.detail.name as keyof typeof eventMap;
       const eventData = interceptedEvent.detail.data;
+
       if (eventMap[eventType]) {
         eventMap[eventType](eventData);
       }
     };
-
-    window.emperia?.events?.addEventListener('fromExperience', eventListener);
-    window.addEventListener('fromExperience', eventListener);
-
+    const target = window?.emperia?.events || window;
+    target.removeEventListener('fromExperience', eventListener);
+    target.addEventListener('fromExperience', eventListener);
     return () => {
-      window.emperia?.events?.removeEventListener('fromExperience', eventListener);
-      window.removeEventListener('fromExperience', eventListener);
+      target.removeEventListener('fromExperience', eventListener);
     };
   }, []);
+
+  useEffect(() => {
+    const currentOrigin = window.location.origin;
+    const acceptedOrigins = [
+      'https://staging.dashboard.emperiavr.com',
+      'https://dashboard.emperiavr.com',
+      'http://localhost:3000',
+      'http://localhost:3001',
+    ];
+    if (acceptedOrigins.includes(currentOrigin)) {
+      setEditable(true);
+    } else {
+      setEditable(false);
+    }
+  }, [editable]);
+
+  useEffect(() => {
+    const eventListener = (event: Event) => {
+      const interceptedEvent = event as CustomEvent;
+      if (interceptedEvent.detail.name === 'updateUI') {
+        if (interceptedEvent.detail.type === 'info') {
+          const activeTabData = interceptedEvent.detail.data;
+          setInfoData({
+            active: infoData.active || true,
+            id: interceptedEvent.detail.id,
+            data: activeTabData,
+          });
+          if (window.emperia) {
+            window.emperia.data.ui.infoModels = window.emperia.data.ui.infoModels.map((info) => {
+              if (info.id === interceptedEvent.detail.id) {
+                return { id: interceptedEvent.detail.id, infoModel: activeTabData };
+              }
+              return info;
+            });
+          }
+        }
+        if (interceptedEvent.detail.type === 'media') {
+          const activeTabData = interceptedEvent.detail.data;
+          setMediaDrawerData({
+            active: true,
+            data: {
+              id: interceptedEvent.detail.id,
+              mediaModel: activeTabData,
+            },
+          });
+          if (window.emperia) {
+            window.emperia.data.ui.mediaModels = window.emperia.data.ui.mediaModels.map((media) => {
+              if (media.id === interceptedEvent.detail.id) {
+                return { id: interceptedEvent.detail.id, mediaModel: activeTabData };
+              }
+              return media;
+            });
+          }
+        }
+
+        if (interceptedEvent.detail.type === 'iframe') {
+          const activeTabData = interceptedEvent.detail.data;
+          setIframeDrawerData({
+            active: true,
+            id: interceptedEvent.detail.id,
+            iFrameModel: activeTabData,
+          });
+          if (window.emperia) {
+            window.emperia.data.ui.iframeModels = window.emperia.data.ui.iframeModels.map((iframe) => {
+              if (iframe.id === interceptedEvent.detail.id) {
+                return { id: interceptedEvent.detail.id, iFrameModel: activeTabData };
+              }
+              return iframe;
+            });
+          }
+        }
+        if (interceptedEvent.detail.type === 'ar') {
+          const activeTabData = interceptedEvent.detail.data;
+          setArData({
+            active: true,
+            id: interceptedEvent.detail.id,
+            arModel: activeTabData,
+          });
+          if (window.emperia) {
+            window.emperia.data.ui.arModels = window.emperia.data.ui.arModels.map((ar) => {
+              if (ar.id === interceptedEvent.detail.id) {
+                return { id: interceptedEvent.detail.id, arModel: activeTabData };
+              }
+              return ar;
+            });
+          }
+        }
+        if (interceptedEvent.detail.type === 'product') {
+          const product = interceptedEvent.detail.data;
+          setProductDrawerData({
+            active: true,
+            id: interceptedEvent.detail.id,
+            data: product,
+          });
+          if (window.emperia) {
+            window.emperia.data.ui.pdpModels = window.emperia.data.ui.pdpModels.map((pdp) => {
+              if (pdp.id === interceptedEvent.detail.id) {
+                return { id: interceptedEvent.detail.id, pdpModel: product };
+              }
+              return pdp;
+            });
+          }
+        }
+        if (interceptedEvent.detail.type === 'ui') {
+          window.emperia.data.ui.uiConfig = interceptedEvent.detail.data;
+          onUIReady();
+        }
+      }
+    };
+    const target = window?.emperia?.events || window;
+    target.removeEventListener('fromDashboard', eventListener);
+    target.addEventListener('fromDashboard', eventListener);
+    return () => {
+      target.removeEventListener('fromDashboard', eventListener);
+    };
+  }, []);
+
   return (
-    <ChakraProvider theme={CustomTheme} cssVarsRoot="#ui-root">
+    <ChakraProvider theme={CustomTheme}>
       <Overlay
         activeScene={activeScene}
         activeLang={activeLang}
         activeSound={activeSound}
         setActiveScene={(scene) => {
           setActiveScene(scene);
-          window?.emperia?.experience?.krpano.call(`loadscene(${scene}, null, MERGE, BLEND(0.5));`);
+          const iframe = document.getElementById('experience-container') as HTMLIFrameElement;
+          if (iframe) {
+            const iframeWindow = iframe.contentWindow;
+            if (iframeWindow) {
+              iframeWindow.postMessage(
+                {
+                  type: 'loadScene',
+                  scene,
+                },
+                '*',
+              );
+            }
+          }
         }}
         setActiveLang={(lang) => changeLanguage(lang)}
         setActiveSound={(sound) => setActiveSound(sound)}
@@ -283,7 +566,7 @@ const App = () => {
         />
       ) : (
         <ProductDrawer
-          productDrawerData={productDrawerData.data}
+          productDrawerData={productDrawerData.data as ProductData}
           active={productDrawerData.active}
           close={() => {
             setProductDrawerData({ ...productDrawerData, active: false });
@@ -297,24 +580,73 @@ const App = () => {
           setCartItems={setCartItems}
           openProductModal={openProductModal}
           productIdTrail={productIdTrail}
-          productId={productDrawerData.data.parent_id}
+          productId={productDrawerData?.id as string}
+          openEdit={openEdit}
+          setOpenEdit={setOpenEdit}
+          editable={editable}
+          activeId={activeId}
         />
       )}
 
       <InfoDrawer
-        infoData={infoData?.data}
+        infoData={infoData?.data as InfoData}
         active={infoData?.active}
         close={() => {
           setInfoData({ ...infoData, active: false });
         }}
+        openEdit={openEdit}
+        setOpenEdit={setOpenEdit}
+        editable={editable}
+        activeId={activeId}
       />
-      <InfoModal
-        infoData={infoFloatingData?.data}
-        active={infoFloatingData?.active}
-        close={() => {
-          setInfoFloatingData({ ...infoData, active: false });
+      <IframeDrawer
+        iframeId={iframeDrawerData?.id}
+        active={iframeDrawerData?.active}
+        url={iframeDrawerData?.iFrameModel?.url?.value}
+        onClose={() => {
+          setIframeDrawerData({ ...iframeDrawerData, active: false });
         }}
       />
+      <MediaDrawer
+        mediaId={mediaDrawerData?.data.id}
+        active={mediaDrawerData?.active}
+        mediaURLs={mediaDrawerData?.data?.mediaModel?.mediaURLs?.value}
+        highlightImage={highlightImage || mediaDrawerData?.data.mediaModel.mediaURLs.value[0]}
+        setHighLightImage={setHighLightImage}
+        onClose={() =>
+          setMediaDrawerData({
+            data: {
+              id: '',
+              mediaModel: {
+                mediaURLs: {
+                  name: '',
+                  value: [],
+                  type: '',
+                },
+              },
+            },
+            active: false,
+          })
+        }
+      />
+      {arData.active && (
+        <ArDrawer
+          onClose={() =>
+            setArData({
+              id: '',
+              arModel: {
+                name: '',
+                type: 'url',
+                value: '',
+              },
+              active: false,
+            })
+          }
+          arId={arData.id}
+          url={arData.arModel.value}
+          active={arData.active}
+        />
+      )}
     </ChakraProvider>
   );
 };

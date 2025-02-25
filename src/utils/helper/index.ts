@@ -1,4 +1,4 @@
-import { ProductMedia, ProductVariantType } from '../../interfaces';
+import { ProductVariantType } from '../../interfaces';
 
 const ORDER = [
   'one size',
@@ -72,8 +72,8 @@ const ORDER = [
 
 export const sortSizes = (sizes: ProductVariantType[]) => {
   sizes.sort((a: ProductVariantType, b: ProductVariantType) => {
-    const first = a.value.toLowerCase();
-    const second = b.value.toLowerCase();
+    const first = a.value.value.toLowerCase();
+    const second = b.value.value.toLowerCase();
 
     let nra = parseInt(first);
     let nrb = parseInt(second);
@@ -143,8 +143,28 @@ export const getOpSys = () => {
   return os;
 };
 
-export const getSorted = (images: ProductMedia[]) => {
-  return images.sort((a, b) => {
-    return a.bMain === b.bMain ? 0 : a.bMain ? -1 : 1;
-  });
+export const youtubeRegex =
+  /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)([\w\-]{11})([?&].*)?$/;
+
+export function parseYouTubeEmbed(link: string) {
+  const match = link.match(youtubeRegex);
+  if (match) {
+    const videoId = match[5];
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+  return link;
+}
+
+export const determineMediaType = (mediaString: string) => {
+  if (mediaString) {
+    if (/https?:\/\/(www\.)?youtube\.com\/watch\?v=[\w-]+/i.test(mediaString)) return 'YouTube';
+    if (/\.(jpeg|png|webp|jpg|gif|bmp|svg|tiff|tif)$/i.test(mediaString)) return 'Picture';
+    if (/\.(mp4|mkv|webm|mov|avi|flv|wmv|m4v|mpeg|mpg)$/i.test(mediaString)) return 'Video';
+    return 'Unknown';
+  }
+  return null;
+};
+
+export const capitalizeFirstLetter = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 };
