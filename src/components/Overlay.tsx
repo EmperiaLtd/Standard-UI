@@ -16,13 +16,10 @@ import {
   RoomItemValue,
   SoundOverlay,
   SoundItemValue,
-  ShareItem,
-  ShareItemValue,
 } from '../interfaces';
 import React from 'react';
 import { handleCopy } from '../utils/helper';
 import CartDrawer from './common/Cart';
-import ShareOption from './common/ShareOption';
 
 function Overlay({
   activeScene,
@@ -70,22 +67,13 @@ function Overlay({
     },
   };
 
-  // const renderMap = {
-  //   instructions: (data: string[]) => renderInstructions(data),
-  //   changeRooms: (data: RoomItem[]) => renderRoomItems(data),
-  //   sound: (data: SoundItem[]) => renderSoundItems(data),
-  //   languages: (data: LanguageItem[]) => renderLanguageItems(data),
-  // };
-
   useEffect(() => {
     const transformedOverlayData =
       overlayData &&
       Object?.values(overlayData)?.map((overlayElement: OverlayElement) => {
         let originalContent;
 
-        if (overlayElement.content === null) {
-          originalContent = null;
-        } else if (overlayElement?.content) {
+        if (overlayElement?.content) {
           switch (overlayElement.key.value) {
             case 'instructions':
               originalContent = renderInstructions(overlayElement.content as string[]);
@@ -102,9 +90,9 @@ function Overlay({
               const languageItem = overlayElement.content as LanguageItem[];
               originalContent = renderLanguageItems(languageItem);
               break;
+
             case 'share':
-              const shareItem = overlayElement.content as ShareItem;
-              originalContent = renderShareItems(shareItem.value);
+              originalContent = overlayElement.text.value;
               break;
             default:
               console.log('No Configuration For This Key', overlayElement.key);
@@ -114,7 +102,7 @@ function Overlay({
 
         const fallbackContent = menuOptionsDimensions[overlayElement.key.value as keyof typeof menuOptionsDimensions];
 
-        const content = originalContent || overlayElement?.content;
+        const content = originalContent || overlayElement.content;
         const text = overlayElement.text.value;
         const textAlternate = overlayElement.textAlternate?.value;
         const key = overlayElement.key.value;
@@ -128,7 +116,6 @@ function Overlay({
           content: content,
         };
       });
-
     setTransformedOverlayData(transformedOverlayData);
   }, [overlayData, activeScene, activeLang, activeSound]);
 
@@ -153,12 +140,6 @@ function Overlay({
         transition={transition}
         onClick={() => setActiveSound(sound.name)}
       />
-    ));
-  };
-
-  const renderShareItems = (shares: ShareItemValue[]) => {
-    return shares?.map((share: ShareItemValue) => (
-      <ShareOption key={share.name} name={share.name} transition={transition} onClick={() => console.log(share)} />
     ));
   };
 
@@ -213,6 +194,12 @@ function Overlay({
     }
   }, []);
 
+  function transformText(text: string): string {
+    // Convert camelCase or PascalCase to space-separated words
+    text = text.replace(/(?<!^)(?=[A-Z])/g, ' ');
+    // Capitalize the first letter of each word
+    return text.replace(/\b\w/g, (char) => char.toUpperCase());
+  }
   return (
     <>
       <Box
@@ -286,21 +273,20 @@ function Overlay({
           {transformedOverlayData?.map((overlayElement: TransformedOverlayData) => {
             const key = overlayElement?.key;
             const content = overlayElement?.content;
-
             return (
               <MenuOption
                 key={overlayElement.key}
-                content={overlayElement?.content}
+                content={content}
                 contentHeight={overlayElement?.height}
                 activeMenuOption={activeMenuOption === key}
                 leftIcon={key}
-                additionalOptions={content !== null && content !== undefined}
+                additionalOptions={content}
                 text={
                   overlayElement.key === 'sound'
                     ? audioActive
                       ? overlayElement.text
                       : overlayElement.textAlternate
-                    : overlayElement.text
+                    : transformText(overlayElement.key)
                 }
                 activateMenuOptions={menuHovered}
                 menuOptionHovered={menuOptionHoveredOrActive === key}
@@ -309,12 +295,17 @@ function Overlay({
                   if (content) {
                     const updatedValue = activeMenuOption === key ? '' : key;
                     setActiveMenuOption(updatedValue);
-                  } else if (overlayElement.key === 'share') {
-                    handleShare();
+                    if (updatedValue === 'share') {
+                      handleShare();
+                    }
                   } else if (overlayElement.key === 'sound') {
                     setAudioActive(!audioActive);
                   } else {
                     setActiveMenuOption('');
+
+                    if (key === 'share') {
+                      handleShare();
+                    }
                     console.log('Regular Click');
                   }
                 }}
@@ -349,7 +340,13 @@ function Overlay({
           }}
           transition={transition}
         >
-          {activeOverlayData?.content}
+          {activeOverlayData?.key === 'share' ? (
+            'Share'
+          ) : React.isValidElement(activeOverlayData?.content) ? (
+            activeOverlayData?.content
+          ) : (
+            <>{activeOverlayData?.content}</>
+          )}
         </Box>
       </Box>
       <Link
