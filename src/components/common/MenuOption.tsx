@@ -143,7 +143,7 @@ function MenuOption({
         }}
         transition={transition}
       >
-        {content.value}
+        {text === 'Share' ? content.value : React.isValidElement(content) ? content : <>{content}</>}
       </Box>
     </Box>
   );

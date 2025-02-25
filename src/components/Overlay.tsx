@@ -67,13 +67,6 @@ function Overlay({
     },
   };
 
-  // const renderMap = {
-  //   instructions: (data: string[]) => renderInstructions(data),
-  //   changeRooms: (data: RoomItem[]) => renderRoomItems(data),
-  //   sound: (data: SoundItem[]) => renderSoundItems(data),
-  //   languages: (data: LanguageItem[]) => renderLanguageItems(data),
-  // };
-
   useEffect(() => {
     const transformedOverlayData =
       overlayData &&
@@ -81,13 +74,13 @@ function Overlay({
         let originalContent;
 
         if (overlayElement?.content) {
-          switch (overlayElement.key.value) {
-            case 'instructions':
-              originalContent = renderInstructions(overlayElement.content as string[]);
+          switch (overlayElement.key.name) {
+            case 'Instructions Key':
+              originalContent = <>{renderInstructions(overlayElement.content as string[])}</>;
               break;
-            case 'changeRooms':
+            case 'Change Rooms Key':
               const roomItem = overlayElement.content as RoomItem;
-              originalContent = renderRoomItems(roomItem.value);
+              originalContent = <>{renderRoomItems(roomItem.value)}</>;
               break;
             case 'sound':
               const soundItem = overlayElement.content as SoundOverlay;
@@ -98,11 +91,11 @@ function Overlay({
               originalContent = renderLanguageItems(languageItem);
               break;
 
-            case 'share':
-              originalContent = overlayElement.content;
+            case 'Share Key':
+              originalContent = overlayElement.text.value;
               break;
             default:
-              console.log('No Configuration For This Key', overlayElement.key);
+              console.log('No Configuration For This Key', overlayElement.key.name);
               break;
           }
         }
@@ -123,37 +116,8 @@ function Overlay({
           content: content,
         };
       });
-
     setTransformedOverlayData(transformedOverlayData);
   }, [overlayData, activeScene, activeLang, activeSound]);
-
-  // useEffect(() => {
-  //   const transformedOverlayData = overlayData?.map((overlayElement: OverlayElement) => {
-  //     let originalContent;
-
-  //     if (overlayElement?.content) {
-  //       originalContent = renderMap[overlayElement.key as keyof typeof renderMap](overlayElement?.content);
-  //     }
-
-  //     const fallbackContent = menuOptionsDimensions[overlayElement.key as keyof typeof menuOptionsDimensions];
-
-  //     const content = originalContent;
-  //     const text = overlayElement?.text;
-  //     const textAlternate = overlayElement?.textAlternate;
-  //     const key = overlayElement?.key;
-
-  //     return {
-  //       height: fallbackContent?.height,
-  //       width: fallbackContent?.width,
-  //       key: key,
-  //       text: text,
-  //       textAlternate: textAlternate,
-  //       content: content,
-  //     };
-  //   });
-
-  //   setTransformedOverlayData(transformedOverlayData);
-  // }, [overlayData, activeScene, activeLang, activeSound]);
 
   const renderLanguageItems = (languages: LanguageItem[]) => {
     return languages?.map((language: LanguageItem) => (
@@ -230,6 +194,13 @@ function Overlay({
     }
   }, []);
 
+  function transformText(text: string): string {
+    // Convert camelCase or PascalCase to space-separated words
+    text = text.replace(/(?<!^)(?=[A-Z])/g, ' ');
+    // Capitalize the first letter of each word
+    return text.replace(/\b\w/g, (char) => char.toUpperCase());
+  }
+
   return (
     <>
       <Box
@@ -303,7 +274,6 @@ function Overlay({
           {transformedOverlayData?.map((overlayElement: TransformedOverlayData) => {
             const key = overlayElement?.key;
             const content = overlayElement?.content;
-
             return (
               <MenuOption
                 key={overlayElement.key}
@@ -317,7 +287,7 @@ function Overlay({
                     ? audioActive
                       ? overlayElement.text
                       : overlayElement.textAlternate
-                    : overlayElement.text
+                    : transformText(overlayElement.key)
                 }
                 activateMenuOptions={menuHovered}
                 menuOptionHovered={menuOptionHoveredOrActive === key}
