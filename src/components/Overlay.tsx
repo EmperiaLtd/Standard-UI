@@ -347,7 +347,6 @@ function Overlay({
           ) : (
             <>{activeOverlayData?.content}</>
           )}
-          {activeOverlayData?.content?.value}
         </Box>
       </Box>
       <Link
