@@ -4,9 +4,8 @@ import React, { useState } from 'react';
 import { CrossIcon } from '../../Icons/CrossIcon';
 import MediaSlider from '../common/MediaSlider';
 import { OpenInNewTabIcon } from '../../Icons/OpenLinkIcon';
-import { EditIcon } from '../../Icons/EditIcon';
 
-function InfoDrawer({ infoData, active, close, editable, activeId }: InfoDrawerProps) {
+function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
   const [highlightImage, setHighlightImage] = useState('');
   const openLinkInNewTab = () => {
     window.open(infoData.linkToOpen.value, '_blank');
@@ -49,19 +48,6 @@ function InfoDrawer({ infoData, active, close, editable, activeId }: InfoDrawerP
     }
   };
 
-  const handleOpenEditInfo = () => {
-    window.emperia &&
-      window.emperia.events.dispatchEvent(
-        new CustomEvent('fromUserInterface', {
-          detail: { name: 'openEdit', type: 'info', id: activeId, title: infoData.title.value },
-        }),
-      );
-    window.dispatchEvent(
-      new CustomEvent('fromUserInterface', {
-        detail: { name: 'openEdit', type: 'info', id: activeId, title: infoData.title.value },
-      }),
-    );
-  };
   return (
     <Drawer
       isOpen={active}
@@ -97,7 +83,6 @@ function InfoDrawer({ infoData, active, close, editable, activeId }: InfoDrawerP
               background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
               backdropFilter="blur(12px)"
             >
-              {editable && <EditIcon boxSize={4} stroke="white" onClick={handleOpenEditInfo} />}
               <CrossIcon
                 cursor="pointer"
                 onClick={close}
