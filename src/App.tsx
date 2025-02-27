@@ -369,9 +369,7 @@ const App = () => {
   useEffect(() => {
     const eventListener = (event: Event) => {
       const interceptedEvent = event as CustomEvent;
-      if (['OpenPDP', 'OpenInfo'].includes(interceptedEvent.detail.name)) {
-        event.stopImmediatePropagation();
-      }
+      event.stopImmediatePropagation();
       const eventType = interceptedEvent.detail.name as keyof typeof eventMap;
       const eventData = interceptedEvent.detail.data;
 
