@@ -193,9 +193,11 @@ export const fallbackData: FallBackData = {
         {
           id: '71666',
           arModel: {
-            name: 'AR Model',
-            type: 'url',
-            value: 'https://walmart.emperia-staging.com/AR/index.html?name=WalkerEdisonSideboard',
+            meshURL: {
+              name: 'AR Model',
+              type: 'url',
+              value: 'https://walmart.emperia-staging.com/AR/index.html?name=WalkerEdisonSideboard',
+            },
           },
         },
       ],
@@ -247,7 +249,191 @@ export const fallbackData: FallBackData = {
               type: 'string',
               value: 399,
             },
-
+            variants: [
+              {
+                bDefault: {
+                  name: 'Default',
+                  type: 'boolean',
+                  value: false,
+                },
+                variant_id: {
+                  name: 'Variant ID',
+                  type: 'string',
+                  value: '',
+                },
+                variant_sku: {
+                  name: 'Variant SKU',
+                  type: 'string',
+                  value: '567',
+                },
+                short_description: {
+                  name: 'Variant Short Description',
+                  type: 'string',
+                  value:
+                    'A versatile test product designed for demonstration and evaluation, featuring durable materials and essential functionalities.',
+                },
+                long_description: {
+                  name: 'Variant Long Description',
+                  type: 'string',
+                  value:
+                    'This test product is a high-quality, versatile item designed for demonstration and evaluation purposes. It features a sleek design, durable materials, and essential functionalities to showcase product capabilities. Ideal for testing performance, usability, and market appeal, this product serves as a reliable prototype for various applications and industries.',
+                },
+                in_stock: {
+                  name: 'In Stock',
+                  type: 'boolean',
+                  value: true,
+                },
+                variants: [
+                  {
+                    name: {
+                      name: 'Variant Name',
+                      type: 'string',
+                      value: 'Variant One',
+                    },
+                    variant_type: {
+                      name: 'Variant Type',
+                      type: 'string',
+                      value: 'size',
+                    },
+                    value: {
+                      name: 'Variant Value',
+                      type: 'string',
+                      value: '12',
+                    },
+                    price: {
+                      name: 'Variant Price',
+                      type: 'string',
+                      value: '399',
+                    },
+                    available_stock: {
+                      name: 'Available Stock',
+                      type: 'number',
+                      value: 10,
+                    },
+                    variant_sku: {
+                      name: 'Variant SKU',
+                      type: 'string',
+                      value: '234',
+                    },
+                    imageURLs: {
+                      name: 'Image URLs',
+                      type: 'urlArray',
+                      value: [
+                        'https://picsum.photos/800/800',
+                        'https://picsum.photos/801/801',
+                        'https://picsum.photos/802/802',
+                      ],
+                    },
+                  },
+                  {
+                    name: {
+                      name: 'Variant Name',
+                      type: 'string',
+                      value: 'Product 2',
+                    },
+                    variant_type: {
+                      name: 'Variant Type',
+                      type: 'string',
+                      value: 'size',
+                    },
+                    value: {
+                      name: 'Variant Value',
+                      type: 'string',
+                      value: 'type 2',
+                    },
+                    price: {
+                      name: 'Variant Price',
+                      type: 'string',
+                      value: '398',
+                    },
+                    available_stock: {
+                      name: 'Available Stock',
+                      type: 'number',
+                      value: 10,
+                    },
+                    variant_sku: {
+                      name: 'Variant SKU',
+                      type: 'string',
+                      value: '',
+                    },
+                    imageURLs: {
+                      name: 'Image URLs',
+                      type: 'urlArray',
+                      value: [
+                        'https://picsum.photos/803/803',
+                        'https://picsum.photos/804/804',
+                        'https://picsum.photos/805/805',
+                      ],
+                    },
+                  },
+                  {
+                    name: {
+                      name: 'Variant Name',
+                      type: 'string',
+                      value: 'Color',
+                    },
+                    variant_type: {
+                      name: 'Variant Type',
+                      type: 'string',
+                      value: 'color',
+                    },
+                    value: {
+                      name: 'Variant Value',
+                      type: 'string',
+                      value: 'Red',
+                    },
+                    price: {
+                      name: 'Variant Price',
+                      type: 'string',
+                      value: '209',
+                    },
+                    available_stock: {
+                      name: 'Available Stock',
+                      type: 'number',
+                      value: 20,
+                    },
+                    variant_sku: {
+                      name: 'Variant SKU',
+                      type: 'string',
+                      value: '123',
+                    },
+                    imageURLs: {
+                      name: 'Image URLs',
+                      type: 'urlArray',
+                      value: [
+                        'https://picsum.photos/806/806',
+                        'https://picsum.photos/807/807',
+                        'https://picsum.photos/808/808',
+                      ],
+                    },
+                  },
+                ],
+                available_stock: {
+                  name: 'Available Stock',
+                  type: 'number',
+                  value: 0,
+                },
+                retail_price: {
+                  name: 'Retail Price',
+                  type: 'string',
+                  value: 0,
+                },
+                sale_price: {
+                  name: 'Sale Price',
+                  type: 'string',
+                  value: 0,
+                },
+                imageURLs: {
+                  name: 'Image URLs',
+                  type: 'urlArray',
+                  value: [
+                    'https://picsum.photos/800/800',
+                    'https://picsum.photos/801/801',
+                    'https://picsum.photos/802/802',
+                  ],
+                },
+              },
+            ],
             short_description: {
               name: 'Short Description',
               type: 'string',

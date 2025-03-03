@@ -2,9 +2,14 @@ import { Box, Button, Image, Text } from '@chakra-ui/react';
 import { WelcomeProps } from '../interfaces';
 import React from 'react';
 
+interface WelcomeField {
+  type: string;
+  value: string;
+  name: string;
+}
 function WelcomeScreen({ welcomeData, active, close }: WelcomeProps) {
   const transition = 'all 0.2s ease-in-out';
-  const renderField = (key: string, field: any) => {
+  const renderField = (key: string, field: WelcomeField) => {
     switch (field.type) {
       case 'image':
         return (
