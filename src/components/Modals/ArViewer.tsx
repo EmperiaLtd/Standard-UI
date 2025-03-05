@@ -22,6 +22,7 @@ const ArViewer = ({ arId, active, url, onClose }: ARProps) => {
         onClose={onClose}
         size={['full', 'full', 'full', 'full', 'full']}
         autoFocus={false}
+        trapFocus={false}
       >
         <ModalOverlay onClick={onClose} />
         <ModalContent margin={0} padding={0} overflow={'hidden'}>
@@ -65,7 +66,7 @@ const ArViewer = ({ arId, active, url, onClose }: ARProps) => {
                 filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
                 zIndex={10000}
                 position="absolute"
-                top="20px" 
+                top="20px"
                 right="10px"
               />
             </Box>

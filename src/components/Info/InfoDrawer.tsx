@@ -5,19 +5,25 @@ import { CrossIcon } from '../../Icons/CrossIcon';
 import MediaSlider from '../common/MediaSlider';
 import { OpenInNewTabIcon } from '../../Icons/OpenLinkIcon';
 
+interface InfoField {
+  name: string;
+  type: string;
+  value: string | string[];
+}
+
 function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
   const [highlightImage, setHighlightImage] = useState('');
   const openLinkInNewTab = () => {
     window.open(infoData.linkToOpen.value, '_blank');
   };
 
-  const renderField = (key: string, field: any) => {
+  const renderField = (key: string, field: InfoField) => {
     switch (field.type) {
       case 'urlArray':
         return (
           <MediaSlider
             key={key}
-            images={field.value}
+            images={field.value as string[]}
             setHighLightImage={setHighlightImage}
             turnTableUrl=""
             highlightImage={highlightImage || field.value[0]}

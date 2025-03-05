@@ -19,7 +19,6 @@ import {
 } from '../interfaces';
 import React from 'react';
 import { handleCopy } from '../utils/helper';
-import CartDrawer from './common/Cart';
 
 function Overlay({
   activeScene,
@@ -30,10 +29,7 @@ function Overlay({
   setActiveSound,
   overlayData,
   active,
-  cartActive,
-  cartItems,
   setCartItems,
-  setCartActive,
 }: OverlayProps) {
   const transition = 'all 0.2s ease-in-out';
   const [audioActive, setAudioActive] = useState(false);
@@ -387,8 +383,6 @@ function Overlay({
           <Image src={Emperia} width={['80px', '80px', '100px']} />
         </Box>
       </Link>
-
-      <CartDrawer data={cartItems} active={cartActive} close={() => setCartActive(false)} setCartItems={setCartItems} />
     </>
   );
 }

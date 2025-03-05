@@ -75,9 +75,11 @@ const App = () => {
     active: false,
     id: '',
     arModel: {
-      name: '',
-      type: 'url',
-      value: '',
+      meshURL: {
+        name: '',
+        value: '',
+        type: '',
+      },
     },
   });
 
@@ -358,11 +360,7 @@ const App = () => {
     setArData({
       active: true,
       id: arId,
-      arModel: {
-        value: arData.value,
-        type: 'url',
-        name: arData.name,
-      },
+      arModel: arData,
     });
   };
 
@@ -633,15 +631,17 @@ const App = () => {
             setArData({
               id: '',
               arModel: {
-                name: '',
-                type: 'url',
-                value: '',
+                meshURL: {
+                  name: '',
+                  value: '',
+                  type: '',
+                },
               },
               active: false,
             })
           }
           arId={arData.id}
-          url={arData.arModel.value}
+          url={arData.arModel.meshURL.value}
           active={arData.active}
         />
       )}

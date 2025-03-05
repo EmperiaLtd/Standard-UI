@@ -253,7 +253,7 @@ export interface InfoState {
   active: boolean;
 }
 export interface InfoData {
-  image: {
+  image?: {
     name: string;
     type: string;
     value: string;
@@ -263,7 +263,7 @@ export interface InfoData {
     type: string;
     value: string;
   };
-  subtitle: { name: string; type: string; value: string };
+  subTitle: { name: string; type: string; value: string };
   description: {
     name: string;
     type: string;
@@ -408,11 +408,7 @@ export type ProductData = {
     type: string;
     value: string[];
   };
-  variants?: {
-    name: string;
-    type: string;
-    value: ProductVariant[];
-  };
+  variants?: ProductVariant[];
   turnTableURL?: {
     name: string;
     type: string;
@@ -612,9 +608,11 @@ export type MediaModel = {
 export type ARModel = {
   id: string;
   arModel: {
-    name: string;
-    type: string;
-    value: string;
+    meshURL: {
+      name: string;
+      type: string;
+      value: string;
+    };
   };
 };
 
@@ -626,7 +624,7 @@ type UiConfig = {
 
 export type InfoModels = {
   id: string;
-  infoModel: any;
+  infoModel: InfoData;
 };
 
 export type PDPModels = {
@@ -836,38 +834,11 @@ export interface MediaData {
 export interface aRModels {
   id: string;
   arModel: {
-    name: string;
-    type: 'url';
-    value: string;
+    meshURL: {
+      name: string;
+      type: string;
+      value: string;
+    };
   };
   active: boolean;
-}
-
-export interface EditDrawerProps {
-  openEditDrawer: boolean;
-  setOpenEditDrawer: (state: boolean) => void;
-  setActiveTab: (tab: string) => void;
-  activeTab: string;
-  tabs: string[];
-  activeTabData: any;
-  setActiveTabData: (data: any) => void;
-  handleSave: (data: any) => void;
-  onClose: () => void;
-  activeId: string | number;
-  setActiveId: (id: string | number) => void;
-}
-
-export interface EditInfoProps {
-  handleSave: (data: any) => void;
-  setActiveTabData: (data: any) => void;
-  activeTabData: any;
-  activeId: string | number;
-  setActiveId: (id: string | number) => void;
-}
-
-export interface JSONUpdatePayload {
-  id: string | number;
-  data: any;
-  fileName: string;
-  modelName: string;
 }

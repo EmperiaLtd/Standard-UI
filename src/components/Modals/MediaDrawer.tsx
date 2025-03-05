@@ -84,7 +84,13 @@ const MediaDrawer = ({
 
   return (
     <Fragment key={mediaId}>
-      <Modal isOpen={active} onClose={onClose} size={['full', 'full', 'full', 'full', 'full']} autoFocus={false}>
+      <Modal
+        isOpen={active}
+        onClose={onClose}
+        size={['full', 'full', 'full', 'full', 'full']}
+        autoFocus={false}
+        trapFocus={false}
+      >
         <ModalOverlay
           onClick={onClose}
           background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
