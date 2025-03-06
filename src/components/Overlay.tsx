@@ -225,7 +225,7 @@ function Overlay({
         zIndex="10"
         opacity={active ? 1 : 0}
         visibility={active ? 'visible' : 'hidden'}
-        position="fixed"
+        position="absolute"
         top={['10px', '10px', '15px', '15px', '20px']}
         left={['10px', '10px', '15px', '15px', '20px']}
         padding={['10px', '10px', '15px', '15px', '20px']}
