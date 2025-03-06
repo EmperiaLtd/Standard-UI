@@ -5,6 +5,10 @@ export const mockEmperia: Emperia = {
   events: new EventTarget(),
   ui: {},
   data: {
+    config: fallbackData.data.config as {
+      experience_id: string;
+      organization_id: string;
+    },
     ui: fallbackData.data.ui,
   },
   experience: {},

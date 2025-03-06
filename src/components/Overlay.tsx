@@ -19,6 +19,16 @@ import {
 } from '../interfaces';
 import React from 'react';
 import { handleCopy } from '../utils/helper';
+import axios from 'axios';
+
+const axiosClient = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json, text/plain, */*',
+  },
+});
 
 function Overlay({
   activeScene,
@@ -38,6 +48,7 @@ function Overlay({
   const [activeMenuOption, setActiveMenuOption] = useState('');
   const toast = useToast();
   const [withinDashboard, setWithinDashboard] = useState(false);
+  const [hideLogo, setHideLogo] = useState(false);
 
   const [transformedOverlayData, setTransformedOverlayData] = useState<TransformedOverlayData[]>();
 
@@ -209,7 +220,20 @@ function Overlay({
     if (acceptedOrigins.includes(currentOrigin)) {
       setWithinDashboard(true);
     }
+    const experienceId = window?.emperia?.data?.config?.experience_id;
+    const url = `experience/${experienceId}/settings`;
+
+    if (experienceId) {
+      axiosClient.get(url).then((response) => {
+        const data = response.data;
+        if (data.status === 'OK') {
+          const setting = data.data.experience_settings;
+          setHideLogo(setting.hide_emperia_logo);
+        }
+      });
+    }
   }, []);
+
   return (
     <>
       <Box
@@ -359,44 +383,46 @@ function Overlay({
           )}
         </Box>
       </Box>
-      <Link
-        href="https://emperiavr.com/"
-        target="_blank"
-        cursor="pointer"
-        opacity={active ? 1 : 0}
-        visibility={active ? 'visible' : 'hidden'}
-        transition={transition}
-      >
-        <Box
-          opacity={!menuHovered ? 1 : 0}
-          visibility={!menuHovered ? 'visible' : 'hidden'}
-          w={['180px', '180px', '225px']}
-          position="fixed"
-          top={['10px', '15px', 'unset']}
-          bottom={['unset', 'unset', '20px']}
-          right={['10px', '15px', '20px']}
-          p={['10px']}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
-          boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-          backdropFilter="blur(12px)"
-          borderRadius="10px"
+      {!hideLogo && (
+        <Link
+          href="https://emperiavr.com/"
+          target="_blank"
+          cursor="pointer"
+          opacity={active ? 1 : 0}
+          visibility={active ? 'visible' : 'hidden'}
           transition={transition}
         >
-          <Text
-            lineHeight={['9px', '9px', '13px']}
-            fontSize={['10px', '10px', '13px']}
-            fontFamily="Montserrat-Medium"
-            color="white"
-            textTransform="uppercase"
+          <Box
+            opacity={!menuHovered ? 1 : 0}
+            visibility={!menuHovered ? 'visible' : 'hidden'}
+            w={['180px', '180px', '225px']}
+            position="fixed"
+            top={['10px', '15px', 'unset']}
+            bottom={['unset', 'unset', '20px']}
+            right={['10px', '15px', '20px']}
+            p={['10px']}
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
+            boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+            backdropFilter="blur(12px)"
+            borderRadius="10px"
+            transition={transition}
           >
-            Powered By
-          </Text>
-          <Image src={Emperia} width={['80px', '80px', '100px']} />
-        </Box>
-      </Link>
+            <Text
+              lineHeight={['9px', '9px', '13px']}
+              fontSize={['10px', '10px', '13px']}
+              fontFamily="Montserrat-Medium"
+              color="white"
+              textTransform="uppercase"
+            >
+              Powered By
+            </Text>
+            <Image src={Emperia} width={['80px', '80px', '100px']} />
+          </Box>
+        </Link>
+      )}
     </>
   );
 }
