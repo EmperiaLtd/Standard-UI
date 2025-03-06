@@ -35,6 +35,7 @@ interface VariantField {
 }
 
 function ProductDrawer({ productId, productDrawerData, active, close, editable, openCart }: ProductDrawerProps) {
+  console.log('editable', editable);
   const transition = 'all 0.2s ease-in-out';
   const { width, height } = useWindowDimensions();
 
