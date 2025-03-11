@@ -115,7 +115,7 @@ function WelcomeScreen({ welcomeData, active, close }: WelcomeProps) {
   };
   return (
     <Box
-      zIndex="12"
+      zIndex="120000"
       opacity={active ? 1 : 0}
       visibility={active ? 'visible' : 'hidden'}
       transition={transition}
