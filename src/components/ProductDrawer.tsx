@@ -320,7 +320,7 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
         autoFocus={false}
         trapFocus={false}
       >
-        {!editable && <DrawerOverlay />}
+        {!editable && <DrawerOverlay onClick={close} />}
         <DrawerContent
           maxH={height}
           background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
@@ -337,7 +337,7 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
               height="50px"
               width="100%"
               display="flex"
-              justifyContent={editable ? 'space-between' : 'flex-end'}
+              justifyContent={'flex-end'}
               alignItems="center"
               padding={['0px 20px']}
               background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
