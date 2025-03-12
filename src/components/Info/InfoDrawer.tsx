@@ -1,6 +1,6 @@
 import { Box, Button, Text, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerOverlay } from '@chakra-ui/react';
 import { InfoDrawerProps } from '../../interfaces';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { CrossIcon } from '../../Icons/CrossIcon';
 import MediaSlider from '../common/MediaSlider';
 import { OpenInNewTabIcon } from '../../Icons/OpenLinkIcon';
@@ -12,8 +12,9 @@ interface InfoField {
 }
 
 function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
+  console.log('editable', editable);
   const [highlightImage, setHighlightImage] = useState('');
-  const containerRef = useRef<HTMLElement | null>(document.body);
+  // const containerRef = useRef<HTMLElement | null>(document.body);
   const openLinkInNewTab = () => {
     window.open(infoData.linkToOpen.value, '_blank');
   };
@@ -61,18 +62,14 @@ function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
       placement="right"
       onClose={close}
       size={['full', 'full', 'sm', 'sm', 'md']}
-      closeOnOverlayClick={false}
+      closeOnOverlayClick={editable ? false : true}
       autoFocus={false}
       trapFocus={false}
-      blockScrollOnMount={false}
-      portalProps={{ containerRef }}
-      preserveScrollBarGap={true}
     >
-      <DrawerOverlay />
+      {!editable && <DrawerOverlay />}
       <DrawerContent
         background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
         backdropFilter="blur(12px)"
-        style={{ overflow: 'visible', pointerEvents: 'auto', zIndex: '0' }}
       >
         <DrawerBody
           padding="0px"

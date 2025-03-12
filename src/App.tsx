@@ -43,7 +43,6 @@ const App = () => {
   const [productDrawerLoading, setProductDrawerLoading] = useState(false);
   const [highlightImage, setHighLightImage] = useState('');
   const [openEdit, setOpenEdit] = useState(false);
-  const [editable, setEditable] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [activeId, setActiveId] = useState<number | string>('');
 
@@ -411,8 +410,24 @@ const App = () => {
     };
   }, []);
 
+  // useEffect(() => {
+  //   const currentOrigin = window.location.origin;
+  //   const acceptedOrigins = [
+  //     'https://staging.dashboard.emperiavr.com',
+  //     'https://dashboard.emperiavr.com',
+  //     'http://localhost:3000',
+  //     'http://localhost:3001',
+  //   ];
+  //   if (acceptedOrigins.includes(currentOrigin)) {
+  //     setEditable(true);
+  //   } else {
+  //     setEditable(false);
+  //   }
+  // }, [window.location]);
+
   useEffect(() => {
     const currentOrigin = window.location.origin;
+    let canEdit = false;
     const acceptedOrigins = [
       'https://staging.dashboard.emperiavr.com',
       'https://dashboard.emperiavr.com',
@@ -420,16 +435,13 @@ const App = () => {
       'http://localhost:3001',
     ];
     if (acceptedOrigins.includes(currentOrigin)) {
-      setEditable(true);
-    } else {
-      setEditable(false);
+      canEdit = true;
     }
-  }, [editable]);
 
-  useEffect(() => {
     const eventListener = (event: Event) => {
       const interceptedEvent = event as CustomEvent;
       if (interceptedEvent.detail.name === 'updateUI') {
+        setIsEditing(true);
         if (interceptedEvent.detail.type === 'info') {
           const activeTabData = interceptedEvent.detail.data;
           closeOtherElements('info');
@@ -466,7 +478,6 @@ const App = () => {
             });
           }
         }
-
         if (interceptedEvent.detail.type === 'iframe') {
           closeOtherElements('iframe');
           const activeTabData = interceptedEvent.detail.data;
@@ -531,14 +542,16 @@ const App = () => {
       }
       if (interceptedEvent.detail.name === 'closeUI') {
         closeOtherElements(interceptedEvent.detail.data);
+        setIsEditing(false);
       }
     };
-    setIsEditing(true);
+
     const target = window?.emperia?.events || window;
-    target.removeEventListener('fromDashboard', eventListener);
-    target.addEventListener('fromDashboard', eventListener);
+    canEdit && target.removeEventListener('fromDashboard', eventListener);
+    canEdit && target.addEventListener('fromDashboard', eventListener);
     return () => {
-      target.removeEventListener('fromDashboard', eventListener);
+      canEdit && target.removeEventListener('fromDashboard', eventListener);
+      setIsEditing(false);
     };
   }, []);
 
@@ -622,7 +635,7 @@ const App = () => {
           productId={productDrawerData?.id as string}
           openEdit={openEdit}
           setOpenEdit={setOpenEdit}
-          editable={editable}
+          editable={isEditing}
           activeId={activeId}
         />
       )}
