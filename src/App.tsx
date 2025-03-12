@@ -43,7 +43,7 @@ const App = () => {
   const [productDrawerLoading, setProductDrawerLoading] = useState(false);
   const [highlightImage, setHighLightImage] = useState('');
   const [openEdit, setOpenEdit] = useState(false);
-  const [editable, setEditable] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [activeId, setActiveId] = useState<number | string>('');
 
   const [iframeDrawerData, setIframeDrawerData] = useState<IframeData>({
@@ -280,6 +280,8 @@ const App = () => {
       data: { ...infoData },
       active: true,
     });
+    setWelcomeData({ ...welcomeData, active: false });
+    setInstructionsData({ ...instructionsData, active: false });
   };
 
   const openWelcomeModal = () => {
@@ -364,6 +366,31 @@ const App = () => {
     });
   };
 
+  const closeOtherElements = (activeElement: string) => {
+    if (activeElement !== 'product') {
+      setProductDrawerData({ ...productDrawerData, active: false });
+    }
+    if (activeElement !== 'info') {
+      setInfoData({ ...infoData, active: false });
+    }
+    if (activeElement !== 'iframe') {
+      setIframeDrawerData({ ...iframeDrawerData, active: false });
+    }
+    if (activeElement !== 'media') {
+      setMediaDrawerData({ ...mediaDrawerData, active: false });
+    }
+    if (activeElement !== 'ar') {
+      setArData({ ...arData, active: false });
+    }
+
+    if (activeElement !== 'instructions') {
+      setInstructionsData({ ...instructionsData, active: false });
+    }
+    if (activeElement !== 'welcome') {
+      setWelcomeData({ ...welcomeData, active: false });
+    }
+  };
+
   useEffect(() => {
     const eventListener = (event: Event) => {
       const interceptedEvent = event as CustomEvent;
@@ -383,8 +410,24 @@ const App = () => {
     };
   }, []);
 
+  // useEffect(() => {
+  //   const currentOrigin = window.location.origin;
+  //   const acceptedOrigins = [
+  //     'https://staging.dashboard.emperiavr.com',
+  //     'https://dashboard.emperiavr.com',
+  //     'http://localhost:3000',
+  //     'http://localhost:3001',
+  //   ];
+  //   if (acceptedOrigins.includes(currentOrigin)) {
+  //     setEditable(true);
+  //   } else {
+  //     setEditable(false);
+  //   }
+  // }, [window.location]);
+
   useEffect(() => {
     const currentOrigin = window.location.origin;
+    let canEdit = false;
     const acceptedOrigins = [
       'https://staging.dashboard.emperiavr.com',
       'https://dashboard.emperiavr.com',
@@ -392,18 +435,16 @@ const App = () => {
       'http://localhost:3001',
     ];
     if (acceptedOrigins.includes(currentOrigin)) {
-      setEditable(true);
-    } else {
-      setEditable(false);
+      canEdit = true;
     }
-  }, [editable]);
 
-  useEffect(() => {
     const eventListener = (event: Event) => {
       const interceptedEvent = event as CustomEvent;
       if (interceptedEvent.detail.name === 'updateUI') {
+        setIsEditing(true);
         if (interceptedEvent.detail.type === 'info') {
           const activeTabData = interceptedEvent.detail.data;
+          closeOtherElements('info');
           setInfoData({
             active: infoData.active || true,
             id: interceptedEvent.detail.id,
@@ -420,6 +461,7 @@ const App = () => {
         }
         if (interceptedEvent.detail.type === 'media') {
           const activeTabData = interceptedEvent.detail.data;
+          closeOtherElements('media');
           setMediaDrawerData({
             active: true,
             data: {
@@ -436,8 +478,8 @@ const App = () => {
             });
           }
         }
-
         if (interceptedEvent.detail.type === 'iframe') {
+          closeOtherElements('iframe');
           const activeTabData = interceptedEvent.detail.data;
           setIframeDrawerData({
             active: true,
@@ -455,6 +497,7 @@ const App = () => {
         }
         if (interceptedEvent.detail.type === 'ar') {
           const activeTabData = interceptedEvent.detail.data;
+          closeOtherElements('ar');
           setArData({
             active: true,
             id: interceptedEvent.detail.id,
@@ -470,6 +513,7 @@ const App = () => {
           }
         }
         if (interceptedEvent.detail.type === 'product') {
+          closeOtherElements('product');
           const product = interceptedEvent.detail.data;
           setProductDrawerData({
             active: true,
@@ -485,17 +529,29 @@ const App = () => {
             });
           }
         }
-        if (interceptedEvent.detail.type === 'ui') {
+        if (interceptedEvent.detail.type === 'instructions') {
           window.emperia.data.ui.uiConfig = interceptedEvent.detail.data;
-          onUIReady();
+          closeOtherElements('instructions');
+          openInstructionsModal();
+        }
+        if (interceptedEvent.detail.type === 'welcome') {
+          window.emperia.data.ui.uiConfig = interceptedEvent.detail.data;
+          closeOtherElements('welcome');
+          openWelcomeModal();
         }
       }
+      if (interceptedEvent.detail.name === 'closeUI') {
+        closeOtherElements(interceptedEvent.detail.data);
+        setIsEditing(false);
+      }
     };
+
     const target = window?.emperia?.events || window;
-    target.removeEventListener('fromDashboard', eventListener);
-    target.addEventListener('fromDashboard', eventListener);
+    canEdit && target.removeEventListener('fromDashboard', eventListener);
+    canEdit && target.addEventListener('fromDashboard', eventListener);
     return () => {
-      target.removeEventListener('fromDashboard', eventListener);
+      canEdit && target.removeEventListener('fromDashboard', eventListener);
+      setIsEditing(false);
     };
   }, []);
 
@@ -579,7 +635,7 @@ const App = () => {
           productId={productDrawerData?.id as string}
           openEdit={openEdit}
           setOpenEdit={setOpenEdit}
-          editable={editable}
+          editable={isEditing}
           activeId={activeId}
         />
       )}
@@ -592,7 +648,7 @@ const App = () => {
         }}
         openEdit={openEdit}
         setOpenEdit={setOpenEdit}
-        editable={editable}
+        editable={isEditing}
         activeId={activeId}
       />
       <IframeDrawer

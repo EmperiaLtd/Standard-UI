@@ -1,4 +1,4 @@
-import { Box, Button, Text, Drawer, DrawerBody, DrawerContent, DrawerOverlay, DrawerFooter } from '@chakra-ui/react';
+import { Box, Button, Text, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerOverlay } from '@chakra-ui/react';
 import { InfoDrawerProps } from '../../interfaces';
 import React, { useState } from 'react';
 import { CrossIcon } from '../../Icons/CrossIcon';
@@ -12,6 +12,7 @@ interface InfoField {
 }
 
 function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
+  console.log('editable', editable);
   const [highlightImage, setHighlightImage] = useState('');
   const openLinkInNewTab = () => {
     window.open(infoData.linkToOpen.value, '_blank');
@@ -60,11 +61,11 @@ function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
       placement="right"
       onClose={close}
       size={['full', 'full', 'sm', 'sm', 'md']}
-      closeOnOverlayClick={true}
+      closeOnOverlayClick={editable ? false : true}
       autoFocus={false}
       trapFocus={false}
     >
-      <DrawerOverlay />
+      {!editable && <DrawerOverlay onClick={close} />}
       <DrawerContent
         background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
         backdropFilter="blur(12px)"
@@ -83,7 +84,7 @@ function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
               height="50px"
               width="100%"
               display="flex"
-              justifyContent={editable ? 'space-between' : 'flex-end'}
+              justifyContent={'flex-end'}
               alignItems="center"
               padding={['0px 20px']}
               background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"

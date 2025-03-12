@@ -317,10 +317,11 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
         placement={width < 769 ? 'bottom' : 'right'}
         onClose={close}
         size={['full', 'full', 'sm', 'sm', 'md']}
+        closeOnOverlayClick={editable ? false : true}
         autoFocus={false}
         trapFocus={false}
       >
-        <DrawerOverlay />
+        {!editable && <DrawerOverlay onClick={close} />}
         <DrawerContent
           maxH={height}
           background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
