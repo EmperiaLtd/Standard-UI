@@ -35,6 +35,7 @@ interface VariantField {
 }
 
 function ProductDrawer({ productId, productDrawerData, active, close, editable, openCart }: ProductDrawerProps) {
+  console.log('editable', editable);
   const transition = 'all 0.2s ease-in-out';
   const { width, height } = useWindowDimensions();
 
@@ -337,7 +338,7 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
               height="50px"
               width="100%"
               display="flex"
-              justifyContent={'flex-end'}
+              justifyContent="flex-end"
               alignItems="center"
               padding={['0px 20px']}
               background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
