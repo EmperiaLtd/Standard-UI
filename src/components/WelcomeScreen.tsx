@@ -6,12 +6,16 @@ interface WelcomeField {
   type: string;
   value: string;
   name: string;
+  displayOnUI: boolean;
 }
 function WelcomeScreen({ welcomeData, active, close }: WelcomeProps) {
   const transition = 'all 0.2s ease-in-out';
   const renderField = (key: string, field: WelcomeField) => {
     switch (field.type) {
       case 'image':
+        if (field?.displayOnUI === false) {
+          return null;
+        }
         return (
           <Box
             width={['180px', '180px', '230px', '230px', '290px']}
@@ -41,6 +45,9 @@ function WelcomeScreen({ welcomeData, active, close }: WelcomeProps) {
           </Box>
         );
       case 'string':
+        if (field?.displayOnUI === false) {
+          return null;
+        }
         if (key === 'jumboTitle') {
           return (
             <Box

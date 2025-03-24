@@ -273,6 +273,7 @@ export interface InfoData {
     name: string;
     type: string;
     value: string;
+    displayOnUI: boolean;
   };
   linkToOpen: {
     name: string;
@@ -332,97 +333,139 @@ export interface SwatchProps {
 }
 
 export type ProductData = {
-  parent_id: {
+  parent_id?: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
-  parent_sku: {
+  parent_sku?: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   market: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   title: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   short_description?: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   long_description?: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   category?: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   brand: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   collection?: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   currency: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
-  gender: { name: string; type: string; value: string };
-  age_group: {
+  gender?: { name: string; type: string; value: string; description: string; displayOnUI: boolean };
+  age_group?: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   default_url: {
     name: string;
     type: 'url';
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   tags: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   base_price: {
     name: string;
     type: string;
     value: number;
+    description: string;
+    displayOnUI: boolean;
   };
   variants_selection_order?: {
     name: string;
     type: string;
     value: string[];
+    description: string;
+    displayOnUI: boolean;
   };
-  variants?: ProductVariant[];
+  variants?: {
+    name: string;
+    type: string;
+    description: string;
+    displayOnUI: boolean;
+    value: ProductVariant[];
+  };
   turnTableURL?: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   retail_price?: {
     name: string;
     type: string;
     value: number;
+    description: string;
+    displayOnUI: boolean;
   };
   imageURLs: {
     name: string;
     type: string;
     value: string[];
+    description: string;
+    displayOnUI: boolean;
   };
 };
 
@@ -432,6 +475,8 @@ export type ProductVariantMedia = {
   thumbnail_url: string;
   media_type: string;
   mobile_version_url: string;
+  description: string;
+  displayOnUI: boolean;
 };
 
 export type ProductVariant = {
@@ -439,52 +484,72 @@ export type ProductVariant = {
     name: string;
     type: string;
     value: boolean;
+    description: string;
+    displayOnUI: boolean;
   };
   variant_id: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   variant_sku: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   short_description: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   long_description: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   variants: ProductVariantType[];
   available_stock: {
     name: string;
     type: string;
     value: number;
+    description: string;
+    displayOnUI: boolean;
   };
   imageURLs: {
     name: string;
     type: string;
     value: string[];
+    description: string;
+    displayOnUI: boolean;
   };
   retail_price: {
     name: string;
     type: string;
     value: number;
+    description: string;
+    displayOnUI: boolean;
   };
   sale_price: {
     name: string;
     type: string;
     value: number;
+    description: string;
+    displayOnUI: boolean;
   };
   in_stock: {
     name: string;
     type: string;
     value: boolean;
+    description: string;
+    displayOnUI: boolean;
   };
 };
 
@@ -501,36 +566,50 @@ export type ProductVariantType = {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   variant_type: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   value: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   price?: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   available_stock?: {
     name: string;
     type: string;
     value: number;
+    description: string;
+    displayOnUI: boolean;
   };
   variant_sku?: {
     name: string;
     type: string;
     value: string;
+    description: string;
+    displayOnUI: boolean;
   };
   imageURLs?: {
     name: string;
     type: string;
     value: string[];
+    description: string;
+    displayOnUI: boolean;
   };
 };
 

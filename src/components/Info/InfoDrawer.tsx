@@ -9,10 +9,10 @@ interface InfoField {
   name: string;
   type: string;
   value: string | string[];
+  displayOnUI: boolean;
 }
 
 function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
-  console.log('editable', editable);
   const [highlightImage, setHighlightImage] = useState('');
   const openLinkInNewTab = () => {
     window.open(infoData.linkToOpen.value, '_blank');
@@ -21,6 +21,9 @@ function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
   const renderField = (key: string, field: InfoField) => {
     switch (field.type) {
       case 'urlArray':
+        if (field?.displayOnUI === false) {
+          return null;
+        }
         return (
           <MediaSlider
             key={key}
@@ -31,6 +34,9 @@ function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
           />
         );
       case 'string':
+        if (field?.displayOnUI === false) {
+          return null;
+        }
         if (key === 'title') {
           return (
             <Box padding={['0px 20px']} key={key}>
@@ -41,6 +47,9 @@ function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
           );
         }
         if (key === 'buttonTitle') {
+          return null;
+        }
+        if (key === 'displayName') {
           return null;
         }
         return (
@@ -106,35 +115,37 @@ function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
           </Box>
         </DrawerBody>
 
-        <DrawerFooter
-          p={['20px', '20px', '20px', '30px', '30px']}
-          width={['100%']}
-          border-top="1px solid #FFFFFF4D"
-          w="100%"
-        >
-          <Box width={['100%']} display="flex" gap={[4]}>
-            <Button
-              leftIcon={<OpenInNewTabIcon boxSize={['24px']} />}
-              variant="solid"
-              color="white"
-              padding={['16px 32px']}
-              borderRadius="40px"
-              bg="rgba(0, 0, 0, 0.1)"
-              _hover={{ bg: 'rgba(0, 0, 0, 0.3)' }}
-              border="1px solid #FFFFFF4D"
-              fontSize={['18px', '18px']}
-              fontWeight="700"
-              fontFamily="Montserrat"
-              cursor="pointer"
-              pointerEvents="auto"
-              w={['100%', '100%', '100%', '100%', '100%']}
-              h="44px"
-              onClick={openLinkInNewTab}
-            >
-              {infoData?.buttonTitle?.value}
-            </Button>
-          </Box>
-        </DrawerFooter>
+        {infoData?.buttonTitle?.displayOnUI && (
+          <DrawerFooter
+            p={['20px', '20px', '20px', '30px', '30px']}
+            width={['100%']}
+            border-top="1px solid #FFFFFF4D"
+            w="100%"
+          >
+            <Box width={['100%']} display="flex" gap={[4]}>
+              <Button
+                leftIcon={<OpenInNewTabIcon boxSize={['24px']} />}
+                variant="solid"
+                color="white"
+                padding={['16px 32px']}
+                borderRadius="40px"
+                bg="rgba(0, 0, 0, 0.1)"
+                _hover={{ bg: 'rgba(0, 0, 0, 0.3)' }}
+                border="1px solid #FFFFFF4D"
+                fontSize={['18px', '18px']}
+                fontWeight="700"
+                fontFamily="Montserrat"
+                cursor="pointer"
+                pointerEvents="auto"
+                w={['100%', '100%', '100%', '100%', '100%']}
+                h="44px"
+                onClick={openLinkInNewTab}
+              >
+                {infoData?.buttonTitle?.value}
+              </Button>
+            </Box>
+          </DrawerFooter>
+        )}
       </DrawerContent>
     </Drawer>
   );
