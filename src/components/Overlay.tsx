@@ -37,6 +37,7 @@ function Overlay({
   const [menuOptionHoveredOrActive, setMenuOptionHoveredOrActive] = useState('');
   const [activeMenuOption, setActiveMenuOption] = useState('');
   const toast = useToast();
+  const [withinDashboard, setWithinDashboard] = useState(false);
 
   const [transformedOverlayData, setTransformedOverlayData] = useState<TransformedOverlayData[]>();
 
@@ -196,6 +197,19 @@ function Overlay({
     // Capitalize the first letter of each word
     return text.replace(/\b\w/g, (char) => char.toUpperCase());
   }
+
+  useEffect(() => {
+    const currentOrigin = window.location.origin;
+    const acceptedOrigins = [
+      'https://staging.dashboard.emperiavr.com',
+      'https://dashboard.emperiavr.com',
+      'http://localhost:3000',
+      'http://localhost:3001',
+    ];
+    if (acceptedOrigins.includes(currentOrigin)) {
+      setWithinDashboard(true);
+    }
+  }, []);
   return (
     <>
       <Box
@@ -225,8 +239,8 @@ function Overlay({
         zIndex="10"
         opacity={active ? 1 : 0}
         visibility={active ? 'visible' : 'hidden'}
-        position="fixed"
-        top={['10px', '10px', '15px', '15px', '20px']}
+        position="absolute"
+        top={withinDashboard ? ['10px', '10px', '65px', '75px', '75px'] : ['10px', '10px', '15px', '15px', '20px']}
         left={['10px', '10px', '15px', '15px', '20px']}
         padding={['10px', '10px', '15px', '15px', '20px']}
         display="flex"
