@@ -27,11 +27,13 @@ interface PDPField {
   name: string;
   type: string;
   value: string | string[] | number | ProductVariant[];
+  displayOnUI: boolean;
 }
 interface VariantField {
   name: string;
   type: string;
   value: string[];
+  displayOnUI: boolean;
 }
 
 function ProductDrawer({ productId, productDrawerData, active, close, editable, openCart }: ProductDrawerProps) {
@@ -48,7 +50,7 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
   const toast = useToast();
 
   const updateVariant = (variant: ProductVariantType) => {
-    const sVariant = productDrawerData?.variants?.find((v) =>
+    const sVariant = productDrawerData?.variants?.value?.find((v) =>
       v.variants.some((v) => v.variant_sku?.value === variant.variant_sku?.value),
     );
     setSelectedVariant(sVariant);
@@ -86,22 +88,19 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
 
   function groupVariants(variantsObj: ProductVariant[]) {
     const groupedVariantsObj = {} as Record<string, ProductVariantType[]>;
-    // Loop through the main variants array (variantsObj)
+
     variantsObj.forEach((product) => {
-      // Access the nested variants array for each product
-      const nestedVariants = product.variants;
-      // Loop through each nested variant to group them by their variant_type
-      nestedVariants.forEach((variant) => {
-        const variantType = variant.variant_type;
-        // If the variantType is not already a key in groupedVariants, initialize it as an array
-        if (!groupedVariantsObj[variantType.value]) {
-          groupedVariantsObj[variantType.value] = [];
+      product.variants.forEach((variant) => {
+        const variantTypeKey = variant.variant_type.value.toLowerCase(); // Convert key to lowercase
+
+        if (!groupedVariantsObj[variantTypeKey]) {
+          groupedVariantsObj[variantTypeKey] = [];
         }
 
-        // Push the variant into the corresponding group
-        groupedVariantsObj[variantType.value].push(variant);
+        groupedVariantsObj[variantTypeKey].push(variant);
       });
     });
+
     return groupedVariantsObj;
   }
 
@@ -133,9 +132,10 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
   }
 
   const renderVariants = (variants_selection_order: VariantField, variants: ProductVariant[]) => {
-    const selection = variants_selection_order.value || ['Color', 'Size'];
+    const groupedVariants = groupVariants(variants);
+    const selection =
+      variants_selection_order.value.length > 0 ? variants_selection_order.value : Object.keys(groupedVariants);
     return (selection as string[])?.map((variantType: string, index: number) => {
-      const groupedVariants = groupVariants(variants);
       return (
         <Box key={index} mb="4" mt={['20px', '20px', '20px', '20px', '20px']} padding={['0px 20px']}>
           <Text
@@ -186,6 +186,9 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
     if (!Array.isArray(field) && 'type' in field) {
       switch (field.type) {
         case 'urlArray': {
+          if (field?.displayOnUI === false) {
+            return null;
+          }
           return (
             <Box key={key} mb={['30px']}>
               <ImageSlider
@@ -202,7 +205,22 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
             </Box>
           );
         }
+        case 'array':
+          if (field?.displayOnUI === false) {
+            return null;
+          }
+          return (
+            <Box key={key} mb={['30px']}>
+              {renderVariants(
+                productDrawerData?.variants_selection_order as VariantField,
+                field.value as ProductVariant[],
+              )}
+            </Box>
+          );
         case 'string':
+          if (field?.displayOnUI === false) {
+            return null;
+          }
           if (key === 'title') {
             return (
               <Box padding={['0px 20px']} key={key}>
