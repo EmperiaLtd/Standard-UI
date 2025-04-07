@@ -16,12 +16,11 @@ import { ProductDrawerProps, ProductVariant, ProductVariantType } from '../inter
 import { handleCopy } from '../utils/helper';
 import useWindowDimensions from '../utils/hooks/useWindowDimensions';
 import React from 'react';
-import ParagraphWithSeeMore from './PDP/ParagraphWithSeeMore';
-import ArViewer from './PDP/ArViewer';
 import { Share } from '../Icons/Share';
 import PDPFooter from './PDP/PDPFooter';
 import Swatch from './PDP/Swatch';
-import VariantItem from './PDP/VarientItem';
+import VariantItem from './PDP/VariantItem';
+import ParagraphWithSeeMore from './common/ParagraphWithSeeMore';
 
 interface PDPField {
   name: string;
@@ -37,15 +36,12 @@ interface VariantField {
 }
 
 function ProductDrawer({ productId, productDrawerData, active, close, editable, openCart }: ProductDrawerProps) {
-  console.log('editable', editable);
   const transition = 'all 0.2s ease-in-out';
   const { width, height } = useWindowDimensions();
-
   const [selectedImage, setSelectedImage] = useState('');
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>();
   const [selectedVariantType, setSelectedVariantType] = useState<ProductVariantType>();
   const [itemAddedToCart, setItemAddedToCart] = useState<boolean>(false);
-  const [ARViewerActive, setARViewerActive] = useState(false);
   const [count, setCount] = useState<number>(1);
   const toast = useToast();
 
@@ -91,7 +87,7 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
 
     variantsObj.forEach((product) => {
       product.variants.forEach((variant) => {
-        const variantTypeKey = variant.variant_type.value.toLowerCase(); // Convert key to lowercase
+        const variantTypeKey = variant.variant_type.value; // Convert key to lowercase
 
         if (!groupedVariantsObj[variantTypeKey]) {
           groupedVariantsObj[variantTypeKey] = [];
@@ -124,15 +120,17 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
     testDiv.style.color = color;
     return testDiv.style.color !== ''; // Returns true if it's a valid color
   }
-  function applyColor(colour: string) {
-    if (!colour.startsWith('#') && /^[A-Fa-f0-9]{3,8}$/.test(colour)) {
-      colour = '#' + colour;
+  function applyColor(color: string) {
+    if (!color.startsWith('#') && /^[A-Fa-f0-9]{3,8}$/.test(color)) {
+      color = '#' + color;
     }
-    return colour;
+    return color;
   }
 
   const renderVariants = (variants_selection_order: VariantField, variants: ProductVariant[]) => {
+    console.log('variants', variants);
     const groupedVariants = groupVariants(variants);
+    console.log('groupedVariants', groupedVariants);
     const selection =
       variants_selection_order.value.length > 0 ? variants_selection_order.value : Object.keys(groupedVariants);
     return (selection as string[])?.map((variantType: string, index: number) => {
@@ -143,7 +141,6 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
             fontWeight="700"
             fontSize={['14px', '14px']}
             lineHeight={['18px', '18px']}
-            letterSpacing="-0.02em"
             color="white"
             textAlign="left"
             mb="2"
@@ -151,7 +148,7 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
             {variantType}
           </Text>
           <Box key={index} display="flex" flexWrap="wrap" alignItems="center">
-            {groupedVariants[variantType.toLowerCase()]?.map((variant, i) =>
+            {groupedVariants[variantType]?.map((variant, i) =>
               isValidColor(variant.value.value) ? (
                 <Swatch
                   key={i}
@@ -229,7 +226,6 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
                   fontWeight="700"
                   fontSize={['18px', '18px']}
                   lineHeight={['24px', '24px']}
-                  letterSpacing="-0.02em"
                   color="white"
                   textAlign="left"
                   mb="4"
@@ -247,7 +243,6 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
                   fontWeight="400"
                   fontSize={['14px', '14px']}
                   lineHeight={['18px', '18px']}
-                  letterSpacing="-0.02em"
                   color="white"
                   textAlign="left"
                   mb="4"
@@ -266,7 +261,6 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
                     fontWeight="700"
                     fontSize={['18px', '18px']}
                     lineHeight={['24px', '24px']}
-                    letterSpacing="-0.02em"
                     color="white"
                     textAlign="left"
                     mb="4"
@@ -290,7 +284,6 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
                     fontWeight="700"
                     fontSize={['14px', '14px']}
                     lineHeight={['18px', '18px']}
-                    letterSpacing="-0.02em"
                     color="white"
                     textAlign="left"
                     onClick={handleShare}
@@ -302,14 +295,11 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
               </Box>
             );
           }
-          if (key === 'short_description') {
+          if (key === 'long_description') {
             return (
               <Box padding={['0px 20px']} key={key}>
                 <ParagraphWithSeeMore
-                  longText={
-                    selectedVariant?.long_description?.value || productDrawerData?.long_description?.value || ''
-                  }
-                  shortText={selectedVariant?.short_description?.value || (field.value as string)}
+                  text={selectedVariant?.long_description?.value || productDrawerData?.long_description?.value || ''}
                   maxLines={1}
                 />
               </Box>
@@ -329,7 +319,6 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
 
   return (
     <Fragment key={productId}>
-      <ArViewer pId={productId} active={ARViewerActive} close={() => setARViewerActive(false)} />
       <Drawer
         isOpen={active}
         placement={width < 769 ? 'bottom' : 'right'}

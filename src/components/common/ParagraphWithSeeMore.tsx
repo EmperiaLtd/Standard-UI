@@ -28,7 +28,6 @@ const ParagraphWithSeeMore: React.FC<ParagraphWithSeeMoreProps> = ({ text, maxLi
           color="white"
           mt="10px"
           overflow="auto"
-          letterSpacing="-0.02em"
           textAlign="left"
           lineHeight={lineHeight}
         >
@@ -47,7 +46,6 @@ const ParagraphWithSeeMore: React.FC<ParagraphWithSeeMoreProps> = ({ text, maxLi
           fontFamily="Montserrat-Bold"
           fontWeight="400"
           fontSize={['16px', '16px']}
-          letterSpacing="-0.02em"
         >
           {isExpanded ? 'See less' : 'See more'}
         </Button>

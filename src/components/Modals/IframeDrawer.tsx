@@ -10,30 +10,22 @@ interface IframeProps {
 }
 
 const IframeDrawer = ({ iframeId, active, url, onClose }: IframeProps) => {
-  const [loaded, setLoaded] = useState(false);
+  const [iframeLoaded, setIframeLoaded] = useState(false);
 
-  const handleFrameLoad = () => {
-    setLoaded(true);
+  const handleIframeLoad = () => {
+    setIframeLoaded(true);
   };
   return (
     <Fragment key={iframeId}>
-      <Modal
-        isOpen={active}
-        onClose={onClose}
-        size={['full', 'full', 'full', 'full', 'full']}
-        autoFocus={false}
-        trapFocus={false}
-      >
+      <Modal isOpen={active} onClose={onClose} size={['full']} autoFocus={false} trapFocus={false}>
         <ModalOverlay
           onClick={onClose}
           background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
           backdropFilter="blur(12px)"
         />
-        <ModalContent margin={0} padding={0} overflow={'hidden'} bg="transparent">
+        <ModalContent overflow={'hidden'} bg="transparent">
           <Box
             width={['100%', '100%', '100%', '100%', '100%']}
-            margin={0}
-            padding={0}
             display="flex"
             flexDirection="column"
             justifyContent="space-between"
@@ -42,60 +34,36 @@ const IframeDrawer = ({ iframeId, active, url, onClose }: IframeProps) => {
             background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
             backdropFilter="blur(12px)"
           >
-            <Box
-              height="50px"
-              width="100%"
-              display="flex"
-              justifyContent="flex-end"
-              alignItems="center"
-              padding={['0px 20px']}
+            <CrossIcon
               position="absolute"
+              cursor="pointer"
+              onClick={onClose}
+              boxSize={4}
+              stroke="white"
+              filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
+              zIndex={10000}
+              fontSize={['20px']}
+              aria-label="Close"
               top="20px"
-              right="10px"
-            >
-              <CrossIcon
-                cursor="pointer"
-                onClick={onClose}
-                boxSize={4}
-                stroke="white"
-                filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
-                zIndex={10000}
-                fontSize={['20px']}
-                aria-label="Close"
-              />
-            </Box>
+              right="20px"
+            />
+
             <Box
               margin={'auto'}
-              width={['90%', '90%', '90%', '90%', '95%']}
-              h={['100vh']}
-              textAlign="center"
-              position="relative"
-              borderRadius={'16px'}
-              display={'flex'}
-              justifyContent={'center'}
-              alignItems={'center'}
-              onClick={onClose}
+              width={['90%']}
+              h={['90%']}
+              as="iframe"
+              src={url}
+              visibility={iframeLoaded ? 'unset' : 'hidden'}
+              borderRadius="8px"
+              overflow="hidden"
               zIndex={100}
-            >
-              <iframe
-                role="iframe"
-                aria-labelledby="Iframe-test"
-                src={url}
-                title={'testIframe'}
-                width="100%"
-                height="80%"
-                style={{ borderRadius: '8px' }}
-                frameBorder="0"
-                allowFullScreen
-                data-testid="iframe-test"
-                onLoad={handleFrameLoad}
-              />
-              {!loaded && (
-                <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" zIndex={-2}>
-                  <Spinner size="xl" color="white" />
-                </Box>
-              )}
-            </Box>
+              allowFullScreen
+              onLoad={url.length > 0 ? handleIframeLoad : undefined}
+            />
+            {!iframeLoaded && (
+              <Spinner color="white" position="absolute" left={0} right={0} top={0} bottom={0} margin="auto" />
+            )}
           </Box>
         </ModalContent>
       </Modal>

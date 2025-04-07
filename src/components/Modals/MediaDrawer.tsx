@@ -1,4 +1,4 @@
-import { Box, Modal, ModalContent, ModalOverlay, Image as ChakraImage } from '@chakra-ui/react';
+import { Box, Modal, ModalContent, Image as ChakraImage } from '@chakra-ui/react';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import Slider from 'react-slick';
 import { ThreeDView } from '../../Icons/ThreeDView';
@@ -84,271 +84,233 @@ const MediaDrawer = ({
 
   return (
     <Fragment key={mediaId}>
-      <Modal
-        isOpen={active}
-        onClose={onClose}
-        size={['full', 'full', 'full', 'full', 'full']}
-        autoFocus={false}
-        trapFocus={false}
-      >
-        <ModalOverlay
-          onClick={onClose}
-          background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
-          backdropFilter="blur(12px)"
-        />
+      <Modal isOpen={active} onClose={onClose} size="full" autoFocus={false} trapFocus={false}>
         <ModalContent
-          margin={0}
-          padding={0}
           overflow={'hidden'}
           background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
           backdropFilter="blur(12px)"
         >
           <Box
             width={['100%', '100%', '100%', '100%', '100%']}
-            margin={0}
-            padding={0}
             display="flex"
             flexDirection="column"
             justifyContent="space-between"
             position="relative"
             height={['100vh']}
           >
-            <Box
-              height="50px"
-              width="100%"
-              display="flex"
-              justifyContent="flex-end"
-              alignItems="center"
-              padding={['0px 20px']}
+            <CrossIcon
+              position="absolute"
+              cursor="pointer"
+              onClick={onClose}
+              boxSize={4}
+              stroke="white"
+              filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
+              zIndex={10000}
+              fontSize={['20px']}
+              aria-label="Close"
               top="20px"
-              right="10px"
-            >
-              <CrossIcon
-                cursor="pointer"
-                onClick={onClose}
-                boxSize={4}
-                stroke="white"
-                filter="drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5))"
-                zIndex={10000}
-                aria-label="Close"
-                position="absolute"
-                top="30px"
-                right="40px"
-              />
-            </Box>
+              right="20px"
+            />
             <Box
               margin={'auto'}
-              width={['90%', '90%', '90%', '90%', '90%']}
+              width={['90%']}
+              h={['90%']}
               textAlign="center"
-              position="relative"
-              borderRadius={'16px'}
-              onClick={onClose}
-              maxH={['70vh', '80vh', '80vh', '80vh', '90vh']}
-            >
-              <Slider ref={slider} {...settings}>
-                {mediaURLs.map((media, index) => {
-                  const mediaType = mediaTypes[media];
-                  return (
-                    <Box
-                      key={index}
-                      position="relative"
-                      flex="0 0 auto"
-                      margin={'30px auto'}
-                      height={['70vh', '80vh', '80vh', '80vh', '85vh']}
-                      onClick={() => {
-                        setHighLightImage(typeof media === 'string' ? media : '');
-                        slider?.current?.slickGoTo(index);
-                      }}
-                      cursor="pointer"
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      _notLast={{ marginRight: '10px' }}
-                      borderRadius={'16px'}
-                      overflow="hidden"
-                      transition={transition}
-                      width={['100%', '85%', '85%', '50%', '50%']}
-                    >
-                      {mediaType === 'Picture' && (
-                        <ChakraImage
-                          src={typeof media === 'string' ? media : ''}
-                          objectFit={['cover', 'cover', 'cover', 'cover', 'contain']}
-                          position="absolute"
-                          height="100%"
-                          max-height="100%"
-                          margin={'0 auto'}
-                          borderRadius={'16px !important'}
-                          width={['100%']}
-                          overflow={'visible'}
-                        />
-                      )}
-                      {mediaType === 'Video' && (
-                        <Box
-                          as="video"
-                          key={index}
-                          display="flex"
-                          justifyContent="center"
-                          alignItems="center"
-                          margin={'0 auto'}
-                          cursor="pointer"
-                          width={'100%'}
-                          height={['100%']}
-                          background={['black']}
-                          objectFit="cover"
-                          objectPosition="top"
-                          src={typeof media === 'string' ? media : ''}
-                          controls
-                          autoPlay
-                          loop
-                          muted
-                        />
-                      )}
-
-                      {['YouTube', 'Unknown'].includes(mediaType) && (
-                        <Box
-                          as="iframe"
-                          key={index}
-                          margin={'0 auto'}
-                          cursor="pointer"
-                          borderRadius={'16px'}
-                          height={'100%'}
-                          objectFit="cover"
-                          width={'100%'}
-                          objectPosition="top"
-                          src={parseYouTubeEmbed(media)}
-                          title="youtube-video"
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        />
-                      )}
-                    </Box>
-                  );
-                })}
-              </Slider>
-            </Box>
-            <Box
-              height={['70px', '80px', '80px', '80px', '100px']}
+              borderRadius={'8px'}
+              gap="10px"
+              overflow="hidden"
               display="flex"
-              justifyContent="flex-start"
-              alignItems="center"
-              w="auto"
-              maxW={['60%', '60%', '70%']}
-              margin="0 auto"
-              mb={'1rem'}
-              gap={[1, 1, 1]}
-              overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
+              flexDirection="column"
+              justifyContent="space-between"
             >
-              {turnTableUrl && turnTableUrl?.length > 0
-                ? mediaURLs?.map((image: string | React.ReactNode, index: number) =>
-                    index === mediaURLs.length - 1 ? (
-                      <Box
-                        className={`${index} ${mediaURLs.length - 1}`}
-                        key={index}
-                        border={activeImageIndex.newIndex === index ? '2px solid white' : '2px solid transparent'}
-                        position="relative"
-                        flex="0 0 auto"
-                        height={['50px', '60px', '60px', '60px', '70px']}
-                        width={['50px', '60px', '60px', '60px', '70px']}
-                        onClick={() => {
-                          setHighLightImage(typeof image === 'string' ? image : '');
-                          slider?.current?.slickGoTo(index);
-                        }}
-                        cursor="pointer"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        _notLast={{ marginRight: '10px' }}
-                        borderRadius="4px"
-                        _hover={{
-                          border: '2px solid white',
-                        }}
-                        overflow="hidden"
-                        transition={transition}
-                      >
-                        <ThreeDView fill="white" width="80%" height="80%" />
-                      </Box>
-                    ) : (
-                      <Box
-                        key={index}
-                        border={activeImageIndex.newIndex === index ? '2px solid white' : '2px solid transparent'}
-                        position="relative"
-                        flex="0 0 auto"
-                        height={['50px', '60px', '60px', '60px', '70px']}
-                        width={['50px', '60px', '60px', '60px', '70px']}
-                        onClick={() => {
-                          setHighLightImage(typeof image === 'string' ? image : '');
-                          slider?.current?.slickGoTo(index);
-                        }}
-                        cursor="pointer"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        _notLast={{ marginRight: '10px' }}
-                        borderRadius="4px"
-                        _hover={{
-                          border: '2px solid white',
-                        }}
-                        overflow="hidden"
-                        transition={transition}
-                      >
-                        <ChakraImage
-                          src={typeof image === 'string' ? image : ''}
-                          objectFit="cover"
-                          position="absolute"
-                          height="100%"
-                          width="100%"
-                          boxShadow="lg"
-                        />
-                      </Box>
-                    ),
-                  )
-                : mediaURLs?.map((media: string, index: number) => {
+              <Box flex="1">
+                <Slider className="media-slider" ref={slider} {...settings}>
+                  {mediaURLs.map((media, index) => {
                     const mediaType = mediaTypes[media];
                     return (
                       <Box
                         key={index}
-                        border={activeImageIndex.newIndex === index ? '2px solid white' : '2px solid transparent'}
-                        position="relative"
                         flex="0 0 auto"
-                        height={['40px', '40px', '40px', '40px', '50px']}
-                        width={['40px', '40px', '40px', '40px', '50px']}
-                        onClick={() => {
-                          setHighLightImage(media);
-                          slider?.current?.slickGoTo(index);
-                        }}
+                        height="100%"
                         cursor="pointer"
                         display="flex"
                         justifyContent="center"
                         alignItems="center"
-                        _notLast={{ marginRight: '16px' }}
-                        borderRadius="8px"
-                        _hover={{
-                          border: '2px solid white',
-                        }}
+                        borderRadius={'8px'}
                         overflow="hidden"
                         transition={transition}
+                        onClick={() => {
+                          setHighLightImage(typeof media === 'string' ? media : '');
+                          slider?.current?.slickGoTo(index);
+                        }}
                       >
                         {mediaType === 'Picture' && (
-                          <ChakraImage src={media} objectFit="cover" position="absolute" height="100%" width="100%" />
+                          <ChakraImage
+                            src={typeof media === 'string' ? media : ''}
+                            objectFit={['cover']}
+                            height="100%"
+                            width="100%"
+                          />
                         )}
-                        {['YouTube', 'Video'].includes(mediaType) && (
+                        {mediaType === 'Video' && (
                           <Box
-                            width={['100%']}
-                            height={'100%'}
-                            border={activeImageIndex.newIndex === index ? '' : '1px solid black'}
-                            display={'flex'}
+                            as="video"
+                            key={index}
+                            display="flex"
                             justifyContent="center"
                             alignItems="center"
-                            borderRadius="8px"
-                          >
-                            <YouTubeIcon fill="white" width="100%" height="100%" />
-                          </Box>
+                            cursor="pointer"
+                            width="100%"
+                            height="100%"
+                            objectFit="cover"
+                            objectPosition="center"
+                            src={typeof media === 'string' ? media : ''}
+                            controls
+                            autoPlay
+                            loop
+                            muted
+                          />
                         )}
-                        {mediaType === 'Unknown' && <UnknownMediaIcon fill="white" width="100%" height="100%" />}
+
+                        {['YouTube', 'Unknown'].includes(mediaType) && (
+                          <Box
+                            as="iframe"
+                            key={index}
+                            cursor="pointer"
+                            height="100%"
+                            objectFit="cover"
+                            width={'100%'}
+                            objectPosition="center"
+                            src={parseYouTubeEmbed(media)}
+                            title="youtube-video"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                          />
+                        )}
                       </Box>
                     );
                   })}
+                </Slider>
+              </Box>
+
+              <Box
+                height="auto"
+                display="flex"
+                justifyContent="flex-start"
+                alignItems="center"
+                w="auto"
+                maxW={['100%', '60%', '70%']}
+                margin="0 auto"
+                gap={['5px', '10px']}
+                overflowX="auto"
+              >
+                {turnTableUrl && turnTableUrl?.length > 0
+                  ? mediaURLs?.map((image: string | React.ReactNode, index: number) =>
+                      index === mediaURLs.length - 1 ? (
+                        <Box
+                          className={`${index} ${mediaURLs.length - 1}`}
+                          key={index}
+                          border={activeImageIndex.newIndex === index ? '2px solid white' : '2px solid transparent'}
+                          position="relative"
+                          flex="0 0 auto"
+                          height={['50px', '60px', '60px', '60px', '70px']}
+                          width={['50px', '60px', '60px', '60px', '70px']}
+                          onClick={() => {
+                            setHighLightImage(typeof image === 'string' ? image : '');
+                            slider?.current?.slickGoTo(index);
+                          }}
+                          cursor="pointer"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          borderRadius="4px"
+                          _hover={{
+                            border: '2px solid white',
+                          }}
+                          overflow="hidden"
+                          transition={transition}
+                        >
+                          <ThreeDView fill="white" width="80%" height="80%" />
+                        </Box>
+                      ) : (
+                        <Box
+                          key={index}
+                          border={activeImageIndex.newIndex === index ? '2px solid white' : '2px solid transparent'}
+                          position="relative"
+                          flex="0 0 auto"
+                          height={['50px', '60px', '60px', '60px', '70px']}
+                          width={['50px', '60px', '60px', '60px', '70px']}
+                          onClick={() => {
+                            setHighLightImage(typeof image === 'string' ? image : '');
+                            slider?.current?.slickGoTo(index);
+                          }}
+                          cursor="pointer"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          borderRadius="4px"
+                          _hover={{
+                            border: '2px solid white',
+                          }}
+                          overflow="hidden"
+                          transition={transition}
+                        >
+                          <ChakraImage
+                            src={typeof image === 'string' ? image : ''}
+                            objectFit="cover"
+                            position="absolute"
+                            height="100%"
+                            width="100%"
+                            boxShadow="lg"
+                          />
+                        </Box>
+                      ),
+                    )
+                  : mediaURLs?.map((media: string, index: number) => {
+                      const mediaType = mediaTypes[media];
+                      return (
+                        <Box
+                          key={index}
+                          border={activeImageIndex.newIndex === index ? '2px solid white' : '2px solid transparent'}
+                          position="relative"
+                          flex="0 0 auto"
+                          height={['40px', '40px', '40px', '40px', '50px']}
+                          width={['40px', '40px', '40px', '40px', '50px']}
+                          onClick={() => {
+                            setHighLightImage(media);
+                            slider?.current?.slickGoTo(index);
+                          }}
+                          cursor="pointer"
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          borderRadius="4px"
+                          _hover={{
+                            border: '2px solid white',
+                          }}
+                          overflow="hidden"
+                          transition={transition}
+                        >
+                          {mediaType === 'Picture' && (
+                            <ChakraImage src={media} objectFit="cover" position="absolute" height="100%" width="100%" />
+                          )}
+                          {['YouTube', 'Video'].includes(mediaType) && (
+                            <Box
+                              width={['100%']}
+                              height={'100%'}
+                              border={activeImageIndex.newIndex === index ? '' : '1px solid black'}
+                              display={'flex'}
+                              justifyContent="center"
+                              alignItems="center"
+                            >
+                              <YouTubeIcon fill="white" width="100%" height="100%" />
+                            </Box>
+                          )}
+                          {mediaType === 'Unknown' && <UnknownMediaIcon fill="white" width="100%" height="100%" />}
+                        </Box>
+                      );
+                    })}
+              </Box>
             </Box>
           </Box>
         </ModalContent>

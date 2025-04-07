@@ -158,14 +158,11 @@ const App = () => {
     openWelcome: () => openWelcomeModal(),
     openInstructions: () => openInstructionsModal(),
     OpenInfo: (infoModalId: string) => openInfoModal(infoModalId),
-    updateLanguage: () => updateLanguage(),
     OpenPDP: (productVariantId: string) => openProductModal(productVariantId),
-    OpenCustomModel: (customModelId: string) => {
-      console.log(customModelId);
-    },
     OpenIframe: (iframeId: string) => openIframeModal(iframeId),
     OpenMedia: (mediaId: string) => openMediaModal(mediaId),
     OpenAR: (arId: string) => openARId(arId),
+    updateLanguage: () => updateLanguage(),
   };
 
   const onUIReady = () => {
@@ -257,7 +254,9 @@ const App = () => {
     setTimeout(() => {
       setProductDrawerLoading(false);
       isModalOpening = false;
-      const product = window.emperia?.data.ui.pdpModels.find((i) => i.id == productVariantId);
+      const product =
+        window.emperia?.data.ui.pdpModels.find((i) => i.id == productVariantId) ||
+        fallbackData?.data.ui.pdpModels.find((i) => i.id == productVariantId);
       const productData = product?.pdpModel || fallbackData.data.ui.pdpModels[0].pdpModel;
       if (!productData) return;
       setProductDrawerData({
@@ -353,7 +352,7 @@ const App = () => {
   };
 
   const openARId = (arId: string) => {
-    const arModels = window.emperia?.data?.ui?.arModels;
+    const arModels = window.emperia?.data?.ui?.arModels || fallbackData.data.ui.arModels;
     // Ensure arModels is a valid array; otherwise, fallback
     const isValidArray = Array.isArray(arModels) && arModels.length > 0;
     const arDataValid = isValidArray ? arModels.find((i) => i.id == arId)?.arModel : undefined;
@@ -382,7 +381,6 @@ const App = () => {
     if (activeElement !== 'ar') {
       setArData({ ...arData, active: false });
     }
-
     if (activeElement !== 'instructions') {
       setInstructionsData({ ...instructionsData, active: false });
     }
@@ -409,21 +407,6 @@ const App = () => {
       target.removeEventListener('fromExperience', eventListener);
     };
   }, []);
-
-  // useEffect(() => {
-  //   const currentOrigin = window.location.origin;
-  //   const acceptedOrigins = [
-  //     'https://staging.dashboard.emperiavr.com',
-  //     'https://dashboard.emperiavr.com',
-  //     'http://localhost:3000',
-  //     'http://localhost:3001',
-  //   ];
-  //   if (acceptedOrigins.includes(currentOrigin)) {
-  //     setEditable(true);
-  //   } else {
-  //     setEditable(false);
-  //   }
-  // }, [window.location]);
 
   useEffect(() => {
     const currentOrigin = window.location.origin;
@@ -586,6 +569,7 @@ const App = () => {
         setCartItems={setCartItems}
         setCartActive={setCartActive}
       />
+
       <WelcomeScreen
         welcomeData={welcomeData?.data}
         active={welcomeData?.active}
@@ -651,6 +635,7 @@ const App = () => {
         editable={isEditing}
         activeId={activeId}
       />
+
       <IframeDrawer
         iframeId={iframeDrawerData?.id}
         active={iframeDrawerData?.active}
@@ -659,6 +644,7 @@ const App = () => {
           setIframeDrawerData({ ...iframeDrawerData, active: false });
         }}
       />
+
       <MediaDrawer
         mediaId={mediaDrawerData?.data.id}
         active={mediaDrawerData?.active}
@@ -681,26 +667,25 @@ const App = () => {
           })
         }
       />
-      {arData.active && (
-        <ArDrawer
-          onClose={() =>
-            setArData({
-              id: '',
-              arModel: {
-                meshURL: {
-                  name: '',
-                  value: '',
-                  type: '',
-                },
+
+      <ArDrawer
+        onClose={() =>
+          setArData({
+            id: '',
+            arModel: {
+              meshURL: {
+                name: '',
+                value: '',
+                type: '',
               },
-              active: false,
-            })
-          }
-          arId={arData.id}
-          url={arData.arModel.meshURL.value}
-          active={arData.active}
-        />
-      )}
+            },
+            active: false,
+          })
+        }
+        arId={arData.id}
+        url={arData.arModel.meshURL.value}
+        active={arData.active}
+      />
     </ChakraProvider>
   );
 };

@@ -188,7 +188,7 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         h={['400px', '450px', '470px', '470px', '550px']}
       >
         {Object.keys(mediaTypes).length == 0 && (
-          <Skeleton width="inherit" startColor="#29303C" endColor="transparent" borderRadius="16px">
+          <Skeleton width="inherit" startColor="#29303C" endColor="transparent">
             <Box width={['100%', '100%', '100%', '100%', '100%']} h={['400px', '450px', '470px', '470px', '550px']} />
           </Skeleton>
         )}
@@ -288,7 +288,7 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
       >
         {Object.keys(mediaTypes).length == 0 && (
-          <Skeleton width="inherit" startColor="#29303C" endColor="transparent" borderRadius="16px">
+          <Skeleton width="inherit" startColor="#29303C" endColor="transparent">
             <Box display="flex" alignItems="center" gap={2} overflowX="auto">
               <Box height={['50px', '60px', '60px', '60px', '70px']} width={['50px', '60px', '60px', '60px', '70px']} />
               <Box height={['50px', '60px', '60px', '60px', '70px']} width={['50px', '60px', '60px', '60px', '70px']} />

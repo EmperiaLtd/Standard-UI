@@ -201,6 +201,16 @@ export const fallbackData: FallBackData = {
             },
           },
         },
+        {
+          id: '71677',
+          arModel: {
+            meshURL: {
+              name: 'AR Model',
+              type: 'url',
+              value: 'https://walmart.emperia-staging.com/AR/index.html?name=Oaklee6DrawerDresser',
+            },
+          },
+        },
       ],
       pdpModels: [
         {
@@ -220,7 +230,7 @@ export const fallbackData: FallBackData = {
             brand: {
               name: 'Brand',
               type: 'string',
-              value: '',
+              value: 'Brand',
               description: 'Brand of the product',
               displayOnUI: true,
             },
@@ -234,7 +244,7 @@ export const fallbackData: FallBackData = {
             category: {
               name: 'Category',
               type: 'string',
-              value: '',
+              value: 'Electronics',
               description: 'Category of the product',
               displayOnUI: true,
             },
@@ -528,7 +538,8 @@ export const fallbackData: FallBackData = {
             long_description: {
               name: 'Long Description',
               type: 'string',
-              value: 'Camera long description',
+              value:
+                'Long description of the product, Long description of the product, Long description of the product, Long description of the product, ,Long description of the product ,Long description of the product',
               description: 'Long description of the product',
               displayOnUI: true,
             },
@@ -942,7 +953,7 @@ export const fallbackData: FallBackData = {
 };
 
 export const ARPCUrls = {
-  '1172288913': 'AR/index.html?name=WalkerEdisonSideboard',
+  '78170': 'AR/index.html?name=WalkerEdisonSideboard',
   '2795761532': 'AR/index.html?name=Oaklee6DrawerDresser',
   '5325854900': 'AR/index.html?name=GuyiCloudCoffeeTable',
   '532121642': 'AR/index.html?name=DecModeAccentTable',

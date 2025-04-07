@@ -29,7 +29,6 @@ function ProductCounter({ count, available, onIncrease, onDecrease }: CounterPro
         lineHeight={['18px', '18px', '18px', '22px', '22px']}
         fontFamily="Montserrat"
         fontWeight="700"
-        letterSpacing="-0.02em"
         textAlign="center"
         minW="20px"
         color="white"
