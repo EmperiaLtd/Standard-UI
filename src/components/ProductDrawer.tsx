@@ -10,7 +10,7 @@ import {
   Divider,
 } from '@chakra-ui/react';
 import { CrossIcon } from '../Icons/CrossIcon';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import ImageSlider from './PDP/ImageSlider';
 import { ProductDrawerProps, ProductVariant, ProductVariantType } from '../interfaces';
 import { handleCopy } from '../utils/helper';
@@ -22,12 +22,6 @@ import Swatch from './PDP/Swatch';
 import VariantItem from './PDP/VariantItem';
 import ParagraphWithSeeMore from './common/ParagraphWithSeeMore';
 
-interface PDPField {
-  name: string;
-  type: string;
-  value: string | string[] | number | ProductVariant[];
-  displayOnUI: boolean;
-}
 interface VariantField {
   name: string;
   type: string;
@@ -38,12 +32,40 @@ interface VariantField {
 function ProductDrawer({ productId, productDrawerData, active, close, editable, openCart }: ProductDrawerProps) {
   const transition = 'all 0.2s ease-in-out';
   const { width, height } = useWindowDimensions();
-  const [selectedImage, setSelectedImage] = useState('');
+  const [selectedImage, setSelectedImage] = useState<string>('');
+  const [turnTableUrl, setTurnTableUrl] = useState<string>('');
+  const [currentImages, setCurrentImages] = useState<string[]>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant>();
   const [selectedVariantType, setSelectedVariantType] = useState<ProductVariantType>();
   const [itemAddedToCart, setItemAddedToCart] = useState<boolean>(false);
   const [count, setCount] = useState<number>(1);
   const toast = useToast();
+
+  useEffect(() => {
+    if (active) {
+      //Set Product Variants
+      const variants = productDrawerData?.variants?.value;
+      // setProductVariants(variants);
+
+      //set Default Variant
+      const defaultVariant =
+        variants?.find((variant: ProductVariant) => variant.bDefault.value) || (variants && variants[0]);
+
+      if (defaultVariant) {
+        setSelectedVariant(defaultVariant);
+        setTurnTableUrl(productDrawerData?.turnTableURL?.value || '');
+        setSelectedVariant(defaultVariant);
+        setSelectedVariantType(defaultVariant?.variants[0]);
+
+        // Get Images
+        defaultVariant?.imageURLs.value && setCurrentImages(defaultVariant?.imageURLs.value);
+        // Set Default Image
+        defaultVariant?.imageURLs.value[0] && setSelectedImage(defaultVariant?.imageURLs.value[0]);
+      }
+    } else {
+      setItemAddedToCart(false);
+    }
+  }, [active]);
 
   const updateVariant = (variant: ProductVariantType) => {
     const sVariant = productDrawerData?.variants?.value?.find((v) =>
@@ -51,6 +73,7 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
     );
     setSelectedVariant(sVariant);
     setSelectedVariantType(variant);
+    setCurrentImages(sVariant?.imageURLs.value);
   };
 
   const handleShare = async () => {
@@ -128,9 +151,7 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
   }
 
   const renderVariants = (variants_selection_order: VariantField, variants: ProductVariant[]) => {
-    console.log('variants', variants);
     const groupedVariants = groupVariants(variants);
-    console.log('groupedVariants', groupedVariants);
     const selection =
       variants_selection_order.value.length > 0 ? variants_selection_order.value : Object.keys(groupedVariants);
     return (selection as string[])?.map((variantType: string, index: number) => {
@@ -179,144 +200,6 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
     });
   };
 
-  const renderField = (key: string, field: ProductVariant[] | PDPField) => {
-    if (!Array.isArray(field) && 'type' in field) {
-      switch (field.type) {
-        case 'urlArray': {
-          if (field?.displayOnUI === false) {
-            return null;
-          }
-          return (
-            <Box key={key} mb={['30px']}>
-              <ImageSlider
-                turnTableUrl={productDrawerData?.turnTableURL?.value || ''}
-                highlightImage={selectedImage}
-                images={
-                  (selectedVariantType?.imageURLs?.value?.length && selectedVariantType?.imageURLs?.value) ||
-                  (selectedVariant?.imageURLs?.value && selectedVariant?.imageURLs?.value) ||
-                  (field.value as string[])
-                }
-                setHighLightImage={(image) => setSelectedImage(image)}
-                product={productDrawerData}
-              />
-            </Box>
-          );
-        }
-        case 'array':
-          if (field?.displayOnUI === false) {
-            return null;
-          }
-          return (
-            <Box key={key} mb={['30px']}>
-              {renderVariants(
-                productDrawerData?.variants_selection_order as VariantField,
-                field.value as ProductVariant[],
-              )}
-            </Box>
-          );
-        case 'string':
-          if (field?.displayOnUI === false) {
-            return null;
-          }
-          if (key === 'title') {
-            return (
-              <Box padding={['0px 20px']} key={key}>
-                <Text
-                  fontFamily="Montserrat"
-                  fontWeight="700"
-                  fontSize={['18px', '18px']}
-                  lineHeight={['24px', '24px']}
-                  color="white"
-                  textAlign="left"
-                  mb="4"
-                >
-                  {field.value as string}
-                </Text>
-              </Box>
-            );
-          }
-          if (key === 'brand') {
-            return (
-              <Box padding={['0px 20px']} key={key}>
-                <Text
-                  fontFamily="Montserrat"
-                  fontWeight="400"
-                  fontSize={['14px', '14px']}
-                  lineHeight={['18px', '18px']}
-                  color="white"
-                  textAlign="left"
-                  mb="4"
-                >
-                  {field.value as string}
-                </Text>
-              </Box>
-            );
-          }
-          if (key === 'base_price') {
-            return (
-              <Box key={key}>
-                <Box padding={['0px 20px']} key={key} display="flex" alignItems="center" justifyContent="space-between">
-                  <Text
-                    fontFamily="Montserrat"
-                    fontWeight="700"
-                    fontSize={['18px', '18px']}
-                    lineHeight={['24px', '24px']}
-                    color="white"
-                    textAlign="left"
-                    mb="4"
-                  >
-                    {`
-                          ${productDrawerData?.currency?.value || '$'}
-                    ${
-                      selectedVariantType?.price?.value ||
-                      selectedVariant?.sale_price?.value ||
-                      selectedVariant?.retail_price?.value ||
-                      Number(field.value).toFixed(2) ||
-                      Number(productDrawerData?.retail_price?.value).toFixed(2) ||
-                      0
-                    }
-                  `}
-                  </Text>
-                  <Button
-                    variant="link"
-                    leftIcon={<Share boxSize={['16px']} />}
-                    fontFamily="Montserrat"
-                    fontWeight="700"
-                    fontSize={['14px', '14px']}
-                    lineHeight={['18px', '18px']}
-                    color="white"
-                    textAlign="left"
-                    onClick={handleShare}
-                  >
-                    Share
-                  </Button>
-                </Box>
-                <Divider />
-              </Box>
-            );
-          }
-          if (key === 'long_description') {
-            return (
-              <Box padding={['0px 20px']} key={key}>
-                <ParagraphWithSeeMore
-                  text={selectedVariant?.long_description?.value || productDrawerData?.long_description?.value || ''}
-                  maxLines={1}
-                />
-              </Box>
-            );
-          }
-      }
-    } else {
-      if (key === 'variants') {
-        return (
-          <Box key={key} mb={['30px']}>
-            {renderVariants(productDrawerData?.variants_selection_order as VariantField, field)}
-          </Box>
-        );
-      }
-    }
-  };
-
   return (
     <Fragment key={productId}>
       <Drawer
@@ -361,7 +244,109 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
                 data-testid="cross-icon"
               />
             </Box>
-            {productDrawerData && Object.entries(productDrawerData).map(([key, field]) => renderField(key, field))}
+
+            {productDrawerData?.imageURLs?.displayOnUI && (
+              <ImageSlider
+                turnTableUrl={turnTableUrl}
+                highlightImage={selectedImage}
+                images={currentImages || []}
+                setHighLightImage={(image) => setSelectedImage(image)}
+                product={productDrawerData}
+              />
+            )}
+
+            {productDrawerData?.brand?.displayOnUI && (
+              <Box padding={['0px 20px']}>
+                <Text
+                  fontFamily="Montserrat"
+                  fontWeight="400"
+                  fontSize={['14px', '14px']}
+                  lineHeight={['18px', '18px']}
+                  color="white"
+                  textAlign="left"
+                  mb="4"
+                >
+                  {productDrawerData?.brand?.value}
+                </Text>
+              </Box>
+            )}
+
+            {productDrawerData?.title?.displayOnUI && (
+              <Box padding={['0px 20px']}>
+                <Text
+                  fontFamily="Montserrat"
+                  fontWeight="700"
+                  fontSize={['18px', '18px']}
+                  lineHeight={['24px', '24px']}
+                  color="white"
+                  textAlign="left"
+                  mb="4"
+                >
+                  {productDrawerData?.title?.value}
+                </Text>
+              </Box>
+            )}
+
+            {productDrawerData?.base_price?.displayOnUI && (
+              <Box>
+                <Box padding={['0px 20px']} display="flex" alignItems="center" justifyContent="space-between">
+                  <Text
+                    fontFamily="Montserrat"
+                    fontWeight="700"
+                    fontSize={['18px', '18px']}
+                    lineHeight={['24px', '24px']}
+                    color="white"
+                    textAlign="left"
+                    mb="4"
+                  >
+                    {`
+                    ${productDrawerData?.currency?.value || '$'}
+                    ${
+                      selectedVariantType?.price?.value ||
+                      selectedVariant?.sale_price?.value ||
+                      selectedVariant?.retail_price?.value ||
+                      Number(productDrawerData?.base_price?.value).toFixed(2) ||
+                      Number(productDrawerData?.retail_price?.value).toFixed(2) ||
+                      0
+                    }
+                `}
+                  </Text>
+                  <Button
+                    variant="link"
+                    leftIcon={<Share boxSize={['16px']} />}
+                    fontFamily="Montserrat"
+                    fontWeight="700"
+                    fontSize={['14px', '14px']}
+                    lineHeight={['18px', '18px']}
+                    color="white"
+                    textAlign="left"
+                    onClick={handleShare}
+                  >
+                    Share
+                  </Button>
+                </Box>
+                <Divider />
+              </Box>
+            )}
+
+            {/* Variants Here */}
+            {productDrawerData?.variants?.displayOnUI && (
+              <Box mb={['30px']}>
+                {renderVariants(
+                  productDrawerData?.variants_selection_order as VariantField,
+                  productDrawerData.variants?.value as ProductVariant[],
+                )}
+              </Box>
+            )}
+
+            {productDrawerData?.long_description?.displayOnUI && (
+              <Box padding={['0px 20px']}>
+                <ParagraphWithSeeMore
+                  text={selectedVariant?.long_description?.value || productDrawerData?.long_description?.value || ''}
+                  maxLines={1}
+                />
+              </Box>
+            )}
           </DrawerBody>
           <PDPFooter
             count={selectedVariant?.in_stock ? count : 0}

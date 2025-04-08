@@ -189,26 +189,31 @@ export interface WelcomeData {
     name: string;
     type: string;
     value: string;
+    displayOnUI: boolean;
   };
   collectionTitle: {
     name: string;
     type: string;
     value: string;
+    displayOnUI: boolean;
   };
   jumboTitle: {
     name: string;
     type: string;
     value: string;
+    displayOnUI: boolean;
   };
   tagline: {
     name: string;
     type: string;
     value: string;
+    displayOnUI: boolean;
   };
   enterCTA: {
     name: string;
     type: string;
     value: string;
+    displayOnUI: boolean;
   };
 }
 
@@ -257,17 +262,20 @@ export interface InfoData {
     name: string;
     type: string;
     value: string;
+    displayOnUI: boolean;
   };
   title: {
     name: string;
     type: string;
     value: string;
+    displayOnUI: boolean;
   };
-  subTitle: { name: string; type: string; value: string };
+  subTitle: { name: string; type: string; value: string; displayOnUI: boolean };
   description: {
     name: string;
     type: string;
     value: string;
+    displayOnUI: boolean;
   };
   buttonTitle: {
     name: string;
@@ -279,11 +287,13 @@ export interface InfoData {
     name: string;
     type: string;
     value: string;
+    displayOnUI: boolean;
   };
-  mediaURLs?: {
+  mediaURLs: {
     name: string;
     type: string;
     value: string[];
+    displayOnUI: boolean;
   };
 }
 

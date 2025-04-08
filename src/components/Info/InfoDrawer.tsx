@@ -5,63 +5,10 @@ import { CrossIcon } from '../../Icons/CrossIcon';
 import MediaSlider from '../common/MediaSlider';
 import { OpenInNewTabIcon } from '../../Icons/OpenLinkIcon';
 
-interface InfoField {
-  name: string;
-  type: string;
-  value: string | string[];
-  displayOnUI: boolean;
-}
-
 function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
   const [highlightImage, setHighlightImage] = useState('');
   const openLinkInNewTab = () => {
     window.open(infoData.linkToOpen.value, '_blank');
-  };
-
-  const renderField = (key: string, field: InfoField) => {
-    switch (field.type) {
-      case 'urlArray':
-        if (field?.displayOnUI === false) {
-          return null;
-        }
-        return (
-          <MediaSlider
-            key={key}
-            images={field.value as string[]}
-            setHighLightImage={setHighlightImage}
-            turnTableUrl=""
-            highlightImage={highlightImage || field.value[0]}
-          />
-        );
-      case 'string':
-        if (field?.displayOnUI === false) {
-          return null;
-        }
-        if (key === 'title') {
-          return (
-            <Box padding={['0px 20px']} key={key}>
-              <Text fontFamily="Montserrat-Bold" fontSize={['20px']} textTransform="uppercase" color="white" mt="10px">
-                {field.value}
-              </Text>
-            </Box>
-          );
-        }
-        if (key === 'buttonTitle') {
-          return null;
-        }
-        if (key === 'displayName') {
-          return null;
-        }
-        return (
-          <Box padding={['0px 20px']} key={key}>
-            <Text key={key} m="10px 0px" fontFamily="Montserrat-Medium" fontSize={['14px']} color="white">
-              {field.value}
-            </Text>
-          </Box>
-        );
-      default:
-        return null;
-    }
   };
 
   return (
@@ -109,8 +56,31 @@ function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
                 data-testid="cross-icon"
               />
             </Box>
-            <Box w="100%" height="auto" display="flex" flexDirection="column" justifyContent="space-between">
-              {infoData && Object.entries(infoData).map(([key, field]) => renderField(key, field))}
+            <Box w="100%" height="auto" display="flex" flexDirection="column" justifyContent="space-between" gap="10px">
+              {infoData?.mediaURLs.displayOnUI && (
+                <MediaSlider
+                  images={infoData?.mediaURLs?.value}
+                  setHighLightImage={setHighlightImage}
+                  turnTableUrl=""
+                  highlightImage={highlightImage}
+                />
+              )}
+
+              {infoData?.title.displayOnUI && (
+                <Box padding={['0px 20px']}>
+                  <Text fontFamily="Montserrat-Bold" fontSize={['20px']} textTransform="uppercase" color="white">
+                    {infoData?.title.value}
+                  </Text>
+                </Box>
+              )}
+
+              {infoData?.description.displayOnUI && (
+                <Box padding={['0px 20px']}>
+                  <Text fontFamily="Montserrat-Medium" fontSize={['14px']} color="white">
+                    {infoData?.description.value}
+                  </Text>
+                </Box>
+              )}
             </Box>
           </Box>
         </DrawerBody>
