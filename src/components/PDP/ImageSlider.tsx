@@ -40,7 +40,7 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
     slidesToScroll: 1,
     draggable: false,
     swipe: false,
-    adaptiveHeight: true,
+    adaptiveHeight: false,
     beforeChange: (oldIndex: number, newIndex: number) => {
       setActiveImageIndex({ oldIndex: oldIndex, newIndex: newIndex });
       if (highlightImage === images[oldIndex]) {
@@ -64,6 +64,7 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         width={['100%', '100%', '100%', '100%', '100%']}
         h={['400px', '450px', '470px', '470px', '550px']}
         gap={5}
+        backgroundColor="white"
       >
         <Box
           display="flex"
@@ -96,6 +97,7 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
               setImageNo(finalValue);
             }
           }}
+          bg={'red'}
         >
           <SliderTrack
             bg="transparent"
@@ -110,7 +112,6 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
               transform={'scale(1.3)'}
               src={`${turnTableUrl}?frame=${imageNo}&width=400`}
               height={['auto']}
-              maxHeight={['300px', '350px', '350px', '350px', '400px']}
               width={['100%']}
             />
           </SliderTrack>
@@ -137,7 +138,7 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
               }
             }}
           >
-            <SliderTrack bg="blackAlpha.300" height="10px" borderRadius="30px">
+            <SliderTrack bg="white" height="10px" borderRadius="30px">
               <SliderFilledTrack bg="blackAlpha.500" />
             </SliderTrack>
             <SliderThumb boxSize={4} />
@@ -166,36 +167,23 @@ const ImageSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         position="relative"
       >
         <Slider ref={slider} {...settings}>
-          {turnTableUrl.length > 0
-            ? sliderImages.map((image: string | React.ReactNode, index: number) =>
-                isString(image) ? (
-                  <ChakraImage
-                    key={index}
-                    cursor="pointer"
-                    loading="lazy"
-                    width={['100%', '100%', '100%', '100%', '100%']}
-                    h={['400px', '450px', '470px', '470px', '550px']}
-                    objectFit={['cover', 'cover', 'cover']}
-                    objectPosition="top"
-                    src={typeof image === 'string' ? image : ''}
-                    alt="product-image"
-                  />
-                ) : (
-                  image
-                ),
-              )
-            : sliderImages.map((image: string | React.ReactNode, index: number) => (
-                <ChakraImage
-                  key={index}
-                  cursor="pointer"
-                  loading="lazy"
-                  width={['100%', '100%', '100%', '100%', '100%']}
-                  h={['400px', '450px', '470px', '470px', '550px']}
-                  objectFit={['cover', 'cover', 'cover']}
-                  objectPosition="top"
-                  src={image as string}
-                />
-              ))}
+          {sliderImages.map((image: string | React.ReactNode, index: number) =>
+            isString(image) ? (
+              <ChakraImage
+                key={index}
+                cursor="pointer"
+                loading="lazy"
+                width={['100%', '100%', '100%', '100%', '100%']}
+                h={['400px', '450px', '470px', '470px', '550px']}
+                objectFit={['cover', 'cover', 'cover']}
+                objectPosition="top"
+                src={typeof image === 'string' ? image : ''}
+                alt="product-image"
+              />
+            ) : (
+              image
+            ),
+          )}
         </Slider>
       </Box>
 

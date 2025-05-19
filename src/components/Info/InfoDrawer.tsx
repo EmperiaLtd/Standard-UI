@@ -73,6 +73,13 @@ function InfoDrawer({ infoData, active, close, editable }: InfoDrawerProps) {
                   </Text>
                 </Box>
               )}
+              {infoData?.subTitle?.displayOnUI && (
+                <Box padding={['0px 20px']}>
+                  <Text fontFamily="Montserrat-Bold" fontSize={['14px']} color="white">
+                    {infoData?.subTitle.value}
+                  </Text>
+                </Box>
+              )}
 
               {infoData?.description.displayOnUI && (
                 <Box padding={['0px 20px']}>

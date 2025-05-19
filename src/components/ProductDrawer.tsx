@@ -58,9 +58,15 @@ function ProductDrawer({ productId, productDrawerData, active, close, editable, 
         setSelectedVariantType(defaultVariant?.variants[0]);
 
         // Get Images
-        defaultVariant?.imageURLs.value && setCurrentImages(defaultVariant?.imageURLs.value);
+        defaultVariant?.imageURLs.value &&
+          setCurrentImages(
+            defaultVariant?.imageURLs.value.length > 0
+              ? defaultVariant?.imageURLs.value
+              : productDrawerData?.imageURLs?.value,
+          );
         // Set Default Image
-        defaultVariant?.imageURLs.value[0] && setSelectedImage(defaultVariant?.imageURLs.value[0]);
+        defaultVariant?.imageURLs.value[0] &&
+          setSelectedImage(defaultVariant?.imageURLs?.value[0] || productDrawerData?.imageURLs?.value[0]);
       }
     } else {
       setItemAddedToCart(false);

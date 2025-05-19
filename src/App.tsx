@@ -116,31 +116,31 @@ const App = () => {
         name: 'collectionImage',
         type: 'url',
         value: '',
-        displayOnUI: false,
+        displayOnUI: true,
       },
       collectionTitle: {
         name: 'collectionTitle',
         type: 'string',
         value: '',
-        displayOnUI: false,
+        displayOnUI: true,
       },
       jumboTitle: {
         name: 'jumboTitle',
         type: 'string',
         value: '',
-        displayOnUI: false,
+        displayOnUI: true,
       },
       tagline: {
         name: 'tagline',
         type: 'string',
         value: '',
-        displayOnUI: false,
+        displayOnUI: true,
       },
       enterCTA: {
         name: 'enterCTA',
         type: 'string',
         value: '',
-        displayOnUI: false,
+        displayOnUI: true,
       },
     },
     active: false,
@@ -397,9 +397,11 @@ const App = () => {
   useEffect(() => {
     const eventListener = (event: Event) => {
       const interceptedEvent = event as CustomEvent;
-      event.stopImmediatePropagation();
       const eventType = interceptedEvent.detail.name as keyof typeof eventMap;
       const eventData = interceptedEvent.detail.data;
+      if (eventType !== 'uiReady') {
+        event.stopImmediatePropagation();
+      }
 
       if (eventMap[eventType]) {
         eventMap[eventType](eventData);
@@ -488,8 +490,7 @@ const App = () => {
           closeOtherElements('ar');
           setArData({
             active: true,
-            id: interceptedEvent.detail.id,
-            arModel: activeTabData,
+            ...activeTabData,
           });
           if (window.emperia) {
             window.emperia.data.ui.arModels = window.emperia.data.ui.arModels.map((ar) => {

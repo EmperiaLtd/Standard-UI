@@ -240,7 +240,7 @@ function Overlay({
         opacity={active ? 1 : 0}
         visibility={active ? 'visible' : 'hidden'}
         position="absolute"
-        top={!withinDashboard ? ['10px', '10px', '65px', '75px', '75px'] : ['10px', '10px', '15px', '15px', '20px']}
+        top={withinDashboard ? ['10px', '10px', '65px', '75px', '75px'] : ['10px', '10px', '15px', '15px', '20px']}
         left={['10px', '10px', '15px', '15px', '20px']}
         padding={['10px', '10px', '15px', '15px', '20px']}
         display="flex"

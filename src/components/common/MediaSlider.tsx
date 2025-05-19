@@ -22,6 +22,7 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
   const [activeImageIndex, setActiveImageIndex] = useState({ oldIndex: 0, newIndex: 0 });
   const [imageNo, setImageNo] = useState(0);
   const [mediaTypes, setMediaTypes] = useState<Record<string, string>>({});
+  const [isFetchingMediaType, setIsFetchingMediaType] = useState(true);
 
   useEffect(() => {
     if (turnTableUrl?.length > 0) {
@@ -32,6 +33,7 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
 
   useEffect(() => {
     const fetchMediaTypes = async () => {
+      setIsFetchingMediaType(true);
       const types: Record<string, string> = {};
       for (const image of images) {
         // first check if it has extension
@@ -43,10 +45,16 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         types[image] = mediaType || 'Unknown';
       }
       setMediaTypes(types);
+      setIsFetchingMediaType(false);
     };
 
     if (images?.length) {
+      console.log('now here', images);
+      setHighLightImage(images[0]);
       fetchMediaTypes();
+    } else {
+      setMediaTypes({});
+      setIsFetchingMediaType(false);
     }
   }, [images]);
 
@@ -81,10 +89,11 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
     slidesToScroll: 1,
     draggable: false,
     swipe: false,
-    adaptiveHeight: true,
+    adaptiveHeight: false,
     beforeChange: (oldIndex: number, newIndex: number) => {
       setActiveImageIndex({ oldIndex, newIndex });
       if (highlightImage === images[oldIndex]) {
+        console.log('Now here one ');
         setHighLightImage(images[newIndex]);
       }
     },
@@ -170,7 +179,7 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         </Box>
       </Box>
     ) : null,
-  ].filter(Boolean);
+  ].filter((image) => image);
 
   return (
     <Box
@@ -187,12 +196,11 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         width={['100%', '100%', '100%', '100%', '100%']}
         h={['400px', '450px', '470px', '470px', '550px']}
       >
-        {Object.keys(mediaTypes).length == 0 && (
+        {isFetchingMediaType && Object.keys(mediaTypes).length == 0 && (
           <Skeleton width="inherit" startColor="#29303C" endColor="transparent">
             <Box width={['100%', '100%', '100%', '100%', '100%']} h={['400px', '450px', '470px', '470px', '550px']} />
           </Skeleton>
         )}
-
         {Object.keys(mediaTypes).length > 0 && (
           <Slider ref={slider} {...settings}>
             {sliderImages.map((image, index) => {
@@ -287,7 +295,7 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         gap={[1, 1, 1]}
         overflowX={['auto', 'auto', 'auto', 'auto', 'auto']}
       >
-        {Object.keys(mediaTypes).length == 0 && (
+        {isFetchingMediaType && Object.keys(mediaTypes).length == 0 && (
           <Skeleton width="inherit" startColor="#29303C" endColor="transparent">
             <Box display="flex" alignItems="center" gap={2} overflowX="auto">
               <Box height={['50px', '60px', '60px', '60px', '70px']} width={['50px', '60px', '60px', '60px', '70px']} />
@@ -299,12 +307,12 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
         )}
         {Object.keys(mediaTypes).length > 0 && (
           <Box display="flex" alignItems="center" gap={2} overflowX="auto" overflowY={'hidden'}>
-            {images?.map((image, index) => (
+            {sliderImages?.map((image, index) => (
               <Box
                 key={index}
                 border={activeImageIndex.newIndex === index ? '2px solid white' : '2px solid transparent'}
                 onClick={() => {
-                  setHighLightImage(image);
+                  setHighLightImage(image as string);
                   slider.current?.slickGoTo(index);
                 }}
                 transition={transition}
@@ -324,11 +332,11 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
                 overflow="hidden"
                 overflowY={'hidden'}
               >
-                {mediaTypes[image] === 'Picture' && (
-                  <ChakraImage src={image} objectFit="cover" position="absolute" height="100%" width="100%" />
+                {mediaTypes[image as string] === 'Picture' && (
+                  <ChakraImage src={image as string} objectFit="cover" position="absolute" height="100%" width="100%" />
                 )}
-                {mediaTypes[image] === 'Video' && <YouTubeIcon fill="white" width="100%" height="100%" />}
-                {['YouTube', 'Unknown'].includes(mediaTypes[image]) && (
+                {mediaTypes[image as string] === 'Video' && <YouTubeIcon fill="white" width="100%" height="100%" />}
+                {['YouTube', 'Unknown'].includes(mediaTypes[image as string]) && (
                   <YouTubeIcon fill="white" width="100%" height="100%" />
                 )}
               </Box>
