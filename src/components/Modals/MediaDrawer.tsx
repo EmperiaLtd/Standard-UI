@@ -97,6 +97,7 @@ const MediaDrawer = ({
             justifyContent="space-between"
             position="relative"
             height={['100vh']}
+            onClick={onClose}
           >
             <CrossIcon
               position="absolute"

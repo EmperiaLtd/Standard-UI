@@ -49,7 +49,6 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
     };
 
     if (images?.length) {
-      console.log('now here', images);
       setHighLightImage(images[0]);
       fetchMediaTypes();
     } else {
@@ -93,7 +92,6 @@ const MediaSlider = ({ turnTableUrl, highlightImage, images, setHighLightImage }
     beforeChange: (oldIndex: number, newIndex: number) => {
       setActiveImageIndex({ oldIndex, newIndex });
       if (highlightImage === images[oldIndex]) {
-        console.log('Now here one ');
         setHighLightImage(images[newIndex]);
       }
     },

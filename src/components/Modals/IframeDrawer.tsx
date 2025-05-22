@@ -17,7 +17,14 @@ const IframeDrawer = ({ iframeId, active, url, onClose }: IframeProps) => {
   };
   return (
     <Fragment key={iframeId}>
-      <Modal isOpen={active} onClose={onClose} size={['full']} autoFocus={false} trapFocus={false}>
+      <Modal
+        isOpen={active}
+        onClose={onClose}
+        size={['full']}
+        autoFocus={false}
+        trapFocus={false}
+        onOverlayClick={onClose}
+      >
         <ModalOverlay
           onClick={onClose}
           background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
@@ -33,6 +40,7 @@ const IframeDrawer = ({ iframeId, active, url, onClose }: IframeProps) => {
             h={['100vh']}
             background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
             backdropFilter="blur(12px)"
+            onClick={onClose}
           >
             <CrossIcon
               position="absolute"

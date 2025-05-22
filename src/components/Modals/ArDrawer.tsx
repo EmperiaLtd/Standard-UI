@@ -80,6 +80,7 @@ const ArDrawer = ({ arId, active, url, onClose }: ARProps) => {
             justifyContent="center"
             position="relative"
             background="linear-gradient(0deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.10) 100%), rgba(184, 184, 184, 0.20)"
+            onClick={onClose}
           >
             <CrossIcon
               position="absolute"
