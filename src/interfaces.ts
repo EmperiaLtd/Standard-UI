@@ -645,6 +645,10 @@ export type Emperia = {
 // Data Events
 export interface FallBackData {
   data: {
+    config?: {
+      organization_id: string;
+      experience_id: string;
+    };
     ui: {
       uiConfig: {
         overlay: OverlayElementObject;
@@ -661,6 +665,10 @@ export interface FallBackData {
 }
 
 export type EventData = {
+  config: {
+    organization_id: string;
+    experience_id: string;
+  };
   ui: {
     uiConfig: UiConfig;
     pdpModels: PDPModels[];
